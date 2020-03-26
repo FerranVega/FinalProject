@@ -5,16 +5,20 @@
 #install.packages("latticeExtra")
 #install.packages("Matrix")
 #install.packages("dils")
-library(tidyverse)
-library(igraph)
-library(ndtv)
-library(htmlwidgets)
-library(latticeExtra)
-library(lubridate)
-library(statnet)
-library(Matrix)
-library(dils)
-library(multilayer.ergm)
+#install.packages("multinet")
+
+#library(tidyverse)
+#library(igraph)
+#library(ndtv)
+#library(htmlwidgets)
+#library(latticeExtra)
+#library(lubridate)
+#library(statnet)
+#library(Matrix)
+#library(dils)
+#library(multilayer.ergm)
+#library(btergm)
+#library(multinet)
 
 
 #data2000 <- read.csv("kingdata.csv") # kingdata has data for 2000-05.
@@ -58,7 +62,7 @@ library(multilayer.ergm)
 load(file = "data90.rda")
 
 # Layer 1 is all this.....
-data1forms <- c("<EHAI>")
+data1forms <- c("<EEAI>")
 
 # Layer 2 is all this.....
 data2forms <- c("<FCOM>","<ICOM>","<MBLO>","<MDEM>","<MOCC>","<MTHR>","<RAID>","<RCEA>","<SANC>",
@@ -77,8 +81,8 @@ data2 <- select(data2,"EventDate", "SrcName","TgtName")
 data2$EventDate <- mdy(data2$EventDate)
 data2 <- data2[order(data2$EventDate),]
 
-#data1 <- subset(data1,data1$EventDate) # Now we have only 1990 values.
-#data2 <- subset(data2,data2$EventDate)
+data1 <- subset(data1,data1$EventDate < "1995-01-01" & data1$EventDate > "1993-12-31") # Now we have only 1994 values.
+data2 <- subset(data2,data2$EventDate < "1995-01-01" & data2$EventDate > "1993-12-31")
 ##################################################
 #attach(data1)
 
@@ -161,34 +165,30 @@ threatmat <- AdjacencyFromEdgelist(edge2)
 
 ############################################################################# MULTI-LAYER ERGM.....
 
-aidthreatnet <- to.multiplex(aidmat$adjacency,threatmat$adjacency,output = "network")
+aidthreatnet1994 <- to.multiplex(aidmat$adjacency,threatmat$adjacency,output = "network")
 
-free <- to.multiplex(matrix(1, ncol = nrow(nodes), nrow = nrow(nodes)), matrix(1, ncol = nrow(nodes), nrow = nrow(nodes)), 
+#free <- to.multiplex(matrix(1, ncol = nrow(nodes), nrow = nrow(nodes)), matrix(1, ncol = nrow(nodes), nrow = nrow(nodes)), 
                      output = "network", offzeros = TRUE)
 
-#save(aidthreatnet,free,file = "multilayer_ergm_everythingneeded.rda")
+save(aidthreatnet1994,file = "mln1994.rda")
 
 #load(file = "multilayer_ergm_everythingneeded.rda")
 
-mod.within <- ergm(aidthreatnet
-                   ~ edges_layer(layer = 1) + edges_layer(layer = 2)
-                   + mutual("layer.mem", diff = T),
-                   control = control.ergm(seed = 206424),
-                   constraints = ~fixallbut(free))
+#mod.within <- ergm(aidthreatnet
+#                   ~ edges_layer(layer = 1) + edges_layer(layer = 2)
+#                   + mutual("layer.mem", diff = T),
+#                   control = control.ergm(seed = 206424),
+#                   constraints = ~fixallbut(free))
 
-summary(mod.within) 
+#summary(mod.within) 
 
-mod.cross <-  ergm(aidthreatnet
-                   ~ edges_layer(layer = 1) + edges_layer(layer = 2)
-                   + mutual("layer.mem", diff = T)
-                   + duplexdyad(c("e", "f"), layers = list(1, 2)),
-                   control = control.ergm(seed = 206424),
-                   constraints = ~fixallbut(free))
+#mod.cross <-  ergm(aidthreatnet
+#                   ~ edges_layer(layer = 1) + edges_layer(layer = 2)
+#                   + mutual("layer.mem", diff = T)
+#                   + duplexdyad(c("e", "f"), layers = list(1, 2)),
+#                   control = control.ergm(seed = 206424),
+#                   constraints = ~fixallbut(free))
 
-summary(mod.cross) 
-
-#### OBSERVATIONS
-# For EEAI and conflictvars, there is reciprocity(weird) between Aid & Threats.
-# For EHAI and conflictvars, there is reinforcement between Aid & Threats(again,weird). Need to check dataset.
+#summary(mod.cross) 
 
 
