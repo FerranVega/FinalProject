@@ -1,22 +1,27 @@
 IDEAS FOR NODE AND EDGE LEVEL COVARIATES :
 
 1. ASYLUM NETWORK
-  A. NODE COVARIATES :
-    1.
-    2.
-    3.
-  B. EDGE COVARIATES :
-    1.
-    2.
-    3.
-
+  A. NODE ATTRIBUTE :
+    1. GDP & per capita - FERRAN
+    2. Ethnic homogeneity - MOHIT
+    3. Religion - MOHIT
+    4. Political Freedom Index - FERRAN
+    5. Civil wars - Correlates of War - MOHIT
+  B. EDGE ATTRIBUTE :
+    1. Community size in destination country - UN-Migrants Dataset - FERRAN
+    2. Geographical Contiguity - FERRAN
+    3. Alliance - Correlates of War - MOHIT
+    4. War - 10 Million Dataset - MOHIT
+    5. FDI - MOHIT
 
 2. AID-THREAT NETWORK
-  A. NODE COVARIATES :
-    1.
-    2.
-    3.
-  B. EDGE COVARIATES :
-    1.
-    2.
-    3.
+  A. NODE ATTRIBUTE :
+    1. GDP & per capita - DONE
+    2. Dominant Ethnic Group - MOHIT 
+    3. Poverty Rate - FERRAN
+    4. Other Economic indicators - MOHIT 
+    5. 
+  B. EDGE ATTRIBUTE :
+    1. Geographical Contiguity - DONE
+    2. Alliance - DONE
+    3. War - DONE
