@@ -11,7 +11,7 @@ load(file = "borders.mat.rda")
 countries <- colnames(borders.mat)
 countries <- countries[-1] 
 countries <- sort(countries)
-# Remove .na entry, which in borders.mat implies country has no adjacencies
+# Remove .na entry, which in borders.mat implies country has no adjacencies/borders
 
 #We can create a new data frame with the row names of the adjacency matrix,
 #and match the variables you want as attributes to this new data frame:
