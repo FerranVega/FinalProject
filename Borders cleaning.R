@@ -803,3 +803,4 @@ for (i in 1:nrow(borders)) {
 }
 borders.mat[4, ] # Does it work for Afghanistan? Yep!
 
+save(borders.mat,file = "borders.mat.rda")
