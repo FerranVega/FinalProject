@@ -8,7 +8,7 @@ IDEAS FOR NODE AND EDGE LEVEL COVARIATES :
     4. Political Freedom Index - FERRAN
     5. Civil wars - Correlates of War - MOHIT
   B. EDGE ATTRIBUTE :
-    1. Community size in destination country - UN-Migrants Dataset - FERRAN
+    1. Community size in destination country - UN-Migrants Dataset - MOHIT
     2. Geographical Contiguity - FERRAN
     3. Alliance - Correlates of War - MOHIT
     4. War - 10 Million Dataset - MOHIT
