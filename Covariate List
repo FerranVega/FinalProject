@@ -12,16 +12,25 @@ IDEAS FOR NODE AND EDGE LEVEL COVARIATES :
     2. Geographical Contiguity - FERRAN
     3. Alliance - Correlates of War - MOHIT
     4. War - 10 Million Dataset - MOHIT
-    5. FDI - MOHIT
 
 2. AID-THREAT NETWORK
   A. NODE ATTRIBUTE :
     1. GDP & per capita - DONE
     2. Dominant Ethnic Group - MOHIT 
     3. Poverty Rate - FERRAN
-    4. Other Economic indicators - MOHIT 
-    5. 
+    
   B. EDGE ATTRIBUTE :
     1. Geographical Contiguity - DONE
     2. Alliance - DONE
     3. War - DONE
+
+LIST OF ALL DATASETS :
+1. GDP & Per Capita - DONE
+2. Ethnic Homogeneity - DONE
+3. Dominant Religion - DONE
+4. Dominant Ethnic Group - *
+5. Political Freedom Index - ^
+6. COW : Wars, Civil Wars, Alliances - *
+7. Borders - DONE
+8. Migrants - *
+9. Poverty Rate/ HDI - ^
