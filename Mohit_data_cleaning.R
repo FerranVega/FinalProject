@@ -1,54 +1,144 @@
 library(tidyverse)
+#install.packages("plyr")
+library(plyr)
+library(dils)
 ################################################################# EFINDEX
-x <- subset(x,x$Year >= 1990 & x$Year <= 2005)
-x$last <- paste(as.character(x$Country),as.character(x$Year))
+x <- subset(x, x$Year >= 1990 & x$Year <= 2005)
+x$last <- paste(as.character(x$Country), as.character(x$Year))
 x <- unique(x)
-x <- select(x,-"last")
-x <- spread(x,Year,EFindex)
+x <- select(x, -"last")
+x <- spread(x, Year, EFindex)
 x <- na.omit(x)
-write.csv(x,"EFIndex_withoutNA.csv")
+write.csv(x, "EFIndex_withoutNA.csv")
 kingcountries <- x
-write.csv(kingcountries,"kingcountries.csv")
+write.csv(kingcountries, "kingcountries.csv")
 
 EFIndex_withNA <- read.csv("EFIndex_withNA.csv")
-save(EFIndex_withNA,file = "EFIndex_withNA.rda")
+save(EFIndex_withNA, file = "EFIndex_withNA.rda")
 ################################################################## RELIGIONS
 x <- read.csv("Religious_Composition_by_Country_2010-2050.csv")
-x <-subset(x,x$Year == "2010")
+x <- subset(x, x$Year == "2010")
 library(tidyverse)
 
-x <- x[,-(1:5)]
-x <- x[-(1:7),]
-x <- x[,-2]
-x <- mutate_all(x,as.character)
-for(i in 1:nrow(x)){
-  if(x[i,2] == "< 1.0"){x[i,2] <- "0.1"}
-  if(x[i,2] == ">99.0"){x[i,2] <- "99"}
-  if(x[i,3] == "< 1.0"){x[i,3] <- "0.1"}
-  if(x[i,3] == ">99.0"){x[i,3] <- "99"}
-  if(x[i,4] == "< 1.0"){x[i,4] <- "0.1"}
-  if(x[i,4] == ">99.0"){x[i,4] <- "99"}
-  if(x[i,5] == "< 1.0"){x[i,5] <- "0.1"}
-  if(x[i,5] == ">99.0"){x[i,5] <- "99"}
-  if(x[i,6] == "< 1.0"){x[i,6] <- "0.1"}
-  if(x[i,6] == ">99.0"){x[i,6] <- "99"}
-  if(x[i,7] == "< 1.0"){x[i,7] <- "0.1"}
-  if(x[i,7] == ">99.0"){x[i,7] <- "99"}
-  if(x[i,8] == "< 1.0"){x[i,8] <- "0.1"}
-  if(x[i,8] == ">99.0"){x[i,8] <- "99"}
-  if(x[i,9] == "< 1.0"){x[i,9] <- "0.1"}
-  if(x[i,9] == ">99.0"){x[i,9] <- "99"}
+x <- x[, -(1:5)]
+x <- x[-(1:7), ]
+x <- x[, -2]
+x <- mutate_all(x, as.character)
+for (i in 1:nrow(x)) {
+  if (x[i, 2] == "< 1.0") {
+    x[i, 2] <- "0.1"
+  }
+  if (x[i, 2] == ">99.0") {
+    x[i, 2] <- "99"
+  }
+  if (x[i, 3] == "< 1.0") {
+    x[i, 3] <- "0.1"
+  }
+  if (x[i, 3] == ">99.0") {
+    x[i, 3] <- "99"
+  }
+  if (x[i, 4] == "< 1.0") {
+    x[i, 4] <- "0.1"
+  }
+  if (x[i, 4] == ">99.0") {
+    x[i, 4] <- "99"
+  }
+  if (x[i, 5] == "< 1.0") {
+    x[i, 5] <- "0.1"
+  }
+  if (x[i, 5] == ">99.0") {
+    x[i, 5] <- "99"
+  }
+  if (x[i, 6] == "< 1.0") {
+    x[i, 6] <- "0.1"
+  }
+  if (x[i, 6] == ">99.0") {
+    x[i, 6] <- "99"
+  }
+  if (x[i, 7] == "< 1.0") {
+    x[i, 7] <- "0.1"
+  }
+  if (x[i, 7] == ">99.0") {
+    x[i, 7] <- "99"
+  }
+  if (x[i, 8] == "< 1.0") {
+    x[i, 8] <- "0.1"
+  }
+  if (x[i, 8] == ">99.0") {
+    x[i, 8] <- "99"
+  }
+  if (x[i, 9] == "< 1.0") {
+    x[i, 9] <- "0.1"
+  }
+  if (x[i, 9] == ">99.0") {
+    x[i, 9] <- "99"
+  }
 }
-x[,-1] <- mutate_all(x[,-1],as.numeric)
-x$major <- colnames(x[,-1])[max.col(x[,-1],ties.method="first")]
+x[, -1] <- mutate_all(x[, -1], as.numeric)
+x$major <- colnames(x[, -1])[max.col(x[, -1], ties.method = "first")]
 
-write.csv(x,"major_religion.csv")
+write.csv(x, "major_religion.csv")
 x <- read.csv("major_religion.csv")
 x$Code <- as.character(x$Code)
-x <- subset(x,x$Code != "#N/A")
-write.csv(x,"major_religion.csv")
+x <- subset(x, x$Code != "#N/A")
+write.csv(x, "major_religion.csv")
 ################################################################## DOMINANT ETHNIC
 x <- read.csv("EPR-2019.csv")
-x <- subset(x, x$from <= 1990 & x$to >= 1990)
+x <- subset(x, x$from <= 2000 & x$to >= 2000)
+x <-
+  subset(
+    x,
+    x$status == "DOMINANT" |
+      x$status == "JUNIOR PARTNER" |
+      x$status == "MONOPOLY" | x$status == "SENIOR PARTNER"
+  )
+x$status <- as.character(x$status)
+x$status <- replace(x$status, x$status == "MONOPOLY", 1)
+x$status <- replace(x$status, x$status == "DOMINANT", 2)
+x$status <- replace(x$status, x$status == "SENIOR PARTNER", 3)
+x$status <- replace(x$status, x$status == "JUNIOR PARTNER", 4)
+x <- x[order(x$status), ]
+x <- distinct(x, statename, .keep_all = TRUE)
+ethnic_dom_grp <- select(x, statename, group, size)
+#LEFT WORK : GIVE THE COUNTRIES ACRONYMS.
+################################################################ FDI EDGES
+################################################################ WARS
+
+p <- read.csv("dyadwars2.csv")
+
+cow_to_king <- levels(p$namea)
+cow_to_king2 <- levels(p$nameb)
+
+r <- read.csv("c2.csv")
+wars <- read.csv("dyadwars2.csv")
+wars <- select(wars,namea,nameb,hihost,year)
+wars$namea <- mapvalues(wars$namea,from = levels(wars$namea),to = as.vector(r$Y))
+wars$nameb <- mapvalues(wars$nameb,from = levels(wars$nameb),to = as.vector(r$Y))
+wars <- subset(wars,wars$namea != "N" & wars$nameb != "N")
+wars1990 <- subset(wars,wars$year == 1990)
+wars1991 <- subset(wars,wars$year == 1991)
+wars1992 <- subset(wars,wars$year == 1992)
+wars1993 <- subset(wars,wars$year == 1993)
+wars1994 <- subset(wars,wars$year == 1994)
+wars1995 <- subset(wars,wars$year == 1995)
+wars1996 <- subset(wars,wars$year == 1996)
+wars1997 <- subset(wars,wars$year == 1997)
+wars1998 <- subset(wars,wars$year == 1998)
+wars1999 <- subset(wars,wars$year == 1999)
+wars2000 <- subset(wars,wars$year == 2000)
+wars2001 <- subset(wars,wars$year == 2001)
+wars2002 <- subset(wars,wars$year == 2002)
+wars2003 <- subset(wars,wars$year == 2003)
+wars2004 <- subset(wars,wars$year == 2004)
+wars2005 <- subset(wars,wars$year == 2005)
+wars_by_year <- list(wars1990,wars1991,wars1992,wars1993,wars1994,wars1995,wars1996,wars1997,wars1998,wars1999,
+                     wars2000,wars2001,wars2002,wars2003,wars2004,wars2005)
+
+save(wars_by_year,file = "wars_by_year.rda")
+################################################################ CIVIL WARS
+
+
+x <- read.csv("GDP_percap_1990to2005_clean.csv")
+
 
 
