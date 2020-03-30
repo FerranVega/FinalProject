@@ -101,7 +101,7 @@ x <- x[order(x$status), ]
 x <- distinct(x, statename, .keep_all = TRUE)
 ethnic_dom_grp <- select(x, statename, group, size)
 #LEFT WORK : GIVE THE COUNTRIES ACRONYMS.
-################################################################ FDI EDGES
+
 ################################################################ WARS
 
 p <- read.csv("dyadwars2.csv")
@@ -135,10 +135,48 @@ wars_by_year <- list(wars1990,wars1991,wars1992,wars1993,wars1994,wars1995,wars1
                      wars2000,wars2001,wars2002,wars2003,wars2004,wars2005)
 
 save(wars_by_year,file = "wars_by_year.rda")
-################################################################ CIVIL WARS
+################################################################ CIVIL FROM 10 MM
+################################################################ ALLIANCE
+
+ally <- read.csv("cowally.csv")
+ally <- select(ally,ccode1,ccode2,year)
+ally$namea <- mapvalues(ally$namea,from = levels(ally$namea),to = as.vector(r$Y))
+ally$nameb <- mapvalues(ally$nameb,from = levels(ally$nameb),to = as.vector(r$Y))
+ally <- subset(ally,ally$namea != "N" & ally$nameb != "N")
+
+ally <- dplyr::mutate(ally,id = row_number())
+ally <- ally[order(ally$ccode1),]
+
+ally2 <- read.csv("a2.csv")
+ally2 <- select(ally2,namea,nameb,year)
+ally2 <- subset(ally2,ally2$namea != "N" & ally2$nameb != "N")
+ally1990 <- subset(ally2,ally2$year == 1990)
+ally1991 <- subset(ally2,ally2$year == 1991)
+ally1992 <- subset(ally2,ally2$year == 1992)
+ally1993 <- subset(ally2,ally2$year == 1993)
+ally1994 <- subset(ally2,ally2$year == 1994)
+ally1995 <- subset(ally2,ally2$year == 1995)
+ally1996 <- subset(ally2,ally2$year == 1996)
+ally1997 <- subset(ally2,ally2$year == 1997)
+ally1998 <- subset(ally2,ally2$year == 1998)
+ally1999 <- subset(ally2,ally2$year == 1999)
+ally2000 <- subset(ally2,ally2$year == 2000)
+ally2001 <- subset(ally2,ally2$year == 2001)
+ally2002 <- subset(ally2,ally2$year == 2002)
+ally2003 <- subset(ally2,ally2$year == 2003)
+ally2004 <- subset(ally2,ally2$year == 2004)
+ally2005 <- subset(ally2,ally2$year == 2005)
+
+ally_by_year <- list(ally1990,ally1991,ally1992,ally1993,ally1994,ally1995,ally1996,ally1997,ally1998,ally1999,
+                     ally2000,ally2001,ally2002,ally2003,ally2004,ally2005)
+
+save(ally_by_year,file = "ally_by_year.rda")
 
 
-x <- read.csv("GDP_percap_1990to2005_clean.csv")
+
+
+
+
 
 
 
