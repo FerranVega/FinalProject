@@ -2,6 +2,7 @@ library(tidyverse)
 #install.packages("plyr")
 library(plyr)
 library(dils)
+library(data.table)
 ################################################################# EFINDEX
 x <- subset(x, x$Year >= 1990 & x$Year <= 2005)
 x$last <- paste(as.character(x$Country), as.character(x$Year))
@@ -176,11 +177,58 @@ ally_by_year <- list(ally1990,ally1991,ally1992,ally1993,ally1994,ally1995,ally1
 
 save(ally_by_year,file = "ally_by_year.rda")
 
+################################################### UN MIGRANTS ( COMMUNITY SIZE )
+
+x <- read.csv("unmigrants.csv")
+#new <- read.csv("xfac.csv")
+x$Country <- mapvalues(x$Country,from = levels(x$Country),to = as.vector(new$new))
+
+xfac <- levels(x$Country)
+x <- subset(x,x$Country != "N")
 
 
+y <- colnames(x)
+
+newcols <- read.csv("col.csv")
+
+colnames(x) <- newcols$namee
+
+x2 <- x
+
+x[, -2] <- mutate_all(x[,-2], as.character)
+x <- as.data.frame(lapply(x, function(y) gsub(",", "", y)))
+x[, -2] <- mutate_all(x[,-2], as.character)
+x[, -2] <- mutate_all(x[,-2], as.numeric)
+
+x[is.na(x)] = 0
+
+x <- x[order(x$Country),]
 
 
+mig1990 <- subset(x,x$Year == 2000)
+x3 <- mig1990
+x3 <- x3 %>% select(-contains("V."))
+rowmatch <- as.character(sort(x3$Country))
+colmatch <- colnames(x3)[-(1:3)]
+colmatch <- colmatch[-4]
+colmatch <- colmatch[-26]
+both <- intersect(rowmatch,colmatch)
+both <- c(colnames(x3)[1:3],both)
+x3 <- x3[which(x3$Country %in% both), which(names(x3) %in% both)]
+x3 <- select(x3,-c("Total","Year"))
+nn <- as.character(x3[,1])
+x3_t <- as.data.frame(t(x3[,-1]))
+x3_t <- setDT(x3_t, keep.rownames = TRUE)[]
+colnames(x3_t) <- c("Country",nn)
+x3_t$Totals <- as.numeric(rowSums(x3_t[,-1]))
+for(i in 1:nrow(x3_t)){
+  x3_t[i,2:190] <- sapply(x3_t[i,2:190], FUN = function(k) k/x3_t[i,191])
+}
+nam <- paste("mig","2000",sep = ".")
+assign(nam,x3_t)
 
+migrants_by_year <- list(mig.1990,mig.1995,mig.2000)
 
+save(migrants_by_year,file = "migrants_by_year.rda")
 
 
