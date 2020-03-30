@@ -1,0 +1,139 @@
+"","country","group","size"
+"1","HON","Whites/mestizos",0.91
+"2","SAL","Whites/mestizos",0.9
+"3","ECU","Whites/mestizos",0.81
+"4","PAR","Whites/mestizos",0.945
+"5","CHL","Whites/mestizos",0.91
+"6","ARG","Whites/mestizos",0.97
+"7","URU","Whites/mestizos",0.908
+"8","FRN","French",0.976
+"9","POL","Poles",0.96
+"10","AUS","Austrians",0.93
+"11","HUN","Hungarians",0.9
+"12","ALB","Albanians",0.82
+"13","GRC","Greeks",0.96
+"14","CYP","Greeks",0.8
+"15","BUL","Bulgarians",0.83
+"16","ARM","Armenians",0.979
+"17","ANG","Mbundu-Mestico",0.26
+"18","LIB","Arabs",0.844
+"19","TUR","Turkish",0.75
+"20","IRQ","Sunni Arabs",0.185
+"21","EGY","Arab Muslims",0.9099
+"22","JOR","Jordanian Arabs",0.4
+"23","BAH","Sunni Arabs",0.15
+"24","AFG","Pashtuns",0.41
+"25","TKM","Turkmen",0.85
+"26","UZB","Uzbeks",0.8
+"27","CHN","Chinese (Han)",0.9153
+"28","JPN","Japanese",0.9798
+"29","BHU","Ngalops (Drupka)",0.2
+"30","BRU","Bumiputera (Muslims)",0.57
+"31","USA","Whites",0.691
+"32","MEX","Mestizos",0.801
+"33","GUA","Ladinos",0.48
+"34","NIC","Whites/mestizos",0.86
+"35","COS","Whites/mestizos",0.837
+"36","PAN","Whites/mestizos",0.8
+"37","COL","Whites/mestizos",0.73
+"38","VEN","Whites/mestizos",0.848
+"39","GUY","Indo-Guyanese",0.435
+"40","PER","Whites/mestizos",0.52
+"41","BRA","Whites",0.54
+"42","BOL","Whites/mestizos",0.41
+"43","SOM","Spanish",0.68
+"44","ITA","Italians",0.935
+"45","CRO","Croats",0.904
+"46","SLV","Slovenes",0.831
+"47","MOD","Moldovans",0.7
+"48","RUS","Russians",0.798
+"49","EST","Estonians",0.679
+"50","LAT","Latvians",0.586
+"51","LIT","Lithuanians",0.766
+"52","GRG","Georgians",0.694
+"53","AZE","Azeri",0.92
+"54","N","Balanta",0.3
+"55","EQG","Fang",0.857
+"56","GUI","Susu",0.2
+"57","TOG","KabrÃ© (and related groups)",0.27
+"58","TAZ","Mainland Africans",0.964
+"59","BUR","Tutsi",0.14
+"60","RWA","Tutsi",0.15
+"61","ZIM","Shona",0.77
+"62","COM","Ngazidja Comorans",0.505
+"63","MOR","Arabs",0.592
+"64","ALG","Arabs",0.72
+"65","SUD","Shaygiyya, Ja'aliyyin and Danagla (Arab)",0.15
+"66","SYR","Alawi",0.13
+"67","TAJ","Tajiks",0.623
+"68","KZK","Kazakhs",0.534
+"69","MON","Mongols",0.9
+"70","BNG","Bengali Muslims",0.895
+"71","MYA","Bamar (Barman)",0.68
+"72","THI","Thai",0.74
+"73","DRV","Kinh (Vietnamese)",0.85
+"74","PHI","Christian lowlanders",0.859
+"75","INS","Javanese",0.45
+"76","AUL","Whites",0.84
+"77","PAP","Papua New Guineans",0.966
+"78","CAN","English speakers",0.59
+"79","TRI","East Indians",0.4
+"80","BLZ","Creoles",0.2493
+"81","SUR","Creoles",0.314
+"82","UKG","English",0.815
+"83","BEL","Flemings",0.59
+"84","SWD","Swiss Germans",0.63
+"85","SLO","Slovaks",0.806
+"86","MAC","Macedonians",0.642
+"87","N","Serbs",0.62
+"88","BOS","Bosniaks/Muslims",0.501
+"89","RUM","Romanians",0.895
+"90","UKR","Ukrainians",0.778
+"91","BLR","Byelorussians",0.78
+"92","FIN","Finns",0.93
+"93","MLI","Blacks (Mande, Peul, Voltaic etc.)",0.9
+"94","SEN","Wolof",0.435
+"95","BEN","Northern (Bariba, Peul, Ottamari, Yoa-Lokpa, Dendi, Gourmanchéma)",0.15
+"96","MAA","White Moors (Beydan)",0.3
+"97","NIR","Djerma-Songhai",0.22
+"98","IVO","Southern Mande",0.1
+"99","LBR","Americo-Liberians",0.02
+"100","GHA","Ewe",0.13
+"101","CAO","Beti (and related peoples)",0.18
+"102","NIG","Yoruba",0.21
+"103","GAB","Mbede (Nzebi, Bateke, Obamba)",0.2
+"104","CEN","Sara",0.1
+"105","CHA","Zaghawa, Bideyat",0.01
+"106","CON","Mbochi (proper)",0.09
+"107","N","Luba Shaba",0.05
+"108","UGA","South-Westerners (Ankole, Banyoro, Toro)",0.141
+"109","KEN","Kalenjin-Masai-Turkana-Samburu",0.15
+"110","DJI","Isaas (Somali)",0.55
+"111","ETH","Tigry",0.0608
+"112","ERI","Christians",0.48
+"113","MZM","Tsonga-Chopi",0.287
+"114","ZAM","Bemba speakers",0.43
+"115","MAW","Southerners (Lomwe, Mang'anja, Nyanja, Yao)",0.46
+"116","SAF","Xhosa",0.18
+"117","NAM","Ovambo",0.498
+"118","BOT","Tswana",0.57
+"119","MAG","Côtiers",0.479
+"120","MAS","Hindi-speaking Hindus",0.4
+"121","IRN","Persians",0.51
+"122","LEB","Shi'a Muslims (Arab)",0.32
+"123","ISR","Ashkenazim (Jewish)",0.23
+"124","SAU","Sunni Wahhabi (Najdi) (Arab)",0.36
+"125","YEM","Northern Zaydis",0.32
+"126","KUW","Kuwaiti Sunni (Arab)",0.23
+"127","KYR","Kyrgyz",0.524
+"128","TAW","Taiwanese",0.84
+"129","IND","Hindi (Non SC/ST/OBCs)",0.263
+"130","PAK","Punjabi",0.56
+"131","SRI","Sinhalese",0.74
+"132","NEP","Caste Hill Hindu Elite",0.31
+"133","CAM","Khmer",0.95
+"134","LAO","Lao (incl. Phuan)",0.55
+"135","MAL","Malays",0.577
+"136","SIN","Chinese",0.75
+"137","NEW","New Zealanders",0.676
+"138","FIJ","Indians",0.4

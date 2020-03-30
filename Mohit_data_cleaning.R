@@ -100,7 +100,11 @@ x$status <- replace(x$status, x$status == "JUNIOR PARTNER", 4)
 x <- x[order(x$status), ]
 x <- distinct(x, statename, .keep_all = TRUE)
 ethnic_dom_grp <- select(x, statename, group, size)
-#LEFT WORK : GIVE THE COUNTRIES ACRONYMS.
+
+edg <- read.csv("edg.csv")
+ethnic_dom_grp <- select(edg,-"X")
+
+write.csv(ethnic_dom_grp,"ethnic_dom_grup.csv")
 
 ################################################################ WARS
 
