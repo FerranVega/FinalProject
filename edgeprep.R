@@ -26,10 +26,21 @@ bord <- EdgelistFromAdjacency(borders.mat_without_NA, nodelist = colnames(border
 
 landlock <- borders.mat[,1]
 
-m1 <- merge(war1990[,-3],ally1990,all = TRUE)
+m1 <- merge(war1990[,-4],ally1990,all = TRUE)
+colnames(m1)[3] <- "Wars"
+colnames(m1)[4] <- "Alliance"
+m1[,3] <- ifelse(is.na(m1[,3]), 0, m1[,3])
+m1[,4] <- ifelse(is.na(m1[,4]), 0, 1)
 
-m2 <- merge(m1,bord,all = TRUE)
+colnames(bord)[1] <- "namea"
+colnames(bord)[2] <- "nameb"
 
+m2 <- merge(m1,bord, by = c("namea", "nameb"))
+
+colnames(mig1990)[1] <- "namea"
+colnames(mig1990)[2] <- "nameb"
+
+m3 <- merge(m2, mig1990, by = c("namea", "nameb"))
 
 
 
