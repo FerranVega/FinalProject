@@ -1,5 +1,6 @@
 library(igraph)
 library(dils)
+library(dplyr)
 ## CREATING EDGES for 1990
 
 load(file = "migrants_by_year.rda")
@@ -35,14 +36,14 @@ m1[,4] <- ifelse(is.na(m1[,4]), 0, 1)
 colnames(bord)[1] <- "namea"
 colnames(bord)[2] <- "nameb"
 
-m2 <- merge(m1,bord, by = c("namea", "nameb"))
+m2 <- merge(m1,bord, by = c("namea", "nameb"), all = TRUE)
+colnames(m2)[5] <- "border"
 
 colnames(mig1990)[1] <- "namea"
 colnames(mig1990)[2] <- "nameb"
 
-m3 <- merge(m2, mig1990, by = c("namea", "nameb"))
-m3 <- m3[,-5]
-colnames(m3)[5] <- "Mig"
+m3 <- merge(m2, mig1990, by = c("namea", "nameb"), all = TRUE)
+colnames(m3)[6] <- "Mig"
 
 load(file = "GDPpc.mat.rda") 
 attGDPpc$country <- as.character(attGDPpc$country)
@@ -50,6 +51,37 @@ attGDPpc$country <- as.character(attGDPpc$country)
 attGDPpc$country[attGDPpc$country == "_UK"] <- "UK_"
 node.att.1990 <- attGDPpc[,1:2]
 
+load(file = "HDI.mat.rda") 
+attHDI$country <- as.character(attHDI$country)
+
+attHDI$country[attHDI$country == "_UK"] <- "UK_"
+node.att.1990 <- merge(node.att.1990, attHDI[1:2], by = "country")
+
+load(file = "EFIndex_withNA.rda") 
+EFI <- EFIndex_withNA
+EFI <- EFI[3:19]
+colnames(EFI)[1] <- "country"
+EFI$country <- as.character(EFI$country)
+node.att.1990 <- merge(node.att.1990, EFI[1:2], by = "country")
+colnames(node.att.1990)[4] <- "EFI1990"
 
 
+Religion <- read.csv("major_religion.csv", head = TRUE, sep=",") 
+Religion <- select(Religion, "Code", "major")
+colnames(Religion)[1] <- "country"
+Religion$country <- as.character(Religion$country)
+node.att.1990 <- merge(node.att.1990, Religion[1:2], by = "country")
 
+edge.att.1990 <- filter(m3, is.element(m3$namea, node.att.1990$country) & is.element(m3$nameb, node.att.1990$country)) 
+node.att.1990 <- filter(node.att.1990, is.element(node.att.1990$country, edge.att.1990$namea) & is.element(node.att.1990$country, edge.att.1990$nameb)) 
+
+edge.att.1990[,3] <- ifelse(is.na(edge.att.1990[,3]), 0, edge.att.1990[,3])
+edge.att.1990[,4] <- ifelse(is.na(edge.att.1990[,4]), 0, edge.att.1990[,4])
+edge.att.1990[,5] <- ifelse(is.na(edge.att.1990[,5]), 0, edge.att.1990[,5])
+
+edge.att.1990[,1] <- as.character(edge.att.1990$namea)
+edge.att.1990[,2] <- as.character(edge.att.1990$nameb)
+
+edge.att.1990 <- edge.att.1990[order(edge.att.1990$namea, edge.att.1990$nameb),]
+
+bord_adj <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,5)])
