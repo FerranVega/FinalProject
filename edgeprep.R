@@ -41,6 +41,14 @@ colnames(mig1990)[1] <- "namea"
 colnames(mig1990)[2] <- "nameb"
 
 m3 <- merge(m2, mig1990, by = c("namea", "nameb"))
+m3 <- m3[,-5]
+colnames(m3)[5] <- "Mig"
+
+load(file = "GDPpc.mat.rda") 
+attGDPpc$country <- as.character(attGDPpc$country)
+
+attGDPpc$country[attGDPpc$country == "_UK"] <- "UK_"
+node.att.1990 <- attGDPpc[,1:2]
 
 
 

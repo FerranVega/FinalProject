@@ -17,19 +17,21 @@ countries <- sort(countries)
 
 #We can create a new data frame with the row names of the adjacency matrix,
 #and match the variables you want as attributes to this new data frame:
-att <- data.frame('country' = as.character(countries))
-att$HDI1991 <- HDI$X1991[match(att$country, as.character(HDI$country.code))]
-att$HDI1992 <- HDI$X1992[match(att$country, as.character(HDI$country.code))]
-att$HDI1993 <- HDI$X1993[match(att$country, as.character(HDI$country.code))]
-att$HDI1994 <- HDI$X1994[match(att$country, as.character(HDI$country.code))]
-att$HDI1995 <- HDI$X1995[match(att$country, as.character(HDI$country.code))]
-att$HDI1996 <- HDI$X1996[match(att$country, as.character(HDI$country.code))]
-att$HDI1997 <- HDI$X1997[match(att$country, as.character(HDI$country.code))]
-att$HDI1998 <- HDI$X1998[match(att$country, as.character(HDI$country.code))]
-att$HDI1999 <- HDI$X1999[match(att$country, as.character(HDI$country.code))]
-att$HDI2000 <- HDI$X2000[match(att$country, as.character(HDI$country.code))]
-att$HDI2001 <- HDI$X2001[match(att$country, as.character(HDI$country.code))]
-att$HDI2002 <- HDI$X2002[match(att$country, as.character(HDI$country.code))]
-att$HDI2003 <- HDI$X2003[match(att$country, as.character(HDI$country.code))]
-att$HDI2004 <- HDI$X2004[match(att$country, as.character(HDI$country.code))]
-att$HDI2005 <- HDI$X2005[match(att$country, as.character(HDI$country.code))]
+attHDI <- data.frame('country' = as.character(countries))
+attHDI$HDI1991 <- HDI$X1991[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI1992 <- HDI$X1992[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI1993 <- HDI$X1993[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI1994 <- HDI$X1994[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI1995 <- HDI$X1995[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI1996 <- HDI$X1996[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI1997 <- HDI$X1997[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI1998 <- HDI$X1998[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI1999 <- HDI$X1999[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI2000 <- HDI$X2000[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI2001 <- HDI$X2001[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI2002 <- HDI$X2002[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI2003 <- HDI$X2003[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI2004 <- HDI$X2004[match(attHDI$country, as.character(HDI$country.code))]
+attHDI$HDI2005 <- HDI$X2005[match(attHDI$country, as.character(HDI$country.code))]
+
+save(attHDI,file = "HDI.mat.rda")
