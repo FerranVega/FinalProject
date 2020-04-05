@@ -18,6 +18,7 @@ countries <- sort(countries)
 #We can create a new data frame with the row names of the adjacency matrix,
 #and match the variables you want as attributes to this new data frame:
 attHDI <- data.frame('country' = as.character(countries))
+attHDI$HDI1990 <- HDI$X1990[match(attHDI$country, as.character(HDI$country.code))]
 attHDI$HDI1991 <- HDI$X1991[match(attHDI$country, as.character(HDI$country.code))]
 attHDI$HDI1992 <- HDI$X1992[match(attHDI$country, as.character(HDI$country.code))]
 attHDI$HDI1993 <- HDI$X1993[match(attHDI$country, as.character(HDI$country.code))]
