@@ -1,154 +1,154 @@
-"","X","Country","Code","Buddhists","Christians","Folk.Religions","Hindus","Jews","Muslims","Other.Religions","Unaffiliated","major"
-"1",1,"Afghanistan","AFG",0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,"Muslims"
-"2",2,"Albania","ALB",0.1,18,0.1,0.1,0.1,80.3,0.1,1.4,"Muslims"
-"3",3,"Algeria","ALG",0.1,0.1,0.1,0.1,0.1,97.9,0.1,1.8,"Muslims"
-"6",6,"Angola","ANG",0.1,90.5,4.2,0.1,0.1,0.1,0.1,5.1,"Christians"
-"9",9,"Argentina","ARG",0.1,85.2,0.1,0.1,0.1,1,0.1,12.2,"Christians"
-"10",10,"Armenia","ARM",0.1,98.5,0.1,0.1,0.1,0.1,0.1,1.3,"Christians"
-"12",12,"Australia","AUL",2.7,67.3,0.1,1.4,0.1,2.4,0.1,24.2,"Christians"
-"13",13,"Austria","AUS",0.1,80.4,0.1,0.1,0.1,5.4,0.1,13.5,"Christians"
-"14",14,"Azerbaijan","AZE",0.1,3,0.1,0.1,0.1,96.9,0.1,0.1,"Muslims"
-"16",16,"Bahrain","BAH",2.5,14.5,0.1,9.8,0.1,70.3,0.1,1.9,"Muslims"
-"17",17,"Bangladesh","BNG",0.1,0.1,0.1,8.5,0.1,90.4,0.1,0.1,"Muslims"
-"19",19,"Belarus","BEL",0.1,71.2,0.1,0.1,0.1,0.1,0.1,28.6,"Christians"
-"20",20,"Belgium","BEL",0.1,64.2,0.1,0.1,0.1,5.9,0.1,29,"Christians"
-"22",22,"Benin","BEN",0.1,53,18.1,0.1,0.1,23.8,0.1,5,"Christians"
-"24",24,"Bhutan","BHU",74.7,0.1,1.9,22.6,0.1,0.1,0.1,0.1,"Buddhists"
-"25",25,"Bolivia","BOL",0.1,93.9,0.1,0.1,0.1,0.1,1,4.1,"Christians"
-"26",26,"Bosnia-Herzegovina","BOS",0.1,52.3,0.1,0.1,0.1,45.2,0.1,2.5,"Christians"
-"27",27,"Botswana","BOT",0.1,72.1,6,0.1,0.1,0.1,0.1,20.6,"Christians"
-"28",28,"Brazil","BRA",0.1,88.9,2.8,0.1,0.1,0.1,0.1,7.9,"Christians"
-"31",31,"Bulgaria","BUL",0.1,82.1,0.1,0.1,0.1,13.7,0.1,4.2,"Christians"
-"32",32,"Burkina Faso","BFO",0.1,22.5,15.4,0.1,0.1,61.6,0.1,0.1,"Muslims"
-"33",33,"Burundi","BUI",0.1,91.5,5.7,0.1,0.1,2.8,0.1,0.1,"Christians"
-"34",34,"Cambodia","CAM",96.9,0.1,0.1,0.1,0.1,2,0.1,0.1,"Buddhists"
-"36",36,"Canada","CAN",0.1,69,1.2,1.4,1,2.1,0.1,23.7,"Christians"
-"37",37,"Cape Verde","CAP",0.1,89.1,1.5,0.1,0.1,0.1,0.1,9.1,"Christians"
-"39",39,"Central African Republic","CEN",0.1,89.5,1,0.1,0.1,8.5,0.1,1,"Christians"
-"40",40,"Chad","CHA",0.1,40.6,1.4,0.1,0.1,55.3,0.1,2.5,"Muslims"
-"42",42,"Chile","CHL",0.1,89.4,1.5,0.1,0.1,0.1,0.1,8.6,"Christians"
-"43",43,"China","CHN",18.2,5.1,21.9,0.1,0.1,1.8,0.1,52.2,"Unaffiliated"
-"44",44,"Colombia","COL",0.1,92.5,0.1,0.1,0.1,0.1,0.1,6.6,"Christians"
-"45",45,"Comoros","COM",0.1,0.1,0.1,0.1,0.1,98.3,0.1,0.1,"Muslims"
-"46",46,"Congo","CON",0.1,85.9,2.8,0.1,0.1,1.2,1.1,9,"Christians"
-"49",49,"Costa Rica","COS",0.1,90.9,0.1,0.1,0.1,0.1,0.1,7.9,"Christians"
-"50",50,"Cote d'Ivoire","IVO",0.1,44.1,10.2,0.1,0.1,37.5,0.1,8,"Christians"
-"51",51,"Croatia","CRO",0.1,93.4,0.1,0.1,0.1,1.4,0.1,5.1,"Christians"
-"52",52,"Cuba","CUB",0.1,59.2,17.4,0.1,0.1,0.1,0.1,23,"Christians"
-"53",53,"Cyprus","CYP",0.1,73.2,0.1,0.1,0.1,25.3,0.1,1.2,"Christians"
-"54",54,"Czech Republic","CZR",0.1,23.3,0.1,0.1,0.1,0.1,0.1,76.4,"Unaffiliated"
-"55",55,"Denmark","DEN",0.1,83.5,0.1,0.1,0.1,4.1,0.1,11.8,"Christians"
-"58",58,"Dominican Republic","DOM",0.1,88,0.1,0.1,0.1,0.1,0.1,10.9,"Christians"
-"59",59,"Ecuador","ECU",0.1,94.1,0.1,0.1,0.1,0.1,0.1,5.5,"Christians"
-"60",60,"Egypt","EGY",0.1,5.1,0.1,0.1,0.1,94.9,0.1,0.1,"Muslims"
-"61",61,"El Salvador","SAL",0.1,88.2,0.1,0.1,0.1,0.1,0.1,11,"Christians"
-"63",63,"Eritrea","ERI",0.1,62.9,0.1,0.1,0.1,36.6,0.1,0.1,"Christians"
-"64",64,"Estonia","EST",0.1,39.9,0.1,0.1,0.1,0.1,0.1,59.6,"Unaffiliated"
-"65",65,"Ethiopia","ETH",0.1,62.8,2.6,0.1,0.1,34.6,0.1,0.1,"Christians"
-"68",68,"Fiji","FJI",0.1,64.4,0.1,27.9,0.1,6.3,0.1,0.1,"Christians"
-"69",69,"Finland","FIN",0.1,80.1,0.1,0.1,0.1,0.1,0.1,19.1,"Christians"
-"70",70,"France","FRN",0.1,63,0.1,0.1,0.1,7.5,0.1,28,"Christians"
-"73",73,"Gabon","GAB",0.1,76.5,6,0.1,0.1,11.2,0.1,5.6,"Christians"
-"74",74,"Gambia","GAM",0.1,4.5,0.1,0.1,0.1,95.1,0.1,0.1,"Muslims"
-"75",75,"Georgia","GRG",0.1,88.5,0.1,0.1,0.1,10.7,0.1,0.1,"Christians"
-"77",77,"Ghana","GHA",0.1,74.9,4.9,0.1,0.1,15.8,0.1,4.2,"Christians"
-"79",79,"Greece","GRC",0.1,88.1,0.1,0.1,0.1,5.3,0.1,6.1,"Christians"
-"84",84,"Guatemala","GUA",0.1,95.2,0.1,0.1,0.1,0.1,0.1,4.1,"Christians"
-"85",85,"Guinea","GUI",0.1,10.9,2.7,0.1,0.1,84.4,0.1,1.8,"Muslims"
-"86",86,"Guinea-Bissau","GNB",0.1,19.7,30.9,0.1,0.1,45.1,0.1,4.3,"Muslims"
-"87",87,"Guyana","GUY",0.1,66,0.1,24.9,0.1,6.4,0.1,2,"Christians"
-"88",88,"Haiti","HAI",0.1,86.9,2.2,0.1,0.1,0.1,0.1,10.6,"Christians"
-"90",90,"Honduras","HON",0.1,87.6,1.1,0.1,0.1,0.1,0.1,10.5,"Christians"
-"92",92,"Hungary","HUN",0.1,81,0.1,0.1,0.1,0.1,0.1,18.6,"Christians"
-"94",94,"India","IND",0.1,2.5,0.1,79.5,0.1,14.4,2.3,0.1,"Hindus"
-"95",95,"Indonesia","INS",0.1,9.9,0.1,1.7,0.1,87.2,0.1,0.1,"Muslims"
-"96",96,"Iran","IRN",0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,"Muslims"
-"97",97,"Iraq","IRQ",0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,"Muslims"
-"98",98,"Ireland","IRE",0.1,92,0.1,0.1,0.1,1.1,0.1,6.2,"Christians"
-"100",100,"Israel","ISR",0.1,2,0.1,0.1,75.6,18.6,0.1,3.1,"Jews"
-"101",101,"Italy","ITA",0.1,83.3,0.1,0.1,0.1,3.7,0.1,12.4,"Christians"
-"102",102,"Jamaica","JAM",0.1,77.2,4.5,0.1,0.1,0.1,0.1,17.2,"Christians"
-"103",103,"Japan","JPN",36.2,1.6,0.1,0.1,0.1,0.1,4.7,57,"Unaffiliated"
-"104",104,"Jordan","JOR",0.1,2.2,0.1,0.1,0.1,97.2,0.1,0.1,"Muslims"
-"105",105,"Kazakhstan","KZK",0.1,24.7,0.1,0.1,0.1,70.4,0.1,4.2,"Muslims"
-"106",106,"Kenya","KEN",0.1,84.8,1.7,0.1,0.1,9.7,1.2,2.5,"Christians"
-"109",109,"Kuwait","KUW",2.8,14.3,0.1,8.5,0.1,74.1,0.1,0.1,"Muslims"
-"111",111,"Laos","LAO",66,1.5,30.7,0.1,0.1,0.1,0.1,0.1,"Buddhists"
-"112",112,"Latvia","LAT",0.1,55.8,0.1,0.1,0.1,0.1,0.1,43.8,"Christians"
-"113",113,"Lebanon","LEB",0.1,38.3,0.1,0.1,0.1,61.3,0.1,0.1,"Muslims"
-"114",114,"Lesotho","LES",0.1,96.8,0.1,0.1,0.1,0.1,0.1,3.1,"Christians"
-"115",115,"Liberia","LBR",0.1,85.9,0.1,0.1,0.1,12,0.1,1.4,"Christians"
-"116",116,"Libya","LIB",0.1,2.7,0.1,0.1,0.1,96.6,0.1,0.1,"Muslims"
-"118",118,"Lithuania","LIT",0.1,89.8,0.1,0.1,0.1,0.1,0.1,10,"Christians"
-"121",121,"Macedonia","MAC",0.1,59.3,0.1,0.1,0.1,39.3,0.1,1.4,"Christians"
-"122",122,"Madagascar","MAD",0.1,85.3,4.5,0.1,0.1,3,0.1,6.9,"Christians"
-"123",123,"Malawi","MAW",0.1,82.7,1.7,0.1,0.1,13,0.1,2.5,"Christians"
-"124",124,"Malaysia","MAL",17.7,9.4,2.3,6,0.1,63.7,0.1,0.1,"Muslims"
-"126",126,"Mali","MLI",0.1,2.4,2.7,0.1,0.1,94.4,0.1,0.1,"Muslims"
-"130",130,"Mauritania","MAA",0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,"Muslims"
-"131",131,"Mauritius","MAS",0.1,32.7,0.1,48.5,0.1,17.3,0.1,0.1,"Hindus"
-"133",133,"Mexico","MEX",0.1,95.1,0.1,0.1,0.1,0.1,0.1,4.7,"Christians"
-"135",135,"Moldova","MLD",0.1,97.4,0.1,0.1,0.1,0.1,0.1,1.4,"Christians"
-"137",137,"Mongolia","MON",55.1,2.3,3.5,0.1,0.1,3.2,0.1,35.9,"Buddhists"
-"140",140,"Morocco","MOR",0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,"Muslims"
-"142",142,"Myanmar","MYA",80.1,7.8,5.8,1.7,0.1,4,0.1,0.1,"Buddhists"
-"143",143,"Namibia","NAM",0.1,97.5,0.1,0.1,0.1,0.1,0.1,1.9,"Christians"
-"145",145,"Nepal","NEP",10.3,0.1,3.7,80.7,0.1,4.6,0.1,0.1,"Hindus"
-"146",146,"Netherlands","NTA",0.1,50.6,0.1,0.1,0.1,6,0.1,42.1,"Christians"
-"148",148,"New Zealand","NEW",1.6,57,0.1,2.1,0.1,1.2,0.1,36.6,"Christians"
-"149",149,"Nicaragua","NIC",0.1,85.8,1.4,0.1,0.1,0.1,0.1,12.5,"Christians"
-"150",150,"Niger","NIR",0.1,0.1,0.1,0.1,0.1,98.4,0.1,0.1,"Muslims"
-"151",151,"Nigeria","NIG",0.1,49.3,1.4,0.1,0.1,48.8,0.1,0.1,"Christians"
-"153",153,"Democratic People's Republic of Korea","PRK",1.5,2,12.3,0.1,0.1,0.1,12.9,71.3,"Unaffiliated"
-"155",155,"Norway","NOR",0.1,84.7,0.1,0.1,0.1,3.7,0.1,10.1,"Christians"
-"156",156,"Oman","OMA",0.1,6.5,0.1,5.5,0.1,85.9,1,0.1,"Muslims"
-"157",157,"Pakistan","PAK",0.1,1.6,0.1,1.9,0.1,96.4,0.1,0.1,"Muslims"
-"160",160,"Panama","PAN",0.1,93,0.1,0.1,0.1,0.1,0.1,4.8,"Christians"
-"162",162,"Paraguay","PAR",0.1,96.9,1.7,0.1,0.1,0.1,0.1,1.1,"Christians"
-"163",163,"Peru","PER",0.1,95.5,0.1,0.1,0.1,0.1,0.1,3,"Christians"
-"164",164,"Philippines","PHI",0.1,92.6,1.5,0.1,0.1,5.5,0.1,0.1,"Christians"
-"165",165,"Poland","POL",0.1,94.3,0.1,0.1,0.1,0.1,0.1,5.6,"Christians"
-"166",166,"Portugal","POR",0.1,91.9,0.1,0.1,0.1,0.1,0.1,7.5,"Christians"
-"168",168,"Qatar","QAT",3.1,13.8,0.1,13.8,0.1,67.7,0.1,0.1,"Muslims"
-"170",170,"Romania","RUM",0.1,99,0.1,0.1,0.1,0.1,0.1,0.1,"Christians"
-"171",171,"Russia","RUS",0.1,73.3,0.1,0.1,0.1,10,0.1,16.2,"Christians"
-"172",172,"Rwanda","RWA",0.1,93.4,0.1,0.1,0.1,1.8,0.1,3.6,"Christians"
-"181",181,"Saudi Arabia","SAU",0.1,4.4,0.1,1.1,0.1,93,0.1,0.1,"Muslims"
-"182",182,"Senegal","SEN",0.1,3.6,0.1,0.1,0.1,96.4,0.1,0.1,"Muslims"
-"183",183,"Serbia","SER",0.1,92.6,0.1,0.1,0.1,4.1,0.1,3.3,"Christians"
-"185",185,"Sierra Leone","SIE",0.1,20.9,0.1,0.1,0.1,78,0.1,0.1,"Muslims"
-"186",186,"Singapore","SIN",33.9,18.2,2.3,5.2,0.1,14.3,9.7,16.4,"Buddhists"
-"187",187,"Slovakia","SLO",0.1,85.3,0.1,0.1,0.1,0.1,0.1,14.3,"Christians"
-"188",188,"Slovenia","SLV",0.1,78.4,0.1,0.1,0.1,3.6,0.1,18,"Christians"
-"189",189,"Solomon Islands","SOL",0.1,97.4,1.3,0.1,0.1,0.1,0.1,0.1,"Christians"
-"190",190,"Somalia","SOM",0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,"Muslims"
-"191",191,"South Africa","SAF",0.1,81.2,0.1,1.1,0.1,1.7,0.1,14.9,"Christians"
-"192",192,"Republic of Korea","ROK",22.9,29.4,0.1,0.1,0.1,0.1,0.1,46.4,"Unaffiliated"
-"193",193,"Spain","SPN",0.1,78.6,0.1,0.1,0.1,2.1,0.1,19,"Christians"
-"194",194,"Sri Lanka","SRI",69.3,7.3,0.1,13.6,0.1,9.8,0.1,0.1,"Buddhists"
-"195",195,"Sudan","SUD",0.1,5.4,2.8,0.1,0.1,90.7,0.1,1,"Muslims"
-"197",197,"Swaziland","SWASA",0.1,88.1,1,0.1,0.1,0.1,0.1,10.1,"Christians"
-"198",198,"Sweden","SWD",0.1,67.2,0.1,0.1,0.1,4.6,0.1,27,"Christians"
-"199",199,"Switzerland","SWEUR",0.1,72.7,0.1,0.1,0.1,4.9,0.1,20.9,"Christians"
-"200",200,"Syria","SYR",0.1,5.2,0.1,0.1,0.1,92.8,0.1,2,"Muslims"
-"201",201,"Taiwan","TAW",21.3,5.5,44.2,0.1,0.1,0.1,16.2,12.7,"Folk.Religions"
-"202",202,"Tajikistan","TAJ",0.1,1.6,0.1,0.1,0.1,96.7,0.1,1.5,"Muslims"
-"203",203,"Tanzania","TAZ",0.1,61.4,1.8,0.1,0.1,35.2,0.1,1.4,"Christians"
-"204",204,"Thailand","THI",93.2,0.1,0.1,0.1,0.1,5.5,0.1,0.1,"Buddhists"
-"206",206,"Togo","TOG",0.1,43.7,35.6,0.1,0.1,14,0.1,6.2,"Christians"
-"209",209,"Trinidad and Tobago","TRI",0.1,65.9,1.9,22.7,0.1,5.9,1.4,1.9,"Christians"
-"210",210,"Tunisia","TUN",0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,"Muslims"
-"211",211,"Turkey","TUR",0.1,0.1,0.1,0.1,0.1,98,0.1,1.2,"Muslims"
-"212",212,"Turkmenistan","TKM",0.1,6.4,0.1,0.1,0.1,93,0.1,0.1,"Muslims"
-"215",215,"Uganda","UGA",0.1,86.7,0.1,0.1,0.1,11.5,0.1,0.1,"Christians"
-"216",216,"Ukraine","UKR",0.1,83.8,0.1,0.1,0.1,1.2,0.1,14.7,"Christians"
-"217",217,"United Arab Emirates","UAE",2,12.6,0.1,6.6,0.1,76.9,0.1,1.1,"Muslims"
-"218",218,"United Kingdom","UK_",0.1,64.3,0.1,1.4,0.1,4.8,0.1,27.8,"Christians"
-"219",219,"United States of America","USA",1.2,78.3,0.1,0.1,1.8,0.1,0.1,16.4,"Christians"
-"221",221,"Uruguay","URU",0.1,57.9,0.1,0.1,0.1,0.1,0.1,40.7,"Christians"
-"222",222,"Uzbekistan","UZB",0.1,2.3,0.1,0.1,0.1,96.7,0.1,0.1,"Muslims"
-"224",224,"Venezuela","VEN",0.1,89.3,0.1,0.1,0.1,0.1,0.1,10,"Christians"
-"225",225,"Democratic Republic of Vietnam","DRV",16.4,8.2,45.3,0.1,0.1,0.1,0.1,29.6,"Folk.Religions"
-"228",228,"Yemen Arab Republic","YEM",0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,"Muslims"
-"229",229,"Zambia","ZAM",0.1,97.6,0.1,0.1,0.1,0.1,0.1,0.1,"Christians"
-"230",230,"Zimbabwe","ZIM",0.1,87,3.8,0.1,0.1,0.1,0.1,7.9,"Christians"
+,X,Country,Code,Buddhists,Christians,Folk.Religions,Hindus,Jews,Muslims,Other.Religions,Unaffiliated,major
+1,1,Afghanistan,AFG,0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,Muslims
+2,2,Albania,ALB,0.1,18,0.1,0.1,0.1,80.3,0.1,1.4,Muslims
+3,3,Algeria,ALG,0.1,0.1,0.1,0.1,0.1,97.9,0.1,1.8,Muslims
+6,6,Angola,ANG,0.1,90.5,4.2,0.1,0.1,0.1,0.1,5.1,Christians
+9,9,Argentina,ARG,0.1,85.2,0.1,0.1,0.1,1,0.1,12.2,Christians
+10,10,Armenia,ARM,0.1,98.5,0.1,0.1,0.1,0.1,0.1,1.3,Christians
+12,12,Australia,AUL,2.7,67.3,0.1,1.4,0.1,2.4,0.1,24.2,Christians
+13,13,Austria,AUS,0.1,80.4,0.1,0.1,0.1,5.4,0.1,13.5,Christians
+14,14,Azerbaijan,AZE,0.1,3,0.1,0.1,0.1,96.9,0.1,0.1,Muslims
+16,16,Bahrain,BAH,2.5,14.5,0.1,9.8,0.1,70.3,0.1,1.9,Muslims
+17,17,Bangladesh,BNG,0.1,0.1,0.1,8.5,0.1,90.4,0.1,0.1,Muslims
+19,19,Belarus,BLR,0.1,71.2,0.1,0.1,0.1,0.1,0.1,28.6,Christians
+20,20,Belgium,BEL,0.1,64.2,0.1,0.1,0.1,5.9,0.1,29,Christians
+22,22,Benin,BEN,0.1,53,18.1,0.1,0.1,23.8,0.1,5,Christians
+24,24,Bhutan,BHU,74.7,0.1,1.9,22.6,0.1,0.1,0.1,0.1,Buddhists
+25,25,Bolivia,BOL,0.1,93.9,0.1,0.1,0.1,0.1,1,4.1,Christians
+26,26,Bosnia-Herzegovina,BOS,0.1,52.3,0.1,0.1,0.1,45.2,0.1,2.5,Christians
+27,27,Botswana,BOT,0.1,72.1,6,0.1,0.1,0.1,0.1,20.6,Christians
+28,28,Brazil,BRA,0.1,88.9,2.8,0.1,0.1,0.1,0.1,7.9,Christians
+31,31,Bulgaria,BUL,0.1,82.1,0.1,0.1,0.1,13.7,0.1,4.2,Christians
+32,32,Burkina Faso,BFO,0.1,22.5,15.4,0.1,0.1,61.6,0.1,0.1,Muslims
+33,33,Burundi,BUI,0.1,91.5,5.7,0.1,0.1,2.8,0.1,0.1,Christians
+34,34,Cambodia,CAM,96.9,0.1,0.1,0.1,0.1,2,0.1,0.1,Buddhists
+36,36,Canada,CAN,0.1,69,1.2,1.4,1,2.1,0.1,23.7,Christians
+37,37,Cape Verde,CAP,0.1,89.1,1.5,0.1,0.1,0.1,0.1,9.1,Christians
+39,39,Central African Republic,CEN,0.1,89.5,1,0.1,0.1,8.5,0.1,1,Christians
+40,40,Chad,CHA,0.1,40.6,1.4,0.1,0.1,55.3,0.1,2.5,Muslims
+42,42,Chile,CHL,0.1,89.4,1.5,0.1,0.1,0.1,0.1,8.6,Christians
+43,43,China,CHN,18.2,5.1,21.9,0.1,0.1,1.8,0.1,52.2,Unaffiliated
+44,44,Colombia,COL,0.1,92.5,0.1,0.1,0.1,0.1,0.1,6.6,Christians
+45,45,Comoros,COM,0.1,0.1,0.1,0.1,0.1,98.3,0.1,0.1,Muslims
+46,46,Congo,CON,0.1,85.9,2.8,0.1,0.1,1.2,1.1,9,Christians
+49,49,Costa Rica,COS,0.1,90.9,0.1,0.1,0.1,0.1,0.1,7.9,Christians
+50,50,Cote d'Ivoire,IVO,0.1,44.1,10.2,0.1,0.1,37.5,0.1,8,Christians
+51,51,Croatia,CRO,0.1,93.4,0.1,0.1,0.1,1.4,0.1,5.1,Christians
+52,52,Cuba,CUB,0.1,59.2,17.4,0.1,0.1,0.1,0.1,23,Christians
+53,53,Cyprus,CYP,0.1,73.2,0.1,0.1,0.1,25.3,0.1,1.2,Christians
+54,54,Czech Republic,CZR,0.1,23.3,0.1,0.1,0.1,0.1,0.1,76.4,Unaffiliated
+55,55,Denmark,DEN,0.1,83.5,0.1,0.1,0.1,4.1,0.1,11.8,Christians
+58,58,Dominican Republic,DOM,0.1,88,0.1,0.1,0.1,0.1,0.1,10.9,Christians
+59,59,Ecuador,ECU,0.1,94.1,0.1,0.1,0.1,0.1,0.1,5.5,Christians
+60,60,Egypt,EGY,0.1,5.1,0.1,0.1,0.1,94.9,0.1,0.1,Muslims
+61,61,El Salvador,SAL,0.1,88.2,0.1,0.1,0.1,0.1,0.1,11,Christians
+63,63,Eritrea,ERI,0.1,62.9,0.1,0.1,0.1,36.6,0.1,0.1,Christians
+64,64,Estonia,EST,0.1,39.9,0.1,0.1,0.1,0.1,0.1,59.6,Unaffiliated
+65,65,Ethiopia,ETH,0.1,62.8,2.6,0.1,0.1,34.6,0.1,0.1,Christians
+68,68,Fiji,FJI,0.1,64.4,0.1,27.9,0.1,6.3,0.1,0.1,Christians
+69,69,Finland,FIN,0.1,80.1,0.1,0.1,0.1,0.1,0.1,19.1,Christians
+70,70,France,FRN,0.1,63,0.1,0.1,0.1,7.5,0.1,28,Christians
+73,73,Gabon,GAB,0.1,76.5,6,0.1,0.1,11.2,0.1,5.6,Christians
+74,74,Gambia,GAM,0.1,4.5,0.1,0.1,0.1,95.1,0.1,0.1,Muslims
+75,75,Georgia,GRG,0.1,88.5,0.1,0.1,0.1,10.7,0.1,0.1,Christians
+77,77,Ghana,GHA,0.1,74.9,4.9,0.1,0.1,15.8,0.1,4.2,Christians
+79,79,Greece,GRC,0.1,88.1,0.1,0.1,0.1,5.3,0.1,6.1,Christians
+84,84,Guatemala,GUA,0.1,95.2,0.1,0.1,0.1,0.1,0.1,4.1,Christians
+85,85,Guinea,GUI,0.1,10.9,2.7,0.1,0.1,84.4,0.1,1.8,Muslims
+86,86,Guinea-Bissau,GNB,0.1,19.7,30.9,0.1,0.1,45.1,0.1,4.3,Muslims
+87,87,Guyana,GUY,0.1,66,0.1,24.9,0.1,6.4,0.1,2,Christians
+88,88,Haiti,HAI,0.1,86.9,2.2,0.1,0.1,0.1,0.1,10.6,Christians
+90,90,Honduras,HON,0.1,87.6,1.1,0.1,0.1,0.1,0.1,10.5,Christians
+92,92,Hungary,HUN,0.1,81,0.1,0.1,0.1,0.1,0.1,18.6,Christians
+94,94,India,IND,0.1,2.5,0.1,79.5,0.1,14.4,2.3,0.1,Hindus
+95,95,Indonesia,INS,0.1,9.9,0.1,1.7,0.1,87.2,0.1,0.1,Muslims
+96,96,Iran,IRN,0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,Muslims
+97,97,Iraq,IRQ,0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,Muslims
+98,98,Ireland,IRE,0.1,92,0.1,0.1,0.1,1.1,0.1,6.2,Christians
+100,100,Israel,ISR,0.1,2,0.1,0.1,75.6,18.6,0.1,3.1,Jews
+101,101,Italy,ITA,0.1,83.3,0.1,0.1,0.1,3.7,0.1,12.4,Christians
+102,102,Jamaica,JAM,0.1,77.2,4.5,0.1,0.1,0.1,0.1,17.2,Christians
+103,103,Japan,JPN,36.2,1.6,0.1,0.1,0.1,0.1,4.7,57,Unaffiliated
+104,104,Jordan,JOR,0.1,2.2,0.1,0.1,0.1,97.2,0.1,0.1,Muslims
+105,105,Kazakhstan,KZK,0.1,24.7,0.1,0.1,0.1,70.4,0.1,4.2,Muslims
+106,106,Kenya,KEN,0.1,84.8,1.7,0.1,0.1,9.7,1.2,2.5,Christians
+109,109,Kuwait,KUW,2.8,14.3,0.1,8.5,0.1,74.1,0.1,0.1,Muslims
+111,111,Laos,LAO,66,1.5,30.7,0.1,0.1,0.1,0.1,0.1,Buddhists
+112,112,Latvia,LAT,0.1,55.8,0.1,0.1,0.1,0.1,0.1,43.8,Christians
+113,113,Lebanon,LEB,0.1,38.3,0.1,0.1,0.1,61.3,0.1,0.1,Muslims
+114,114,Lesotho,LES,0.1,96.8,0.1,0.1,0.1,0.1,0.1,3.1,Christians
+115,115,Liberia,LBR,0.1,85.9,0.1,0.1,0.1,12,0.1,1.4,Christians
+116,116,Libya,LIB,0.1,2.7,0.1,0.1,0.1,96.6,0.1,0.1,Muslims
+118,118,Lithuania,LIT,0.1,89.8,0.1,0.1,0.1,0.1,0.1,10,Christians
+121,121,Macedonia,MAC,0.1,59.3,0.1,0.1,0.1,39.3,0.1,1.4,Christians
+122,122,Madagascar,MAD,0.1,85.3,4.5,0.1,0.1,3,0.1,6.9,Christians
+123,123,Malawi,MAW,0.1,82.7,1.7,0.1,0.1,13,0.1,2.5,Christians
+124,124,Malaysia,MAL,17.7,9.4,2.3,6,0.1,63.7,0.1,0.1,Muslims
+126,126,Mali,MLI,0.1,2.4,2.7,0.1,0.1,94.4,0.1,0.1,Muslims
+130,130,Mauritania,MAA,0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,Muslims
+131,131,Mauritius,MAS,0.1,32.7,0.1,48.5,0.1,17.3,0.1,0.1,Hindus
+133,133,Mexico,MEX,0.1,95.1,0.1,0.1,0.1,0.1,0.1,4.7,Christians
+135,135,Moldova,MLD,0.1,97.4,0.1,0.1,0.1,0.1,0.1,1.4,Christians
+137,137,Mongolia,MON,55.1,2.3,3.5,0.1,0.1,3.2,0.1,35.9,Buddhists
+140,140,Morocco,MOR,0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,Muslims
+142,142,Myanmar,MYA,80.1,7.8,5.8,1.7,0.1,4,0.1,0.1,Buddhists
+143,143,Namibia,NAM,0.1,97.5,0.1,0.1,0.1,0.1,0.1,1.9,Christians
+145,145,Nepal,NEP,10.3,0.1,3.7,80.7,0.1,4.6,0.1,0.1,Hindus
+146,146,Netherlands,NTA,0.1,50.6,0.1,0.1,0.1,6,0.1,42.1,Christians
+148,148,New Zealand,NEW,1.6,57,0.1,2.1,0.1,1.2,0.1,36.6,Christians
+149,149,Nicaragua,NIC,0.1,85.8,1.4,0.1,0.1,0.1,0.1,12.5,Christians
+150,150,Niger,NIR,0.1,0.1,0.1,0.1,0.1,98.4,0.1,0.1,Muslims
+151,151,Nigeria,NIG,0.1,49.3,1.4,0.1,0.1,48.8,0.1,0.1,Christians
+153,153,Democratic People's Republic of Korea,PRK,1.5,2,12.3,0.1,0.1,0.1,12.9,71.3,Unaffiliated
+155,155,Norway,NOR,0.1,84.7,0.1,0.1,0.1,3.7,0.1,10.1,Christians
+156,156,Oman,OMA,0.1,6.5,0.1,5.5,0.1,85.9,1,0.1,Muslims
+157,157,Pakistan,PAK,0.1,1.6,0.1,1.9,0.1,96.4,0.1,0.1,Muslims
+160,160,Panama,PAN,0.1,93,0.1,0.1,0.1,0.1,0.1,4.8,Christians
+162,162,Paraguay,PAR,0.1,96.9,1.7,0.1,0.1,0.1,0.1,1.1,Christians
+163,163,Peru,PER,0.1,95.5,0.1,0.1,0.1,0.1,0.1,3,Christians
+164,164,Philippines,PHI,0.1,92.6,1.5,0.1,0.1,5.5,0.1,0.1,Christians
+165,165,Poland,POL,0.1,94.3,0.1,0.1,0.1,0.1,0.1,5.6,Christians
+166,166,Portugal,POR,0.1,91.9,0.1,0.1,0.1,0.1,0.1,7.5,Christians
+168,168,Qatar,QAT,3.1,13.8,0.1,13.8,0.1,67.7,0.1,0.1,Muslims
+170,170,Romania,RUM,0.1,99,0.1,0.1,0.1,0.1,0.1,0.1,Christians
+171,171,Russia,RUS,0.1,73.3,0.1,0.1,0.1,10,0.1,16.2,Christians
+172,172,Rwanda,RWA,0.1,93.4,0.1,0.1,0.1,1.8,0.1,3.6,Christians
+181,181,Saudi Arabia,SAU,0.1,4.4,0.1,1.1,0.1,93,0.1,0.1,Muslims
+182,182,Senegal,SEN,0.1,3.6,0.1,0.1,0.1,96.4,0.1,0.1,Muslims
+183,183,Serbia,SER,0.1,92.6,0.1,0.1,0.1,4.1,0.1,3.3,Christians
+185,185,Sierra Leone,SIE,0.1,20.9,0.1,0.1,0.1,78,0.1,0.1,Muslims
+186,186,Singapore,SIN,33.9,18.2,2.3,5.2,0.1,14.3,9.7,16.4,Buddhists
+187,187,Slovakia,SLO,0.1,85.3,0.1,0.1,0.1,0.1,0.1,14.3,Christians
+188,188,Slovenia,SLV,0.1,78.4,0.1,0.1,0.1,3.6,0.1,18,Christians
+189,189,Solomon Islands,SOL,0.1,97.4,1.3,0.1,0.1,0.1,0.1,0.1,Christians
+190,190,Somalia,SOM,0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,Muslims
+191,191,South Africa,SAF,0.1,81.2,0.1,1.1,0.1,1.7,0.1,14.9,Christians
+192,192,Republic of Korea,ROK,22.9,29.4,0.1,0.1,0.1,0.1,0.1,46.4,Unaffiliated
+193,193,Spain,SPN,0.1,78.6,0.1,0.1,0.1,2.1,0.1,19,Christians
+194,194,Sri Lanka,SRI,69.3,7.3,0.1,13.6,0.1,9.8,0.1,0.1,Buddhists
+195,195,Sudan,SUD,0.1,5.4,2.8,0.1,0.1,90.7,0.1,1,Muslims
+197,197,Swaziland,SWASA,0.1,88.1,1,0.1,0.1,0.1,0.1,10.1,Christians
+198,198,Sweden,SWD,0.1,67.2,0.1,0.1,0.1,4.6,0.1,27,Christians
+199,199,Switzerland,SWEUR,0.1,72.7,0.1,0.1,0.1,4.9,0.1,20.9,Christians
+200,200,Syria,SYR,0.1,5.2,0.1,0.1,0.1,92.8,0.1,2,Muslims
+201,201,Taiwan,TAW,21.3,5.5,44.2,0.1,0.1,0.1,16.2,12.7,Folk.Religions
+202,202,Tajikistan,TAJ,0.1,1.6,0.1,0.1,0.1,96.7,0.1,1.5,Muslims
+203,203,Tanzania,TAZ,0.1,61.4,1.8,0.1,0.1,35.2,0.1,1.4,Christians
+204,204,Thailand,THI,93.2,0.1,0.1,0.1,0.1,5.5,0.1,0.1,Buddhists
+206,206,Togo,TOG,0.1,43.7,35.6,0.1,0.1,14,0.1,6.2,Christians
+209,209,Trinidad and Tobago,TRI,0.1,65.9,1.9,22.7,0.1,5.9,1.4,1.9,Christians
+210,210,Tunisia,TUN,0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,Muslims
+211,211,Turkey,TUR,0.1,0.1,0.1,0.1,0.1,98,0.1,1.2,Muslims
+212,212,Turkmenistan,TKM,0.1,6.4,0.1,0.1,0.1,93,0.1,0.1,Muslims
+215,215,Uganda,UGA,0.1,86.7,0.1,0.1,0.1,11.5,0.1,0.1,Christians
+216,216,Ukraine,UKR,0.1,83.8,0.1,0.1,0.1,1.2,0.1,14.7,Christians
+217,217,United Arab Emirates,UAE,2,12.6,0.1,6.6,0.1,76.9,0.1,1.1,Muslims
+218,218,United Kingdom,UK_,0.1,64.3,0.1,1.4,0.1,4.8,0.1,27.8,Christians
+219,219,United States of America,USA,1.2,78.3,0.1,0.1,1.8,0.1,0.1,16.4,Christians
+221,221,Uruguay,URU,0.1,57.9,0.1,0.1,0.1,0.1,0.1,40.7,Christians
+222,222,Uzbekistan,UZB,0.1,2.3,0.1,0.1,0.1,96.7,0.1,0.1,Muslims
+224,224,Venezuela,VEN,0.1,89.3,0.1,0.1,0.1,0.1,0.1,10,Christians
+225,225,Democratic Republic of Vietnam,DRV,16.4,8.2,45.3,0.1,0.1,0.1,0.1,29.6,Folk.Religions
+228,228,Yemen Arab Republic,YEM,0.1,0.1,0.1,0.1,0.1,99,0.1,0.1,Muslims
+229,229,Zambia,ZAM,0.1,97.6,0.1,0.1,0.1,0.1,0.1,0.1,Christians
+230,230,Zimbabwe,ZIM,0.1,87,3.8,0.1,0.1,0.1,0.1,7.9,Christians

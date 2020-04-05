@@ -57,8 +57,7 @@ attHDI$country <- as.character(attHDI$country)
 attHDI$country[attHDI$country == "_UK"] <- "UK_"
 node.att.1990 <- merge(node.att.1990, attHDI[1:2], by = "country")
 
-load(file = "EFIndex_withNA.rda") 
-EFI <- EFIndex_withNA
+EFI <- read.csv("EFIndex_withNA.csv") 
 EFI <- EFI[3:19]
 colnames(EFI)[1] <- "country"
 EFI$country <- as.character(EFI$country)
