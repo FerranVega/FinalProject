@@ -33,6 +33,9 @@ attGDPpc$GDP2003 <- GDPpc$X2003[match(attGDPpc$country, as.character(GDPpc$Count
 attGDPpc$GDP2004 <- GDPpc$X2004[match(attGDPpc$country, as.character(GDPpc$Country.Code))]
 attGDPpc$GDP2005 <- GDPpc$X2005[match(attGDPpc$country, as.character(GDPpc$Country.Code))]
 
+attGDPpc <- attGDPpc[,2:18]
+
+save(attGDPpc,file = "GDPpc.mat.rda")
 
 
 
