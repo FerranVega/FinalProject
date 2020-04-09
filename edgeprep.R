@@ -49,19 +49,20 @@ load(file = "GDPpc.mat.rda")
 attGDPpc$country <- as.character(attGDPpc$country)
 
 attGDPpc$country[attGDPpc$country == "_UK"] <- "UK_"
-node.att.1990 <- attGDPpc[,1:2]
+node.att.1990 <- attGDPpc[,1:2] # Create GDP node att column
 
 load(file = "HDI.mat.rda") 
 attHDI$country <- as.character(attHDI$country)
 
 attHDI$country[attHDI$country == "_UK"] <- "UK_"
-node.att.1990 <- merge(node.att.1990, attHDI[1:2], by = "country")
+node.att.1990 <- merge(node.att.1990, attHDI[1:2], by = "country") # Merging HDI node att
+
 
 EFI <- read.csv("EFIndex_withNA.csv") 
 EFI <- EFI[3:19]
 colnames(EFI)[1] <- "country"
 EFI$country <- as.character(EFI$country)
-node.att.1990 <- merge(node.att.1990, EFI[1:2], by = "country")
+node.att.1990 <- merge(node.att.1990, EFI[1:2], by = "country") # Merging ethnic frac node att
 colnames(node.att.1990)[4] <- "EFI1990"
 
 
@@ -69,7 +70,12 @@ Religion <- read.csv("major_religion.csv", head = TRUE, sep=",")
 Religion <- select(Religion, "Code", "major")
 colnames(Religion)[1] <- "country"
 Religion$country <- as.character(Religion$country)
-node.att.1990 <- merge(node.att.1990, Religion[1:2], by = "country")
+node.att.1990 <- merge(node.att.1990, Religion[1:2], by = "country") # Merging religion node att
+
+node.att.1990 <- node.att.1990[as.character(node.att.1990$GDP1990)!= "" ,]
+node.att.1990 <- na.omit(node.att.1990)
+
+m3 <- na.omit(m3)
 
 edge.att.1990 <- filter(m3, is.element(m3$namea, node.att.1990$country) & is.element(m3$nameb, node.att.1990$country)) 
 node.att.1990 <- filter(node.att.1990, is.element(node.att.1990$country, edge.att.1990$namea) & is.element(node.att.1990$country, edge.att.1990$nameb)) 
@@ -83,4 +89,9 @@ edge.att.1990[,2] <- as.character(edge.att.1990$nameb)
 
 edge.att.1990 <- edge.att.1990[order(edge.att.1990$namea, edge.att.1990$nameb),]
 
-bord_adj <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,5)])
+war_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,3)])
+alliance_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,4)])
+bord_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,5)])
+mig_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,6)])
+
+
