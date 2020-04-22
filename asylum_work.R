@@ -24,7 +24,7 @@ data20 <- dplyr::select(data20,"EventDate", "SrcName","TgtName")
 
 data20$EventDate <- mdy_hms(data20$EventDate)
 data20 <- data20[order(data20$EventDate),]
-data20 <- subset(data20,data20$EventDate < "2001/01/01") ###################### 1990 - 1995.
+data20 <- subset(data20,data20$EventDate < "2005/01/01" & data20$EventDate >= "2004/01/01") ###################### 1990 - 1995.
 
 #data90 <- data90[,-1]
 
@@ -45,8 +45,8 @@ load(file = "borders.mat.rda")
 load(file = "wars_by_year.rda") 
 load(file = "ally_by_year.rda") 
 
-ally1990 <- ally_by_year[[11]]
-war1990 <- wars_by_year[[11]]
+ally1990 <- ally_by_year[[15]]
+war1990 <- wars_by_year[[15]]
 migrants1990 <- migrants_by_year[[3]]
 
 
@@ -158,11 +158,25 @@ network::set.vertex.attribute(asylumnet, 'Per Capita Income', as.numeric(node.at
 #network::set.vertex.attribute(asylumnet, 'HDI', node.att.1990$HDI1990)
 #network::set.vertex.attribute(asylumnet, 'EFI', node.att.1990$EFI1990)
 #network::set.vertex.attribute(asylumnet, 'Religion', as.character(node.att.1990$major))
+network::set.network.attribute(asylumnet,'Wars', edge.att.1990$Wars)
+network::set.network.attribute(asylumnet,'Alliance', edge.att.1990$Alliance)
+network::set.network.attribute(asylumnet,'Border', edge.att.1990$border)
+network::set.network.attribute(asylumnet,'Migrants', edge.att.1990$Mig)
 
-model_2 <- ergm(asylumnet ~ edges + mutual() + nodeocov('Per Capita Income') + nodeicov('Per Capita Income') + absdiff('Per Capita Income')
-                + gwidegree(1,fixed = TRUE) + gwodegree(1, fixed = TRUE)
-                + edgecov(war_adj_1990$adjacency) + edgecov(alliance_adj_1990$adjacency)
-                + edgecov(bord_adj_1990$adjacency) + edgecov(mig_adj_1990$adjacency)
-                )
 
-summary(model_2)
+
+
+save(asylumnet, file = "asylumnet2004final.rda")
+
+
+
+
+
+#model_2 <- ergm(asylumnet ~ edges + mutual() + nodeocov('Per Capita Income')
+#                + nodeicov('Per Capita Income') + absdiff('Per Capita Income')
+#                + gwidegree(1,fixed = TRUE) + gwodegree(1, fixed = TRUE)
+#                + edgecov('Wars') + edgecov('Alliance')
+#                + edgecov('Border') + edgecov('Migrants')
+#                )
+#
+#summary(model_2)
