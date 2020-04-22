@@ -24,7 +24,7 @@ data20 <- dplyr::select(data20,"EventDate", "SrcName","TgtName")
 
 data20$EventDate <- mdy_hms(data20$EventDate)
 data20 <- data20[order(data20$EventDate),]
-data20 <- subset(data20,data20$EventDate < "2005/01/01" & data20$EventDate >= "2004/01/01") ###################### 1990 - 1995.
+data20 <- subset(data20,data20$EventDate < "2005-01-01" & data20$EventDate >= "2004-01-01") ###################### 1990 - 1995.
 
 #data90 <- data90[,-1]
 
@@ -46,23 +46,27 @@ load(file = "wars_by_year.rda")
 load(file = "ally_by_year.rda") 
 
 ally1990 <- ally_by_year[[15]]
-war1990 <- wars_by_year[[15]]
-migrants1990 <- migrants_by_year[[3]]
+ally1990_1 <- ally1990
+temp <- ally1990_1[,1]
+ally1990_1[,1] <- ally1990_1[,2]
+ally1990_1[,2] <- temp
+ally1990 <- rbind(ally1990, ally1990_1) # Makes alliances edglist "complete"
+
+war1990 <- wars_by_year[[15]] # Already "complete" edgelist
+migrants1990 <- migrants_by_year[[3]] # Change every 5 years
 
 
-mig <- graph.adjacency(as.matrix(migrants1990[,2:190]))
-get.edgelist(mig)
+#mig <- graph.adjacency(as.matrix(migrants1990[,2:190]))
+#get.edgelist(mig)
 
 colnames(borders.mat)[3] <- "UK_"
 rownames(borders.mat)[3] <- "UK_"
+borders.mat_without_NA <- as.matrix(borders.mat[-(1:2),-(1:2)])
+bord <- EdgelistFromAdjacency(borders.mat_without_NA, nodelist = colnames(borders.mat_without_NA))
+landlock <- borders.mat[,1]
 
 mig1990 <- EdgelistFromAdjacency(as.matrix(migrants1990[,2:190]), nodelist = colnames(migrants1990[,2:190]))
 
-borders.mat_without_NA <- as.matrix(borders.mat[-(1:2),-(1:2)])
-
-bord <- EdgelistFromAdjacency(borders.mat_without_NA, nodelist = colnames(borders.mat_without_NA))
-
-landlock <- borders.mat[,1]
 
 m1 <- merge(war1990[,-4],ally1990,all = TRUE)
 colnames(m1)[3] <- "Wars"
@@ -133,25 +137,21 @@ node.att.1990 <- filter(node.att.1990, is.element(node.att.1990$country, edge.at
 
 edge.att.1990 <- edge.att.1990[order(edge.att.1990$namea, edge.att.1990$nameb),]
 
-war_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,3)])
-alliance_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,4)])
-bord_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,5)])
-mig_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,6)])
+#war_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,3)])
+#alliance_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,4)])
+#bord_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,5)])
+#mig_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,6)])
 asylum_adj_1990 <- AdjacencyFromEdgelist(edge.att.1990[,c(1:2,7)])
 
-Adjlist <- list(war_adj_1990$adjacency,alliance_adj_1990$adjacency,bord_adj_1990$adjacency,mig_adj_1990$adjacency)
+#Adjlist <- list(war_adj_1990$adjacency,alliance_adj_1990$adjacency,bord_adj_1990$adjacency,mig_adj_1990$adjacency)
 
-save(node.att.1990,file = "Asylum_Node_Attributes_1990.rda")
-save(Adjlist,file = "Asylum_Edge_Adjacencies_1990.rda")
-save(asylum_adj_1990,file = "Asylum_Adjacency_1990.rda")
+#save(node.att.1990,file = "Asylum_Node_Attributes_1990.rda")
+#save(Adjlist,file = "Asylum_Edge_Adjacencies_1990.rda")
+#save(asylum_adj_1990,file = "Asylum_Adjacency_1990.rda")
 
 ################################################################ ERGM
 
-
-
 asylumnet <- network(asylum_adj_1990$adjacency,directed = TRUE,matrix.type = "adjacency")
-
-
 
 
 network::set.vertex.attribute(asylumnet, 'Per Capita Income', as.numeric(node.att.1990$GDP1990))
@@ -162,8 +162,6 @@ network::set.network.attribute(asylumnet,'Wars', edge.att.1990$Wars)
 network::set.network.attribute(asylumnet,'Alliance', edge.att.1990$Alliance)
 network::set.network.attribute(asylumnet,'Border', edge.att.1990$border)
 network::set.network.attribute(asylumnet,'Migrants', edge.att.1990$Mig)
-
-
 
 
 save(asylumnet, file = "asylumnet2004final.rda")
