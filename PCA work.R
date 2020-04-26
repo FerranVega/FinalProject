@@ -33,3 +33,19 @@ PCA_data_1 <- reshape(PCA_data_1, idvar = "Countries", timevar = "Events", direc
 
 save(PCA_data_1, file = "PCA_data.rda")
 
+load(file = "PCA_data.rda")
+attach(PCA_data_1)
+
+names(PCA_data_1) <- gsub("Counts.", "", names(PCA_data_1), fixed = TRUE)
+names(PCA_data_1) <- gsub("<", "", names(PCA_data_1), fixed = TRUE)
+names(PCA_data_1) <- gsub(">", "", names(PCA_data_1), fixed = TRUE)
+
+events.pc<-prcomp(~ AERI + APOL + BLAM + ATSE, 
+                  data=PCA_data_1, center=T, scale=T, retx=T)
+sum(ASKM)
+
+#Screeplot
+screeplot(events.pc, type = "l")
+abline(h=1)
+summary(events.pc)
+events.pc$rotation
