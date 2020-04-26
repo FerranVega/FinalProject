@@ -34,11 +34,23 @@ PCA_data_1 <- reshape(PCA_data_1, idvar = "Countries", timevar = "Events", direc
 save(PCA_data_1, file = "PCA_data.rda")
 
 load(file = "PCA_data.rda")
-attach(PCA_data_1)
 
 names(PCA_data_1) <- gsub("Counts.", "", names(PCA_data_1), fixed = TRUE)
 names(PCA_data_1) <- gsub("<", "", names(PCA_data_1), fixed = TRUE)
 names(PCA_data_1) <- gsub(">", "", names(PCA_data_1), fixed = TRUE)
+
+PCA_Transp <- as.data.frame(t(PCA_data_1)) 
+colnames(PCA_Transp) <- PCA_data_1$Countries
+PCA_Transp <- PCA_Transp[-1,]
+
+row.names(PCA_Transp) <- gsub("Counts.", "", row.names(PCA_Transp), fixed = TRUE)
+row.names(PCA_Transp) <- gsub("<", "", row.names(PCA_Transp), fixed = TRUE)
+row.names(PCA_Transp) <- gsub(">", "", row.names(PCA_Transp), fixed = TRUE)
+
+save(PCA_Transp, file = "PCA_data_T.rda")
+
+
+####################################################################################
 
 events.pc<-prcomp(~ AERI + APOL + BLAM + ATSE, 
                   data=PCA_data_1, center=T, scale=T, retx=T)
