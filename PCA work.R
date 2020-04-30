@@ -1,7 +1,12 @@
 rm(list=ls())
+setwd("C:/Users/Ferran Vega/OneDrive/Math 23 C/Final Project/FinalProject")
 
 library(dils)
 library(dplyr)
+
+# Prepare data for PCA
+
+## Load data and create counts for each action type
 
 load("data90.rda")
 load("data95.rda")
@@ -31,9 +36,9 @@ PCA_data_1$Counts[is.na(PCA_data_1$Counts)] = 0
 
 PCA_data_1 <- reshape(PCA_data_1, idvar = "Countries", timevar = "Events", direction = "wide")
 
-save(PCA_data_1, file = "PCA_data.rda")
+## Save matrix and create a transpose of it just in case it could be useful
 
-load(file = "PCA_data.rda")
+save(PCA_data_1, file = "PCA_data.rda")
 
 names(PCA_data_1) <- gsub("Counts.", "", names(PCA_data_1), fixed = TRUE)
 names(PCA_data_1) <- gsub("<", "", names(PCA_data_1), fixed = TRUE)
@@ -48,6 +53,16 @@ row.names(PCA_Transp) <- gsub("<", "", row.names(PCA_Transp), fixed = TRUE)
 row.names(PCA_Transp) <- gsub(">", "", row.names(PCA_Transp), fixed = TRUE)
 
 save(PCA_Transp, file = "PCA_data_T.rda")
+
+## Load the matrix and trim the number of columns to include only the 
+
+rm(list=ls())
+setwd("C:/Users/Ferran Vega/OneDrive/Math 23 C/Final Project/FinalProject")
+
+##########################
+load(file = "PCA_data.rda")
+#########################
+
 
 
 ####################################################################################
