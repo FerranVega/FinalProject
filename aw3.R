@@ -11,6 +11,7 @@ load(file = "ally_by_year.rda")
 load(file = "data90.rda")
 load(file = "data95.rda") 
 load(file = "data20.rda")
+
 load(file = "civil90s.rda")
 civil90 <- civil
 load(file = "civil95s.rda") 
