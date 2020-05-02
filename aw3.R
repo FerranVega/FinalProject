@@ -115,8 +115,8 @@ for (i in 1:15){
   attGDPpc$country <- as.character(attGDPpc$country)
   
   attGDPpc$country[attGDPpc$country == "_UK"] <- "UK_"
-  node.att.1990 <- attGDPpc[,1:2] # Create GDP node att column
-  
+  node.att.1990 <- attGDPpc[,c(1,i+1)] # Create GDP node att column
+  colnames(node.att.1990)[2] <- "GDP"
   node.att.1990 <- merge(node.att.1990, civil, by = "country", all = TRUE) #Merging civil war data.
   colnames(node.att.1990)[3] <- "CivilWars"
   node.att.1990$CivilWars[is.na(node.att.1990$CivilWars)] = 0
@@ -125,21 +125,21 @@ for (i in 1:15){
   #attHDI$country <- as.character(attHDI$country)
   
   #attHDI$country[attHDI$country == "_UK"] <- "UK_"
-  #node.att.1990 <- merge(node.att.1990, attHDI[1:2], by = "country") # Merging HDI node att
-  
+  #node.att.1990 <- merge(node.att.1990, attHDI[,c(1,i+1)], by = "country") # Merging HDI node att
+  #colnames(node.att.1990)[4] <- "HDI"
   #EFI <- read.csv("EFIndex_withNA.csv") 
   #EFI <- EFI[3:19]
   #colnames(EFI)[1] <- "country"
   #EFI$country <- as.character(EFI$country)
-  #node.att.1990 <- merge(node.att.1990, EFI[1:2], by = "country") # Merging ethnic frac node att
-  #colnames(node.att.1990)[4] <- "EFI1990"
+  #node.att.1990 <- merge(node.att.1990, EFI[,c(1,i+1)], by = "country") # Merging ethnic frac node att
+  #colnames(node.att.1990)[5] <- "EFI"
   
   #Religion <- read.csv("major_religion.csv", head = TRUE, sep=",") 
   #Religion <- select(Religion, "Code", "major")
   #colnames(Religion)[1] <- "country"
   #Religion$country <- as.character(Religion$country)
-  #node.att.1990 <- merge(node.att.1990, Religion[1:2], by = "country") # Merging religion node att
-  
+  #node.att.1990 <- merge(node.att.1990, Religion[,c(1,i+1)], by = "country") # Merging religion node att
+  #colnames(node.att.1990)[6] <- "RELIGION"
   node.att.1990 <- node.att.1990[as.character(node.att.1990$GDP1990)!= "" ,]
   node.att.1990 <- na.omit(node.att.1990)
 
@@ -160,11 +160,11 @@ for (i in 1:15){
   
   asylumnet <- network(asylum_adj_1990$adjacency,directed = TRUE,matrix.type = "adjacency")
   
-  network::set.vertex.attribute(asylumnet, 'Per Capita Income', as.numeric(node.att.1990$GDP1990))
+  network::set.vertex.attribute(asylumnet, 'Per Capita Income', as.numeric(node.att.1990$GDP))
   network::set.vertex.attribute(asylumnet, 'Civil Conflicts', as.numeric(node.att.1990$CivilWars))
-  #network::set.vertex.attribute(asylumnet, 'HDI', node.att.1990$HDI1990)
-  #network::set.vertex.attribute(asylumnet, 'EFI', node.att.1990$EFI1990)
-  #network::set.vertex.attribute(asylumnet, 'Religion', as.character(node.att.1990$major))
+  #network::set.vertex.attribute(asylumnet, 'HDI', node.att.1990$HDI)
+  #network::set.vertex.attribute(asylumnet, 'EFI', node.att.1990$EFI)
+  #network::set.vertex.attribute(asylumnet, 'Religion', as.character(node.att.1990$RELIGION))
   network::set.network.attribute(asylumnet,'Wars', edge.att.1990$Wars)
   network::set.network.attribute(asylumnet,'Alliance', edge.att.1990$Alliance)
   network::set.network.attribute(asylumnet,'Border', edge.att.1990$border)
