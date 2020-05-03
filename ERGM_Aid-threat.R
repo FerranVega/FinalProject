@@ -6,7 +6,7 @@ library(btergm)
 library(plyr)
 library(beepr)
 
-load(file = "econaids.rda")
+load(file = "migrants_by_year.rda")
 load(file = "borders.mat.rda") 
 load(file = "wars_by_year.rda") 
 load(file = "ally_by_year.rda")
@@ -178,7 +178,7 @@ netlist <- list(tnet1990,tnet1991,tnet1992,tnet1993,tnet1994
 tnet2000,tnet2001,tnet2002,tnet2003,tnet2004)
 
 
-model_fulltime41 <- btergm(netlist ~ edges + mutual() 
+"model_fulltime41 <- btergm(netlist ~ edges + mutual() 
                           + nodeocov('Per Capita Income')
                           + nodeicov('Per Capita Income')
                           + edgecov('Alliance')
@@ -218,6 +218,6 @@ model_fulltime45 <- btergm(netlist ~ edges + mutual() + nodeocov('Per Capita Inc
                           R = 50
 )
 summary(model_fulltime45)
+"
 
-
-save(model_fulltime41,model_fulltime42,model_fulltime43,model_fulltime44,model_fulltime45,file = "tergms_threat_41to45.rda")
+#save(model_fulltime41,model_fulltime42,model_fulltime43,model_fulltime44,model_fulltime45,file = "tergms_threat_41to45.rda")
