@@ -395,7 +395,15 @@ colnames(Belligerance.index) <- c("country", "Index")
 
 # Check highest values
 Belligerance.index_high <- subset(Belligerance.index,Belligerance.index$Index>1)
-barplot(Belligerance.index_high$Index, names.arg = Belligerance.index_high$country)
+colnames(Belligerance.index_high) <- c("Country", "Index")
+library(grid)
+library(gridBase)
+library(ggplot2)
+
+p<-ggplot(data=Belligerance.index_high, aes(x=Country, y=Index)) +
+  geom_bar(stat="identity", fill="steelblue")+
+  theme_minimal()
+p + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 ## Set up regressions on belligerance index
 
