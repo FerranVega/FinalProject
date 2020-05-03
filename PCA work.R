@@ -383,6 +383,7 @@ try5 <- try5[order(try5$V3),]
 
 detach(PCA_data_1)
 attach(PCA_data_5)
+detach(PCA_data_5)
 
 ## Create the belligerance index!
 
@@ -390,10 +391,54 @@ Belligerance.index <- as.data.frame(PCA_data_5$Countries)
 Index <- (RAID+POLPER+AERI+CLAS+PASS+EXIL+PEXE+GRPG)/8
 Belligerance.index$Index <- Index*100
 Belligerance.index <- Belligerance.index[order(-Belligerance.index$Index),]
+colnames(Belligerance.index) <- c("country", "Index")
 
 # Check highest values
 Belligerance.index_high <- subset(Belligerance.index,Belligerance.index$Index>1)
+barplot(Belligerance.index_high$Index, names.arg = Belligerance.index_high$country)
 
+## Set up regressions on belligerance index
+
+## Load node attributes (we will use 2003 nodal attributes for this regression)
+load(file = "Reg_attributes.rda") 
+Reg_vars <- merge(Belligerance.index,node.att.regressions,by = "country",all = TRUE)
+
+Reg_vars <- na.omit(Reg_vars)
+#Reg_vars$Index <- Reg_vars$Index*100
+Reg_vars$GDP <- log(as.numeric(Reg_vars$GDP))
+
+
+plot(Reg_vars$GDP, Reg_vars$Index)
+abline(h=5)
+abline(h=3, col="red")
+abline(h=1.5, col="blue")
+cor(Reg_vars$GDP, Reg_vars$Index)
+
+plot(Reg_vars$HDI, Reg_vars$Index)
+abline(h=5)
+abline(h=3, col="red")
+abline(h=1.5, col="blue")
+cor(Reg_vars$HDI, Reg_vars$Index)
+
+plot(Reg_vars$No.border, Reg_vars$Index)
+abline(h=5)
+abline(h=3, col="red")
+abline(h=1.5, col="blue")
+cor(Reg_vars$No.border, Reg_vars$Index)abline(h=3, col="red")
+
+
+plot(Reg_vars$CivilWars, Reg_vars$Index)
+abline(h=5)
+abline(h=3, col="red")
+abline(h=1.5, col="blue")
+cor(Reg_vars$CivilWars, Reg_vars$Index)
+
+Reg_vars$GDP.sq <- (Reg_vars$GDP)^2
+Reg_vars$GDP.sq <- (Reg_vars$GDP)^2
+
+
+reg_model <- lm(Reg_vars$Index ~ Reg_vars$GDP + (Reg_vars$GDP^2) + Reg_vars$HDI + (Reg_vars$HDI^2) + Reg_vars$CivilWars + Reg_vars$No.border)
+summary(reg_model)
 
 
 ####################################################################################
