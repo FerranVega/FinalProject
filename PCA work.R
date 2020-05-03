@@ -383,7 +383,6 @@ try5 <- try5[order(try5$V3),]
 
 detach(PCA_data_1)
 attach(PCA_data_5)
-detach(PCA_data_5)
 
 ## Create the belligerance index!
 
@@ -393,17 +392,17 @@ Belligerance.index$Index <- Index*100
 Belligerance.index <- Belligerance.index[order(-Belligerance.index$Index),]
 colnames(Belligerance.index) <- c("country", "Index")
 
-# Check highest values
+# Check highest values (plot only if index is above 1 after scaling by a factor of 100)
 Belligerance.index_high <- subset(Belligerance.index,Belligerance.index$Index>1)
 colnames(Belligerance.index_high) <- c("Country", "Index")
 library(grid)
 library(gridBase)
 library(ggplot2)
 
-p<-ggplot(data=Belligerance.index_high, aes(x=Country, y=Index)) +
+p<-ggplot(data=Belligerance.index_high, aes(x=reorder(Country, -Index), y=Index)) +
   geom_bar(stat="identity", fill="steelblue")+
   theme_minimal()
-p + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+p + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(title = "Belligerant countries", x = "Country") + geom_hline(yintercept = 1, col="red")
 
 ## Set up regressions on belligerance index
 
@@ -448,6 +447,7 @@ Reg_vars$GDP.sq <- (Reg_vars$GDP)^2
 reg_model <- lm(Reg_vars$Index ~ Reg_vars$GDP + (Reg_vars$GDP^2) + Reg_vars$HDI + (Reg_vars$HDI^2) + Reg_vars$CivilWars + Reg_vars$No.border)
 summary(reg_model)
 
+detach(PCA_data_5)
 
 ####################################################################################
 
