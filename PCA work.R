@@ -389,9 +389,11 @@ attach(PCA_data_5)
 Belligerance.index <- as.data.frame(PCA_data_5$Countries)
 Index <- (RAID+POLPER+AERI+CLAS+PASS+EXIL+PEXE+GRPG)/8
 Belligerance.index$Index <- Index*100
+Belligerance.index <- Belligerance.index[order(-Belligerance.index$Index),]
 
 # Check highest values
 Belligerance.index_high <- subset(Belligerance.index,Belligerance.index$Index>1)
+
 
 
 ####################################################################################
