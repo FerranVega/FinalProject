@@ -398,11 +398,13 @@ colnames(Belligerance.index_high) <- c("Country", "Index")
 library(grid)
 library(gridBase)
 library(ggplot2)
+library(ggthemes)
 
 p<-ggplot(data=Belligerance.index_high, aes(x=reorder(Country, -Index), y=Index)) +
   geom_bar(stat="identity", fill="steelblue")+
   theme_minimal()
-p + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(title = "Belligerant countries", x = "Country") + geom_hline(yintercept = 1, col="red")
+p1 <- p + theme_economist() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(title = "Belligerant countries", x = "Country") + geom_hline(aes(yintercept=1), col="red") 
+p1 + scale_y_continuous(breaks = c(1, 5, 10,15))
 
 ## Set up regressions on belligerance index
 
@@ -413,7 +415,6 @@ Reg_vars <- merge(Belligerance.index,node.att.regressions,by = "country",all = T
 Reg_vars <- na.omit(Reg_vars)
 #Reg_vars$Index <- Reg_vars$Index*100
 Reg_vars$GDP <- log(as.numeric(Reg_vars$GDP))
-
 
 plot(Reg_vars$GDP, Reg_vars$Index)
 abline(h=5)
@@ -431,8 +432,7 @@ plot(Reg_vars$No.border, Reg_vars$Index)
 abline(h=5)
 abline(h=3, col="red")
 abline(h=1.5, col="blue")
-cor(Reg_vars$No.border, Reg_vars$Index)abline(h=3, col="red")
-
+cor(Reg_vars$No.border, Reg_vars$Index)
 
 plot(Reg_vars$CivilWars, Reg_vars$Index)
 abline(h=5)
@@ -440,12 +440,24 @@ abline(h=3, col="red")
 abline(h=1.5, col="blue")
 cor(Reg_vars$CivilWars, Reg_vars$Index)
 
-Reg_vars$GDP.sq <- (Reg_vars$GDP)^2
-Reg_vars$GDP.sq <- (Reg_vars$GDP)^2
+# Create matrix A from which we can create the "trimmed" projection matrix formula
+# that gives us the coefficients.
+
+v1 <- c(rep(1, nrow(Reg_vars)))
+A <- cbind(v1, Reg_vars$GDP, Reg_vars$HDI, Reg_vars$CivilWars, Reg_vars$No.border)
+coeff <- solve(t(A)%*%A)%*%t(A)%*%Reg_vars$Index
 
 
-reg_model <- lm(Reg_vars$Index ~ Reg_vars$GDP + (Reg_vars$GDP^2) + Reg_vars$HDI + (Reg_vars$HDI^2) + Reg_vars$CivilWars + Reg_vars$No.border)
-summary(reg_model)
+reg_model <- lm(Reg_vars$Index ~ Reg_vars$GDP + Reg_vars$HDI + Reg_vars$CivilWars + Reg_vars$No.border)
+summary(reg_model) ; coeff
+# The coefficients match those provided by the integrated lm function. Lm reveals some
+# significant coefficients. Specifically, it suggests that HDI and the ocurrance
+# of civil wars lead to increases in the level of belligerance shown by countries
+# as measured by our index. However, given suspicion (motivated by the initial
+# scatterplots of the dependent variable with each individual regressor)
+# that a linear model might not be appropriate for this analysis, we advise not to 
+# read too much into these.
+
 
 detach(PCA_data_5)
 
