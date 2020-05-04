@@ -378,8 +378,35 @@ row.names(try5) <- c(colnames(A_5))
 options(scipen=999)
 
 try5 <- try5[order(try5$V1),]
+PC1 <- as.data.frame(try5$V1)
+rownames(PC1) <- rownames(try5)
+
 try5 <- try5[order(try5$V2),]
+PC2 <- as.data.frame(try5$V2)
+rownames(PC2) <- rownames(try5)
+
 try5 <- try5[order(try5$V3),]
+PC3 <- as.data.frame(try5$V3)
+rownames(PC3) <- rownames(try5)
+
+'
+The first component PC1 has negative loadings for each action type and is likely
+accounting from something related to the overall activity level of countries in
+the international arena. PC2 and PC3 on the other hand do seem to capture something
+related to belligerance. We focus on PC2 since this accounts for over 15% of 
+the total variation. On PC2 we see positive loadings on actions that we
+might normally associate to belligerant and/or aggresive nations. The actions with 
+positive loadings are:
+RAID (Armed actions)
+POLPER (Political flight/arrests)
+AERI (Missile attacks)
+CLAS (Armed battle)
+PASS (All uses of non-armed physical force in assaults against people)
+EXIL (Expel)
+PEXE (Small arms attack)
+GRPG (Artillery attack)
+'
+PC2
 
 detach(PCA_data_1)
 attach(PCA_data_5)
