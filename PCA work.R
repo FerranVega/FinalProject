@@ -133,9 +133,9 @@ for (i in 1:52) {
 prop.var <- Eig.vals/summ_var
 sum(prop.var) # adds up to 1, we are in business. 
 
-plot(prop.var, type = "l")
-points(c(1:52),prop.var)
-abline(h=.1) # Horizonal line at 10% of the variation. Only one component with this threshold.
+PC_index <- 1:52
+ggplot(data=as.data.frame(prop.var), aes(y=prop.var*100, x=PC_index)) + geom_line(linetype = "dashed") + geom_point() + geom_hline(aes(yintercept=10), col="red") + geom_hline(aes(yintercept=5), col="blue") + labs(y = "%", x = "Components", title="Proportion of variance explained") + scale_y_continuous(breaks = c(0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95))
+# Horizonal line at 10% and 5% of the variation. Only one component above this threshold.
 
 prop.var[1] # It seems like the first component, the one with the largest eigenvalue, accounts for 
 # over 92 percent of the total variance. 
@@ -192,10 +192,9 @@ for (i in 1:29) {
 prop.var_2 <- Eig.vals_2/summ_var_2
 sum(prop.var_2) # adds up to ~1 (not quite 1 probably due to rounding), we are in business. 
 
-plot(prop.var_2, type = "l")
-points(c(1:29),prop.var_2)
-abline(h=.1) # Horizonal line at 10% of the variation. Only one component with this threshold.
-abline(h=.05, col="red") # Horizontal line at 5%
+PC_index <- 1:29
+ggplot(data=as.data.frame(prop.var_2), aes(y=prop.var_2*100, x=PC_index)) + geom_line(linetype = "dashed") + geom_point() + geom_hline(aes(yintercept=10), col="red") + geom_hline(aes(yintercept=5), col="blue") + labs(y = "%", x = "Components", title="Proportion of variance explained") + scale_y_continuous(breaks = c(0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95))
+# Horizonal line at 10% and 5% of the variation. Only one component above this threshold.
 
 prop.var_2[1] # It seems like the first component, the one with the largest eigenvalue, accounts for 
 # over 92 percent of the total variance. 
@@ -244,10 +243,9 @@ for (i in 1:25) {
 prop.var_3 <- Eig.vals_3/summ_var_3
 sum(prop.var_3) # adds up to 1, we are in business. 
 
-plot(prop.var_3, type = "l")
-points(c(1:25),prop.var_3)
-abline(h=.1) # Horizonal line at 10% of the variation. Only one component with this threshold.
-abline(h=.05, col="red") # Horizontal line at 5%
+PC_index <- 1:25
+ggplot(data=as.data.frame(prop.var_3), aes(y=prop.var_3*100, x=PC_index)) + geom_line(linetype = "dashed") + geom_point() + geom_hline(aes(yintercept=10), col="red") + geom_hline(aes(yintercept=5), col="blue") + labs(y = "%", x = "Components", title="Proportion of variance explained") + scale_y_continuous(breaks = c(0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95))
+# Horizonal line at 10% and 5% of the variation. Only one component above this threshold.
 
 prop.var_3[1] # It seems like the first component, the one with the largest eigenvalue, accounts for 
 # over 93 percent of the total variance. 
@@ -295,10 +293,9 @@ for (i in 1:25) {
 prop.var_4 <- Eig.vals_4/summ_var_4
 sum(prop.var_4) # adds up to 1, we are in business. 
 
-plot(prop.var_4, type = "l")
-points(c(1:25),prop.var_4)
-abline(h=.1) # Horizonal line at 10% of the variation. Only one component with this threshold.
-abline(h=.05, col="red") # Horizontal line at 5%
+PC_index <- 1:25
+ggplot(data=as.data.frame(prop.var_4), aes(y=prop.var_4*100, x=PC_index)) + geom_line(linetype = "dashed") + geom_point() + geom_hline(aes(yintercept=10), col="red") + geom_hline(aes(yintercept=5), col="blue") + labs(y = "%", x = "Components", title="Proportion of variance explained") + scale_y_continuous(breaks = c(0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95))
+# Horizonal line at 10% and 5% of the variation. 3 components above the 10% threshold.
 
 prop.var_4[1] # It seems like the first component, the one with the largest eigenvalue, accounts for 
 # over 52.5 percent of the total variance. 
@@ -356,10 +353,9 @@ for (i in 1:24) {
 prop.var_5 <- Eig.vals_5/summ_var_5
 sum(prop.var_5) # adds up to 1, we are in business. 
 
-plot(prop.var_5, type = "l")
-points(c(1:24),prop.var_5)
-abline(h=.1) # Horizonal line at 10% of the variation. Only one component with this threshold.
-abline(h=.05, col="red") # Horizontal line at 5%
+PC_index <- 1:24
+ggplot(data=as.data.frame(prop.var_5), aes(y=prop.var_5*100, x=PC_index)) + geom_line(linetype = "dashed") + geom_point() + geom_hline(aes(yintercept=10), col="red") + geom_hline(aes(yintercept=5), col="blue") + labs(y = "%", x = "Components", title="Proportion of variance explained") + scale_y_continuous(breaks = c(0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95))
+# Horizonal line at 10% and 5% of the variation. 2 components above the 10% threshold.
 
 prop.var_5[1] # It seems like the first component, the one with the largest eigenvalue, accounts for 
 # over 64.1 percent of the total variance. 
@@ -443,28 +439,16 @@ Reg_vars <- na.omit(Reg_vars)
 #Reg_vars$Index <- Reg_vars$Index*100
 Reg_vars$GDP <- log(as.numeric(Reg_vars$GDP))
 
-plot(Reg_vars$GDP, Reg_vars$Index)
-abline(h=5)
-abline(h=3, col="red")
-abline(h=1.5, col="blue")
+ggplot(Reg_vars, aes(x = Reg_vars$GDP, y = Reg_vars$Index)) + geom_point() + geom_hline(aes(yintercept=5), col="black") + geom_hline(aes(yintercept=3), col="red") + geom_hline(aes(yintercept=1.5), col="blue") + labs(x="log GDP per capita", y="Belligerance Index")
 cor(Reg_vars$GDP, Reg_vars$Index)
 
-plot(Reg_vars$HDI, Reg_vars$Index)
-abline(h=5)
-abline(h=3, col="red")
-abline(h=1.5, col="blue")
+ggplot(Reg_vars, aes(x = Reg_vars$HDI, y = Reg_vars$Index)) + geom_point() + geom_hline(aes(yintercept=5), col="black") + geom_hline(aes(yintercept=3), col="red") + geom_hline(aes(yintercept=1.5), col="blue") + labs(x="HDI", y="Belligerance Index")
 cor(Reg_vars$HDI, Reg_vars$Index)
 
-plot(Reg_vars$No.border, Reg_vars$Index)
-abline(h=5)
-abline(h=3, col="red")
-abline(h=1.5, col="blue")
+ggplot(Reg_vars, aes(x = Reg_vars$No.border, y = Reg_vars$Index)) + geom_point() + geom_hline(aes(yintercept=5), col="black") + geom_hline(aes(yintercept=3), col="red") + geom_hline(aes(yintercept=1.5), col="blue") + labs(x="No border = 1", y="Belligerance Index")
 cor(Reg_vars$No.border, Reg_vars$Index)
 
-plot(Reg_vars$CivilWars, Reg_vars$Index)
-abline(h=5)
-abline(h=3, col="red")
-abline(h=1.5, col="blue")
+ggplot(Reg_vars, aes(x = Reg_vars$CivilWars, y = Reg_vars$Index)) + geom_point() + geom_hline(aes(yintercept=5), col="black") + geom_hline(aes(yintercept=3), col="red") + geom_hline(aes(yintercept=1.5), col="blue") + labs(x="Civil war events", y="Belligerance Index")
 cor(Reg_vars$CivilWars, Reg_vars$Index)
 
 # Create matrix A from which we can create the "trimmed" projection matrix formula
@@ -492,8 +476,118 @@ stargazer(reg_model, type="text",
           dep.var.labels=c("Belligerance Index"),
           covariate.labels=c("Log GDP per cap.","Human Development Index (HDI)","Civil war",
                              "Lacking border"), out="linear_model.pdf")
-
 detach(PCA_data_5)
+
+## Do Chi-squared test: Border/no border & HDI classifications
+chisq_data <- Reg_vars[,c(1,5:6)]
+attach(chisq_data)
+
+'The UNDP classifies each country into one of three development groups: Low human development for HDI 
+scores between 0.0 and 0.5, Medium human development for HDI scores between 0.5 and 0.8. High human 
+development for HDI scores between 0.8 and 1.0.'
+
+## Create categorical version of HDI in accordance to UNDP guidelines
+chisq_data$HDI_cat <-  cut(HDI, 
+                breaks=c(-Inf, 0.5, 0.8, Inf), 
+                labels=c("Low","Middle","High"))
+
+## Observed table
+attach(chisq_data)
+Obs_table <- table(No.border, HDI_cat); Obs_table
+
+'The Chi square test used in the Contingency table approach requires at least 80% of the cells 
+to have an expected count greater than 5 or else the sum of the cell Chi squares will not have
+a Chi square distribution. In our case, only 1/6 of the cells have a count lower than 5.
+'
+
+Obs = matrix(c(39, 3, 70, 18, 28, 7), ncol=3) ; Obs
+colnames(Obs) = c('Low', 'Middle', 'High')
+rownames(Obs) = c('Border', 'No border') ;Obs
+
+rowsums <- c(sum(Obs[1,]),sum(Obs[2,])) ; rowsums
+colsums <- c(sum(Obs[,1]),sum(Obs[,2]),sum(Obs[,3])) ; colsums
+total <- sum(Obs)
+
+# Expected table
+Exp <- matrix(nrow=2, ncol=3) ; Exp
+
+for (i in 1:2){
+  for (j in 1:3){
+    Exp[i,j] <- rowsums[i]*colsums[j]/total
+  }
+}
+
+# Determine the degrees of freedom
+dfs <- (nrow(Obs)-1)*(ncol(Obs)-1) 
+
+ChiSq <-function(Obs,Exp){
+  sum((Obs-Exp)^2/Exp)
+} # borrow Paul's function
+
+chisq <- ChiSq(Obs,Exp) ; chisq
+pvalue <- pchisq(chisq, dfs, lower.tail = FALSE); pvalue # 0.1447803
+# This pvalue is not small enough for us to reject the null hypothesis of independence.
+# There is over a 14% chance that the observed data pattern could have arisen by chance
+# under the assumption that the null hypothesis of independence is true. We are not 
+# comfortable with such a high probability for making a type I error (false positive), 
+# and thus conclude that the we cannot reject the null hypothesis of independence in this case.
+
+# We could have also used the integrated R command for carrying out a chi squared test 
+# of independence, which uses Yates continuity correction to handle improve accuracy  
+# after approximating discrete quantities with a continuous distribution 
+# (See Chihara&Hesterberg, p. 370)
+
+chisq.test(Obs) # This yields a chi squared statistic and a pvalue that are very 
+# close to the ones we calculated by hand. As above, we cannot reject the null hypothesis
+# that the two categorical variables are independent.
+
+# Permutation test on Border/no Border & HDI level
+
+idx <- which(No.border == 1) # Index for countries without a border
+
+Mean.NoBorder <- mean(HDI[idx])
+Mean.Border <- mean(HDI[-idx])
+observed <- Mean.Border - Mean.NoBorder ; observed 
+'On average, Countries that do not have a border have HDIs 0.07096872 lower 
+than countries with a border'
+
+# Now carry out permutation test to check whether this difference is significant
+N <- 10000
+diff <- numeric(N)
+
+for (i in 1:N){
+  samp <- sample(nrow(chisq_data), sum(No.border == 1)) 
+  # obtain random sample of size equal to number of countries without a border in the data
+  weightSamp <- mean(HDI[samp]) # mean for random sample
+  weightOther <- mean(HDI[-samp]) # mean for complement
+  diff[i] <- weightSamp - weightOther # calculate the difference
+}
+
+breaks <- pretty(range(diff), n = nclass.FD(diff), min.n = 1)
+bwidth <- breaks[2]-breaks[1]
+ggplot(data = as.data.frame(diff),aes(diff)) + theme_economist() + geom_histogram(binwidth=bwidth,fill="white",colour="black") + geom_vline(aes(xintercept=observed), col="red") + labs(title = "Simulated differences", x = "Diff", y="Count")
+# The red line is quite far into the left tail of the histogram. Seems 
+# like the difference is significant from the graph, but lets calculate the
+# exact p-value!
+
+# Calculate pvalue
+(sum(diff <= observed)+1)/(N+1) #One tailed: Check if the observed difference is large
+# enough to determine that countries without a border have an HDI that is significantly 
+# lower than countries that do have a border. The p-value is very small, 0.02239776, meaning
+# that that it is extremely unlikely (roughly a 2% chance) that the observed difference happened 
+# by chance if the null hypothesis of equal HDIs were true. However, we did not try to establish
+# the sign of the difference a priori, so we should instead carry out a two-tailed test.
+# To do so, we multiply the p-value by 2.
+
+((sum(diff <= observed)+1)/(N+1))*2 # Two tailed, multiply this pvalue by two
+# The pvalue remains small (0.04479552). This means that there it is quite unlikely 
+# (roughly 4.5% chance) that the observed difference happened by chance under the 
+# assumption that the null hypothesis of equal HDIs were true. We can thus confidently 
+# (at the 5% significance level) reject this null hypothesis and conclude that HDI levels
+# for countries that do not have a border are significantly different from the HDI levels
+# of countries that do have a border.
+
+detach(chisq_data)
 
 ####################################################################################
 
