@@ -485,6 +485,13 @@ summary(reg_model) ; coeff
 # that a linear model might not be appropriate for this analysis, we advise not to 
 # read too much into these.
 
+#install.packages("stargazer") 
+library(stargazer)
+
+stargazer(reg_model, type="text",
+          dep.var.labels=c("Belligerance Index"),
+          covariate.labels=c("Log GDP per cap.","Human Development Index (HDI)","Civil war",
+                             "Lacking border"), out="linear_model.pdf")
 
 detach(PCA_data_5)
 
