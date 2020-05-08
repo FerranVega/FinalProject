@@ -6,6 +6,9 @@ library(btergm)
 library(plyr)
 library(beepr)
 
+# Saving attributes 2003 attributes for regression purposes. We select this year
+# for that exercise because we have the least amount of missing data in this year.
+
 #load(file = "migrants_by_year.rda")
 load(file = "borders.mat.rda") 
 load(file = "wars_by_year.rda") 
