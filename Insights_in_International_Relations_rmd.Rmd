@@ -50,7 +50,7 @@ This project aims to apply several concepts taught in class, introduce a variety
 
 ## 1 : Peer Influence in International Relations.
 
-```{r,echo=FALSE,results='hide',message=FALSE}
+```{r,echo=FALSE,results='hide',message=FALSE,warning=FALSE}
 #install.packages('dplyr')
 #install.packages('lubridate')
 #install.packages('Renext')
