@@ -703,10 +703,187 @@ At this point, we can compare the Chi-squared test with the Permutation test.
 
 Abstract :
 
-In this topic, we construct a "World Belligerence Index" using Principal Component Analysis. We find that one of our Principal Components captures the variance in "good" and "bad" actions performed by countries. "Bad" actions are mostly composed of belligerent/agressive actions. Using this, we compute PC scores for the countries which serves as an index measuring "belligerence" of countries.\
+In this topic, we construct a "World Belligerence Index" using Principal Component Analysis. We find that one of our Principal Components captures the variance in "good" and "bad" actions performed by countries. "Bad" actions are mostly composed of belligerent/agressive actions. Using this, we compute Principal Components that help us to identify the belligerent actions, out of which we construct the Index.\
 We then regress the Index scores on GDP per capita, HDI, Civil conflicts and a binary variable for presence of a border with another country. These covariates were computed in the many topics covered in this topic.
 
 Datasets used : 10 Million International Dyadic Events (10MM_IDE).
+
+```{r,echo=FALSE,results='hide',message=FALSE,warning=FALSE}
+# install.packages('grid')
+# install.packages('gridBase')
+# install.packages('ggplot2')
+# install.packages('ggthemes')
+# install.packages('stargazer')
+library(grid)
+library(gridBase)
+library(ggplot2)
+library(ggthemes)
+library(stargazer)
+```
+---
+
+### I. Constructing the World Belligerence Index.
+
+After many attempts, we narrowed down the dataset to just 24 actions. We filtered the actions on the basis of relevance (to the purpose of the index) and removed actions with too low variance.
+
+We convert action counts to percentage of total actions by each country. This is done to avoid capturing variance in total activity amongst the countries.
+```{r,eval=FALSE}
+PCA_data_5 <- select(PCA_data_2, "Countries", "AERI","BREL","CLAS","COLL","COMP_1", "DMOB",
+                     "DWAR","ESAN","EAID", "EMAI","EXIL","GRPG","HAID","POLPER", "IMPR","MDEM","NEGO",
+                     "PASS","PEXE","RAID", "RALL","SANC","SHEP","THRT_1")
+```
+```{r,echo=FALSE,comment=""}
+load(file = "PCA_data_5.rda")
+head(PCA_data_5[,1:7])
+```
+We use Eigenvalue decomposition to compute the Principal components. We create the symmetric covariance matrix and compute its Eigenvectors. These form the orthogonal eigenbasis of out covariance matrix by the Spectral Theorem.
+
+```{r,comment="",results='hide'}
+m_5<- nrow(PCA_data_5) ; m_5
+A_5 <- PCA_data_5[,2:25] # Select relevant vectors
+S_5 <- var(A_5) # Covariance symmetric matrix
+
+#Now we have a symmetric matrix to which the spectral theorem applies.
+Eig_5 <- eigen(S_5)
+Eig.vals_5 <- Eig_5$values
+P_5 <- Eig_5$vectors# This is the change of basis matrix, composed of the eigenvectors
+```
+
+These eigenvectors are our Principal Components. By the Spectral Theorem, we know they are orthogonal. We generate a Scree Plot and retain only the ones that explain more than 5% of total variance.
+
+```{r,echo=FALSE,fig.align='center',fig.height=5,fig.width=8}
+## Lets once again calculate total variance and the proportions explained by each component
+summ_var_5 <- 0 
+variances_5 <- numeric(24)
+
+for (i in 1:24) {
+  for (j in 1:24){
+    if (i == j){
+      summ_var_5 <- summ_var_5 + S_5[i,j]
+      variances_5[j] <- S_5[i,j]
+    }
+  }
+}
+
+prop.var_5 <- Eig.vals_5/summ_var_5
+sum(prop.var_5) # adds up to 1, we are in business. 
+
+PC_index <- 1:24
+ggplot(data=as.data.frame(prop.var_5), aes(y=prop.var_5*100, x=PC_index)) + geom_line(linetype = "dashed") + geom_point() + geom_hline(aes(yintercept=10), col="red") + geom_hline(aes(yintercept=5), col="blue") + labs(y = "%", x = "Components", title="Proportion of variance explained") + scale_y_continuous(breaks = c(0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95))
+# Horizonal line at 10% and 5% of the variation. 2 components above the 10% threshold.
+
+```
+```{r,comment=""}
+prop.var_5[1] 
+prop.var_5[2] 
+prop.var_5[3]
+```
+It seems like the first component, the one with the largest eigenvalue, accounts for over 64.1% of the total variance. The second and third account for 15% and 6.7% respectively.
+
+```{r,echo=FALSE,comment=""}
+try5 <- as.data.frame(P_5[,1:3])
+data_5 <- cbind(S_5,try5)  
+colnames(data_5) <- c(colnames(A_5), "Eig1", "Eig2", "Eig3")
+row.names(try5) <- c(colnames(A_5))
+options(scipen=999)
+```
+The first component PC1 has negative loadings for each action type and is likely
+accounting from something related to the overall activity level of countries in
+the international arena. PC2 and PC3 on the other hand do seem to capture something
+related to belligerance. We focus on PC2 since this accounts for over 15% of 
+the total variation. On PC2 we see positive loadings on actions that we
+might normally associate to belligerant and/or aggresive nations. The actions with 
+positive loadings are:
+
+* RAID (Armed actions)
+* POLPER (Political flight/arrests)
+*AERI (Missile attacks)
+* CLAS (Armed battle)
+* PASS (All uses of non-armed physical force in assaults against people)
+* EXIL (Expel)
+* PEXE (Small arms attack)
+* GRPG (Artillery attack)
+
+---
+
+Now we use the belligerent actions identified by PC2 to form our Index scores.\
+We take the arithmetic mean of the action percentages.
+```{r,results='hide'}
+attach(PCA_data_5)
+Belligerance.index <- as.data.frame(PCA_data_5$Countries)
+Index <- (RAID+POLPER+AERI+CLAS+PASS+EXIL+PEXE+GRPG)/8
+Belligerance.index$Index <- Index*100
+Belligerance.index <- Belligerance.index[order(-Belligerance.index$Index),]
+colnames(Belligerance.index) <- c("country", "Index")
+```
+
+```{r,echo=FALSE,results='hide'}
+Belligerance.index_high <- subset(Belligerance.index,Belligerance.index$Index>1)
+colnames(Belligerance.index_high) <- c("Country", "Index")
+```
+
+```{r,echo=FALSE,fig.align='center',fig.height=7,fig.width=10}
+p<-ggplot(data=Belligerance.index_high, aes(x=reorder(Country, -Index), y=Index)) +
+  geom_bar(stat="identity", fill="steelblue")+
+  theme_minimal()
+p1 <- p + theme_economist() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(title = "Belligerant countries", x = "Country") + geom_hline(aes(yintercept=1), col="red") 
+p1 + scale_y_continuous(breaks = c(1, 5, 10,15))
+
+```
+
+---
+
+### II. Linear Regression
+
+In this section, we use Linear Regression to model how our Index relates to some of the variables we computed and used in all our topics upto now.
+
+We construct the dataframe,
+```{r,echo=FALSE,comment=""}
+load(file = "Reg_attributes.rda") 
+Reg_vars <- merge(Belligerance.index,node.att.regressions,by = "country",all = TRUE)
+
+Reg_vars <- na.omit(Reg_vars)
+#Reg_vars$Index <- Reg_vars$Index*100
+Reg_vars$GDP <- log(as.numeric(Reg_vars$GDP))
+head(Reg_vars)
+```
+
+```{r,echo=FALSE,comment="",fig.align='center'}
+p1 <- ggplot(Reg_vars, aes(x = Reg_vars$GDP, y = Reg_vars$Index)) + geom_point() + geom_hline(aes(yintercept=5), col="black") + geom_hline(aes(yintercept=3), col="red") + geom_hline(aes(yintercept=1.5), col="blue") + labs(x="log GDP per capita", y="Belligerance Index")
+
+p2 <- ggplot(Reg_vars, aes(x = Reg_vars$HDI, y = Reg_vars$Index)) + geom_point() + geom_hline(aes(yintercept=5), col="black") + geom_hline(aes(yintercept=3), col="red") + geom_hline(aes(yintercept=1.5), col="blue") + labs(x="HDI", y="Belligerance Index")
+
+p3 <- ggplot(Reg_vars, aes(x = Reg_vars$No.border, y = Reg_vars$Index)) + geom_point() + geom_hline(aes(yintercept=5), col="black") + geom_hline(aes(yintercept=3), col="red") + geom_hline(aes(yintercept=1.5), col="blue") + labs(x="No border = 1", y="Belligerance Index")
+
+p4 <- ggplot(Reg_vars, aes(x = Reg_vars$CivilWars, y = Reg_vars$Index)) + geom_point() + geom_hline(aes(yintercept=5), col="black") + geom_hline(aes(yintercept=3), col="red") + geom_hline(aes(yintercept=1.5), col="blue") + labs(x="Civil war events", y="Belligerance Index")
+
+grid.arrange(p1,p2,p3,p4, ncol = 2)
+
+```
+
+We use the projection matrices approach to conduct Linear Regression.
+$$\mathbf{\hat{y}} = A(A^TA)A^T\mathbf{y} $$
+where, $\hat{y}$ is the vector of projected y values and A is the matrix with $\mathbf{1}$ and the covariate vectors as its columns.
+
+```{r,comment=""}
+v1 <- c(rep(1, nrow(Reg_vars)))
+A <- cbind(v1, Reg_vars$GDP, Reg_vars$HDI, Reg_vars$CivilWars, Reg_vars$No.border)
+coeff <- solve(t(A)%*%A)%*%t(A)%*%Reg_vars$Index
+```
+We find that the built-in R function lm() returns the same results. We use it to find the t-statistics, f-statistic and R-squared of our model.
+```{r,comment=""}
+reg_model <- lm(Reg_vars$Index ~ Reg_vars$GDP + Reg_vars$HDI + Reg_vars$CivilWars + Reg_vars$No.border)
+```
+
+```{r,comment="",echo=FALSE}
+stargazer(reg_model, type="text",
+          dep.var.labels=c("Belligerance Index"),
+          covariate.labels=c("Log GDP per cap.","Human Development Index (HDI)","Civil war",
+                             "Lacking border"), out="linear_model.pdf")
+detach(PCA_data_5)
+```
+
+The results suggest that HDI and the occurrence of civil wars lead to increases in the level of belligerance shown by countries as measured by our index. However, given suspicion (motivated by the initial scatterplots of the dependent variable with each individual regressor) that a linear model might not be appropriate for this analysis, we advise not to read too much into these.
 
 ---
 
@@ -753,6 +930,10 @@ Datasets used : 10 Million International Dyadic Events (10MM_IDE).
 * Nicely labeled graphics using ggplot, with good use of color, line styles, etc., that tell a convincing story. (Many)
 * Appropriate use of novel statistics (Likelihood Ratio test in Topic 1.)
 * Use of linear regression. (Topic 5)
+* Appropriate use of covariance or correlation. (Topic 5, PCA uses a covariance matrix)
 * A graphical display that is different from those in the class scripts. (Many)
 * Team consists of exactly two members.
 * A video of the short script is posted on YouTube and a link to it is left in your long script.
+
+---
+
