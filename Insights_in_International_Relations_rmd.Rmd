@@ -34,15 +34,17 @@ This project aims to apply several concepts taught in class, introduce a variety
 
 3. The (not-so)Great Escape : Analyzing Political Exile.
 
-4. The World Belligerence Index : Constructing a Global Index using PCA.
+4. Minding their own business : Does Geographical Isolation impact development?
 
-5. Conclusion
+5. The World Belligerence Index : Constructing a Global Index using PCA.
 
-6. Scope for further research
+6. Fulfilled Project Requirements
 
-7. Acknowledgements
+7. Conclusion
 
-8. References
+8. Acknowledgements
+
+9. References
 
 ---
 
@@ -380,9 +382,9 @@ This result motivates us to conduct an ERGM to analyze these networks as they ar
 
 ---
 
-### II. Network analysis using ERGM
+### II. Network Analysis using ERGMs
 
-The Exponential family is a broad family of models for covering many types of data, not just networks. An ERGM is a model from this family which describes networks.
+The Exponential family is a broad family of models for covering many types of data, not just networks. An Exponential Random Graph Model is a model from this family which describes networks.
 
 Formally a random graph $Y$ consists of a set of $n$ nodes and $m$ dyads (edges) ${Y_{ij} : i=1,2,3...n ; j=1,2,3...n}$ where $Y_{ij} = 1$ if the nodes $(i,j)$ are connected and 0 otherwise.
 
@@ -397,7 +399,79 @@ $c(\theta)$ is the normalizing constant to make it a probabiliy measure between 
 
 These models represent a probability distribution on each possible network on $n$ nodes and may be directed or undirected.
 
+We can interpret the results of such models in the following way :
 
+We define $Y_{ij}^c$ as the graph we observe before edge $Y_{ij}$ is measured.
+
+$\begin{align*} odds(Y_{ij} = 1) &= \frac{P(Y_{ij}=1|Y_{ij}^c)}{1-P(Y_{ij}=1|Y_{ij}^c)}\\ &= \frac{P(Y_{ij}=1|Y_{ij}^c)}{P(Y_{ij}=0|Y_{ij}^c)}\\ &= \frac{exp(\theta^Ts(Y_{ij}^+))}{exp(\theta^Ts(Y_{ij}^-))}\end{align*}$
+
+Here, $Y_{ij}^+$ is the graph with edge $Y_{ij}$ present and $Y_{ij}^-$ is the graph where its absent. It is important to note that both these graphs are identical $\forall Y_{pq} \in Y \neq Y_{ij}$.
+
+$\begin{align*} odds(Y_{ij} = 1) &= exp(\theta^Ts(Y_{ij}^+) - \theta^Ts(Y_{ij}^-))\\ &= exp(\theta^T[s(Y_{ij}^+) - s(Y_{ij}^-)])\end{align*}$
+
+Here, $s(Y_{ij}^+) - s(Y_{ij}^-)$ is the "change statistic" vector that represents the change in the values of the statistics by adding the edge $Y_{ij}$. Each variable now accounts for the change in counts of network statistics. We notate it as $s(\Delta Y_{ij})$.
+
+$\begin{align*} odds(Y_{ij} = 1) &= exp(\theta^Ts(\Delta Y_{ij}))\\ logodds(Y_{ij} = 1) &= \theta^Ts(\Delta Y_{ij})\\ logit(Y_{ij} = 1) &= \theta_1s_1(\Delta Y_{ij}) + \theta_2s_2(\Delta Y_{ij}) + \theta_3s_3(\Delta Y_{ij}) +.......\theta_ns_n(\Delta Y_{ij}) \end{align*}$
+
+This is the Logit model we solve when we use an ERGM. The statistics can be network features like number of edges, triangles, etc.
+
+Now suppose we choose only "Edges" as the network statistic.\
+$\theta_1 s_1(\Delta Y_{ij}) = \theta_1 (1) = \theta_1$\
+This is because the change in th edge count by adding edge $Y_{ij}$ is $1$.
+
+Our model thus becomes,
+$\begin{align*} logodds(Y_{ij} = 1) &= \theta_1\\ odds(Y_{ij}=1) &= exp(\theta_1)\\ \frac{p}{1-p} &= exp(\theta_1)\\ p &= \frac{exp(\theta_1)}{1+exp(\theta_1)} \end{align*}$
+
+This $p$ would be the "Erdos-Renyi" probability of an edge forming randomly. However, the reason we use ERGMs is to model complex networks where $p$ is not constant across the entire network. Just like any other Logit model, we control for these other factors by adding them as covariates in our Logit model.
+
+For example,
+$logodds(Y_{ij} = 1) = \theta_1Edges + \theta_2GDP_i + \theta_3GDP_j + \theta_4Border$
+
+We cleaned the following datasets to obtain our covariates :
+1. GDP per capita
+2. Dominant Ethnic Group
+3. HDI
+4. Borders
+5. Alliances : Correlates of War dataset
+6. Wars : Correlates of War dataset
+
+We ruled out the following due to issues :
+1. Dominant Ethnic Group : Data was available only for a small subset of countries which would pose problems due to the network being sparse and possibility of selection bias.
+2. Wars : ERGM models did not converge possibly due to very high collinearity. We suspected the War and alliance data might be too correlated.
+
+The strategy here is to specify "Economic Aid" as a directed edge covariate that is equal to 1 if country i received Economic Aid from country j and 0 otherwise. $Y_{ij}$ is a directed edge from i to j representing a "Threat" made by country i to j. A negative $\theta$ on the exogenous variable "Aid" will mean that receiving aid from a country j reduces the probability of sending a threat to that same country for all countries i. We explore caveats regarding direction of causality in the next section.
+
+We used an extension of the ERGM called the Temporal ERGM (TERGM) to analyze an evolving network where the nodal and edge covariates keep changing over time. We use data from 1990-2005.
+
+For every year, we used a loop to extract all the data and store it into a Network object created using the "btergm" package in R.
+
+```{r,eval=FALSE,comment=""}
+  threatnet <- network(threat_adj_1990$adjacency,directed = TRUE,matrix.type = "adjacency")
+  
+  network::set.vertex.attribute(threatnet, 'Per Capita Income', as.numeric(node.att.1990$GDP))
+  network::set.network.attribute(threatnet,'Alliance', edge.att.1990$Alliance)
+  network::set.network.attribute(threatnet,'Border', edge.att.1990$border)
+  network::set.network.attribute(threatnet,'Aid', edge.att.1990$Aid)
+```
+We then run the model with the following specification,
+```{r,eval=FALSE,comment=""}
+model_fulltime11 <- btergm(netlist ~ edges + mutual() 
+                          + nodeocov('Per Capita Income')
+                          + nodeicov('Per Capita Income')
+                          + edgecov('Alliance')
+                          + edgecov('Border')
+                          + edgecov('Aid'),
+                          R = 50)
+summary(model_fulltime11)
+```
+We obtain the results,
+```{r,echo=FALSE,comment=""}
+load(file = "threatmod_summary.rda") # Load results.
+sum_threatmod
+```
+---
+
+### III. Discussion
 
 ```{r,echo=FALSE,warning=FALSE, message=FALSE, fig.align='center', fig.height=10, fig.width=12, results='hide'}
 
@@ -408,10 +482,6 @@ plot(routes_igraph,vertex.size = 10,vertex.label.cex = 0.7,vertex.label.color = 
 legend("topleft",c("Economic Aid","Threat"),fill = colorss)
 
 ```
-
----
-
-place for A&T discussion and conclusion
 
 ---
 
@@ -468,17 +538,52 @@ Asylumplot
 
 This result motivates us to conduct an ERGM to analyze these networks as they are clearly not Erdos-Renyi Random Graphs.
 
-  2. Testing hypotheses using Classical and Monte Carlo techniques.
-  
-Here we test......
+---
 
-We use Chisq....
+### II. Network Analysis using ERGMs
 
-We use a Permutation Test....
+We employ the same procedure as the last topic. Here we specify $Y_{ij}$ as a directed edge from i to j representing a politician fleeing from i to j.
+
+We cleaned the following datasets to obtain our covariates :
+1. GDP per capita
+2. Ethnic Homogeneity
+3. HDI
+4. Dominant Religious Group
+5. Civil conflicts
+6. Borders
+7. Alliances : Correlates of War dataset
+8. Wars : Correlates of War dataset
+
+We ruled out the following due to issues :
+1. Ethnic Homogeneity : Data was available only for a small subset of countries which would pose problems due to the network being sparse.
+2. Wars : ERGM models did not converge possibly due to very high collinearity. We suspected the War and alliance data might be too correlated.
+
+We use a TERGM like before to model the evolving network.
+
+We then run the model with the following specification,
+```{r,eval=FALSE,comment=""}
+asylfull6_rel <- btergm(netlist ~ edges + mutual()
+                           + nodeocov('Per Capita Income')
+                           + nodeicov('Per Capita Income')
+                           + nodematch('Religion')
+                           + nodeocov('Civil Conflicts')
+                           + nodeicov('Civil Conflicts')
+                           + nodeocov('HDI')
+                           + nodeicov('HDI')
+                           + edgecov('Alliance')
+                           + edgecov('Border')
+                           ,
+                           R = 50)
+```
+We obtain the results,
+```{r,echo=FALSE,comment=""}
+load(file = "asylmod_summary.rda") # Load results.
+sum_asylnet
+```
 
 ---
 
-place for ERGM - Asylum
+### III. Discussion
 
 ```{r,echo=FALSE,warning=FALSE, message=FALSE, fig.align='center', fig.height=10, fig.width=12, results='hide'}
 
@@ -489,14 +594,165 @@ plot(routes_igraph,vertex.size = 10,vertex.label.cex = 0.7,vertex.label.color = 
 
 ---
 
-place for Asylum discussion and conclusion
+## 4. Minding their own business : Does Geographical Isolation impact development?
+
+Abstract : In this short topic, we analyze HDI and Geographical contiguity data to determine if there is a statistically significant impact of having no borders i.e. being isolated on HDI levels. For this, we make use of the Pearson Chi-squared test. We then use a Permutation test after which we compare the two methods.
+
+Datasets used : HDI
+                Borders
+              
+---
+
+The UNDP classifies each country into one of three development groups: Low human development for HDI scores between 0.0 and 0.5, Medium human development for HDI scores between 0.5 and 0.8. High human development for HDI scores between 0.8 and 1.0. We convert our HDI data to these categorical variables.
+
+We conduct our analysis using the following dataset,
+```{r,echo=FALSE,comment=""}
+load("chisq_data.rda")
+head(chisq_data)
+```
+This is the contingency table,
+```{r,echo=FALSE,comment=""}
+attach(chisq_data)
+Obs_table <- table(No.border, HDI_cat); Obs_table
+```
+The Chi square test used in the Contingency table approach requires at least 80% of the cells 
+to have an expected count greater than 5 or else the sum of the cell Chi squares will not have
+a Chi square distribution. In our case, only 1/6 of the cells have a count lower than 5.
+```{r,echo=FALSE,results='hide'}
+Obs = matrix(c(39, 3, 70, 18, 28, 7), ncol=3) ; Obs
+colnames(Obs) = c('Low', 'Middle', 'High')
+rownames(Obs) = c('Border', 'No border') ;Obs
+
+rowsums <- c(sum(Obs[1,]),sum(Obs[2,])) ; rowsums
+colsums <- c(sum(Obs[,1]),sum(Obs[,2]),sum(Obs[,3])) ; colsums
+total <- sum(Obs)
+
+# Expected table
+Exp <- matrix(nrow=2, ncol=3) ; Exp
+
+for (i in 1:2){
+  for (j in 1:3){
+    Exp[i,j] <- rowsums[i]*colsums[j]/total
+  }
+}
+
+# Determine the degrees of freedom
+dfs <- (nrow(Obs)-1)*(ncol(Obs)-1) 
+```
+We conduct the Chi-squared test.
+```{r,comment=""}
+ChiSq <-function(Obs,Exp){
+  sum((Obs-Exp)^2/Exp)
+}
+
+chisq <- ChiSq(Obs,Exp) ; chisq
+pvalue <- pchisq(chisq, dfs, lower.tail = FALSE); pvalue
+```
+This pvalue is not small enough for us to reject the null hypothesis of independence.
+There is over a 14% chance that the observed data pattern could have arisen by chance under the assumption that the null hypothesis of independence is true. We are not comfortable with such a high probability for making a type I error (false positive), and thus conclude that the we cannot reject the null hypothesis of independence in this case.
+
+```{r,echo=FALSE,results='hide'}
+idx <- which(No.border == 1) # Index for countries without a border
+
+Mean.NoBorder <- mean(HDI[idx])
+Mean.Border <- mean(HDI[-idx])
+```
+```{r,comment=""}
+observed <- Mean.Border - Mean.NoBorder ; observed 
+```
+On average, non-isolated countries have HDI 0.0709 points lower 
+than isolated countries.
+
+Now we carry out a permutation test to check whether this difference is significant.
+```{r,comment="",results='hide'}
+N <- 10000
+diff <- numeric(N)
+
+for (i in 1:N){
+  samp <- sample(nrow(chisq_data), sum(No.border == 1)) 
+  # obtain random sample of size equal to number of countries without a border in the data
+  weightSamp <- mean(HDI[samp]) # mean for random sample
+  weightOther <- mean(HDI[-samp]) # mean for complement
+  diff[i] <- weightSamp - weightOther # calculate the difference
+}
+```
+Let's plot a histogram of the results.
+
+```{r,echo=FALSE}
+breaks <- pretty(range(diff), n = nclass.FD(diff), min.n = 1)
+bwidth <- breaks[2]-breaks[1]
+ggplot(data = as.data.frame(diff),aes(diff)) + geom_histogram(binwidth=bwidth,fill="white",colour="black") + geom_vline(aes(xintercept=observed), col="red") + labs(title = "Simulated differences", x = "Diff", y="Count")
+```
+
+Since we did not try to establish the sign of the difference a priori, we should carry out a two-tailed test.
+
+```{r,comment=""}
+((sum(diff <= observed)+1)/(N+1))*2
+```
+```{r,echo=FALSE,results='hide'}
+detach(chisq_data)
+```
+
+This means that there it is quite unlikely (roughly 4.5% chance) that the observed difference happened by chance under the assumption that the null hypothesis of equal HDIs were true. We can thus confidently (at the 5% significance level) reject this null hypothesis and conclude that HDI levels for countries that do not have a border are significantly different from the HDI levels of countries that do have a border.
+
+At this point, we can compare the Chi-squared test with the Permutation test.
 
 ---
 
-## 4. The World Belligerence Index : Constructing a Global Index using PCA.
+## 5. The World Belligerence Index : Constructing a Global Index using PCA.
 
 Abstract :
 
-...We use PCA...
+In this topic, we construct a "World Belligerence Index" using Principal Component Analysis. We find that one of our Principal Components captures the variance in "good" and "bad" actions performed by countries. "Bad" actions are mostly composed of belligerent/agressive actions. Using this, we compute PC scores for the countries which serves as an index measuring "belligerence" of countries.\
+We then regress the Index scores on GDP per capita, HDI, Civil conflicts and a binary variable for presence of a border with another country. These covariates were computed in the many topics covered in this topic.
 
 Datasets used : 10 Million International Dyadic Events (10MM_IDE).
+
+---
+
+## 6. Fulfilled Project Requirements :
+
+**Required dataset standards :**
+
+* A dataframe. (Many)
+* At least two categorical or logical columns. (Topic 4)
+* At least two numeric columns. (Topic 3)
+* At least 20 rows, preferably more, but real-world data may be limited. (10 million rows!, although we reduce it.)
+
+**Required graphical displays :**
+
+* A barplot. (Topic 5)
+* A histogram. (Topic 1,2,3)
+* A probability density graph overlaid on a histogram. (Topic 1,2,3)
+* A contingency table. (Topic 4)
+
+**Required analysis :**
+
+* A permutation test. (Topic 4)
+* A p-value or other statistic based on a distribution function. (Topic 1)
+* Analysis of a contingency table. (Topic 4)
+* Comparison of analysis by classical methods (chi-square, CLT) and simulation methods. (Topic 4)
+
+**Required submission uploads :**
+
+* A .csv file with the dataset (Many)
+* A long, well-commented script that loads the dataset, explores it, and does all the analysis.
+* A shorter .Rmd with compiled .pdf or .html file that presents highlights in ten minutes.
+* A one-page handout that explains the dataset and summarizes the analysis.
+
+**Additional points for creativity or complexity :**
+
+* A data set with lots of columns, allowing comparison of many different variables. (Many variables used in the entire project.)
+* A data set that is so large that it can be used as a population from which samples are taken. (10 million observations in original dataset.)
+* A graphical display that is different from those in the textbook or in the class scripts. (Many)
+* Appropriate use of R functions for a probability distribution other than binomial, normal, or chi-square. (Exponential, Weibull in Topic 1)
+* Appropriate use of integration to calculate a significant result. (Calculated Expectation in Topic 1.)
+* A convincing demonstration of a relationship that might not have been statistically significant but that turns out to be so. (Topic 4)
+* A convincing demonstration of a relationship that might have been statistically significant but that turns out not to be so. (Topic 2,3)
+* Professional-looking software engineering (e.g defining and using your own functions). (Many, examples are making own Weibull functions in Topic 1, vector generators in Topic 2.)
+* Nicely labeled graphics using ggplot, with good use of color, line styles, etc., that tell a convincing story. (Many)
+* Appropriate use of novel statistics (Likelihood Ratio test in Topic 1.)
+* Use of linear regression. (Topic 5)
+* A graphical display that is different from those in the class scripts. (Many)
+* Team consists of exactly two members.
+* A video of the short script is posted on YouTube and a link to it is left in your long script.
