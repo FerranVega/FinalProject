@@ -1,0 +1,502 @@
+---
+title: |
+  | Insights in International Relations
+  | <font size="4"> Submitted as Term Project for MATH E-23C </font>
+  
+author: 
+  - Mohit Negi, Ferran Vega
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  slidy_presentation:
+    font_adjustment: -2
+    footer: "Mohit Negi | Ferran Vega"
+---
+
+## Introduction
+
+The primary dataset used in this project is Gary King's "10 Million International Dyadic Events" dataset from Harvard dataverse.
+
+The data available here include almost 10 million individual events, each coded to the exact day they occur or become known. Each event is summarized in the data as "Actor A does something to Actor B", with Actors A and B recording about 450 countries and other (within-country) actors and "does something to" coded in an ontology of about 200 types of actions. The data are coded by computer from millions of Reuters news reports.
+
+In some topics, we filter this huge dataset to only include "Inter-country" events.
+
+In addition to this, we use several other datasets that are cited appropriately in the relevant topics.
+
+The idea of the project is to utilize the extremely rich dataset to find insights in International Relations. For this, we employ various data analysis techniques. 
+
+## Structure of the project
+
+This project aims to apply several concepts taught in class, introduce a variety of new techniques and discover insights by analyzing the data. All the while we try to connect the diverse topics and drive a coherent story.
+
+1. Peer Influence in International Relations.
+
+2. Does providing Aid buy Softpower?
+
+3. The (not-so)Great Escape : Analyzing Political Exile.
+
+4. The World Belligerence Index : Constructing a Global Index using PCA.
+
+5. Conclusion
+
+6. Scope for further research
+
+7. Acknowledgements
+
+8. References
+
+---
+
+## 1 : Peer Influence in International Relations.
+
+```{r,echo=FALSE,results='hide',message=FALSE}
+#install.packages('dplyr')
+#install.packages('lubridate')
+#install.packages('Renext')
+#install.packages('ggplot2')
+#install.packages('EWGoF')
+library(dplyr)
+library(lubridate)
+library(Renext)
+library(ggplot2)
+library(EWGoF)
+```
+
+Abstract :
+
+In this topic, we exploit the properties of the Exponential and Weibull probability distributions to see which Inter-country dyadic events might be peer-influenced and which might not.\
+The Hazard rate (aka Failure rate) is the conditional probability of "failure" on survival upto a point in time. For a random variable $T$, it is defined as : $\frac{f_T}{1 - F_T}$, where $f_T$ is the PDF and $F_T$ is the CDF of $T$.\
+The Exponential distribution (as we'll see in a bit) has a constant Hazard rate whereas the Weibull with a shape parameter $(\beta) < 1$ has decreasing Hazard rate.\
+This property makes the Exponential distribution exhibit "Memoryless-ness" and the Weibull exhibit "Infant-mortality".\
+We use these properties to explore an interesting insight : Some types of events seem to be peer-influenced while some don't.
+
+First, we discuss our analysis strategy after which we take the theory to data by providing an example of a "peer influenced" event. We then provide a counter-example of an event that does not seem to be peer influenced. Finally, we conclude the topic.
+
+Datasets used : 10 Million International Dyadic Events (10MM_IDE).
+
+---
+
+### Strategy
+
+We begin by looking at the Poisson process. If the number of events occuring in unit time is a random variable $X \sim Pois(\lambda)$, taking a time interval $[0,\infty)$, the number of events occuring in every subinterval of length $t$ will be a random variable with distribution $Pois(\lambda t)$. Further, the number of events occuring in distinct arbitrary non-overlapping intervals are independent random variables.\
+This is a Poisson process.
+
+If we look at the time intervals $T$ between successive occurences in such a Poisson process, they are random variables $T \sim Expo(\lambda)$. This random variable $T$ exhibits the property of "Memoryless-ness" defined as : $P(T > t+x | T = x) = P(T > t)$.\
+It is also provable that if $X$ is a positive, continuous random variable that is memoryless, then $\exists \lambda \in \mathbb{R}$ such that $X \sim Expo(\lambda)$.
+
+This is useful to see if the occurence of some event in the world is purely random. Our primary dataset 10MM_IDE includes the date of every event of a certain type between an "Actor" and a "Target". We filter the data to include only those events where both the parties are of the type "Country".
+
+The strategy is to determine if the time interval $T$ between successive events of a certain type is exponentially distributed. If it is, it implies that the event occurs purely at random and is not "peer influenced".
+
+By Peer influence, we mean that the probability of an event occuring is dependent on the occurence of the event before it. If an event occurs between a dyad, it "influences" the probability of the event occuring between other dyads.
+
+It is important to note, however, that if $T$ is not exponentially distributed, it need not imply that the event is peer influenced. For this, we need the Weibull distribution.
+
+The Weibull distribution is a generalization of the Exponential distribution and has the PDF :
+$$f_T = \frac{\beta t^{\beta - 1}}{\eta^\beta} e^{-(\frac{t}{\eta})^\beta}$$
+and CDF :
+$$F_T = 1 - e^{-(\frac{t}{\eta})^\beta}$$
+The Hazard rate is :
+$$H_T = \frac{f_T}{1 - F_T} = \frac{\beta}{\eta} (\frac{t}{\eta})^{\beta - 1}$$
+where $\beta$ is the shape parameter and $\eta$ is the scale parameter.\
+It is easy to see that when $\beta = 1$, the functions describe the Exponential random variable.
+
+We make the functions in R,
+
+```{r}
+
+#Weibull PDF function.
+weibull_pdf <- function(t,eta,beta){
+  beta*(t)^(beta-1)*exp(-1*(t/eta)^beta)/(eta^beta)
+}
+
+#Integrating to find the CDF.
+weibull_cdf <- Vectorize(function(p,eta,beta){
+  integrate(weibull_pdf,lower=10^(-100),upper=p,eta=eta,beta=beta)$value
+})
+
+#Hazard rate will be PDF/survival.
+hazardrate <- Vectorize(function(x,eta,beta){
+  weibull_pdf(x,eta,beta)/(1-weibull_cdf(x,eta,beta))
+})
+
+```
+
+It is interesting to note what happens to the $H_T$ as time progresses.\
+For this, we differentiate $H_T$ w.r.t. $t$.
+$$H_T' = \frac{\beta}{\eta^\beta} (\beta - 1) t^{\beta - 2}$$
+
+* When $\beta < 1$, $H_T$ is decreasing. : The probability of the event occuringdecreases over time. Every additional period of survival implies a longer remaining life expectancy (when event occuring is death). This is called the "Lindy Effect". This property is likened to "Infant Mortality".
+
+* When $\beta = 1$, $H_T$ is constant. : This is what we call "Memoryless-ness".
+
+* When $\beta > 1$, $H_T$ is increasing. : The probability of the event occuring increases over time. This is likened to the "wear-and-tear" effect on machine failure events.
+
+Let's verify this :
+
+```{r,fig.width=4, fig.height=4, fig.align='center'}
+curve(hazardrate(x,1,0.9)) # Weibull with beta < 1 has decreasing hazard rate.
+curve(hazardrate(x,1,1)) # Weibull with beta = 1 has constant hazard rate.
+curve(hazardrate(x,1,1.5)) # Weibull with beta > 1 has increasing hazard rate.
+```
+
+For our purposes, a Weibull r.v. with $\beta < 1$ can imply a "positive" peer influence. The event encourages more events. When $\beta > 1$, we see "negative" peer influence. The event discourages subsequent events which become more probable as time passes since the last event.
+
+---
+
+### Taking the theory to data
+
+* <em>Armed Assistance Requests</em>
+
+First we look at the events of the type "Ask for armed assistance". Let's see if it follows any of our interesting distributions.
+
+We load the data in, do some cleaning and then create a vector that holds the time intervals between subsequent events through the following for loop.
+```{r, eval = FALSE}
+for(i in 1:(nrow(data)-1)){
+  if(SrcName[i] != SrcName[i+1] & SrcName[i] != TgtName[i+1]
+     & TgtName[i] != TgtName[i+1] & TgtName[i] != SrcName[i+1]){
+    j <- difftime(strptime(data$EventDate[i+1], format = "%Y-%m-%d"),
+                  strptime(data$EventDate[i], format = "%Y-%m-%d"),units=timeframe)
+    vec90 <- c(vec90,j)
+  }
+}
+detach(data)
+```
+This for loop populates the vec90 vector with date differences of successive events.\
+It is computed such that none of the actors(src or tgt) are repeated in successive events.\
+This is done to avoid mass-action events like a country asking for armed assisstance from multiple countries at once or multiple countries asking a single country for armed assisstance at once.\
+Such events would obviously be peer influenced.\
+By doing this, we remove such trivial examples of peer-influence.
+
+We use Likelihood Ratio test for g.o.f of exponential and weibull distributions.
+```{r,echo=FALSE,comment=""}
+load(file = "ASKI_vec_mem.rda")
+l1 <- LK.test(vec90,"LR",nsim = 200)  #Check for g.o.f of exponential distbn.
+w1 <- WLK.test(vec90,type="EW",procedure="LR") #Check for g.o.f of weibull distbn.
+l1;w1
+```
+The weibull fits excellently (pval $> 0.9$) and estimates a shape parameter $\neq 1$.
+This gives sufficient evidence that armed assisstance requests are NOT purely random and they might be peer influenced.
+The weibull shape parameter is $0.769$ which tells us there is positive peer influence.
+
+Let's graph our fitted curves.
+
+```{r,echo=FALSE,fig.width=6, fig.height=4, fig.align='center'}
+#Graph it.
+df <- as.data.frame(vec90)
+df$index <- c(1:length(vec90))
+
+x <- seq(0, 30, length.out=100)
+df2 <- with(df, data.frame(x = x, y = dexp(x,l1$estimate)))
+df3 <- with(df, data.frame(x = x, y = weibull_pdf(x,w1$estimate[1],w1$estimate[2])))
+
+ASKIplot <- ggplot(df,aes(x=vec90)) + 
+  geom_histogram(aes(y=..density..),binwidth = 0.8,color = "black",fill = alpha("black",0.1)) +
+  geom_line(data = df2, aes(x = x, y = y,color = "Exponential"), size = 1) +
+  geom_line(data = df3, aes(x = x, y = y,color = "Weibull"), size = 1) +
+  geom_density(aes(y=..density..),fill ="#FF6666",alpha = 0.4) +
+  scale_x_continuous(name = "Weeks since last event") +
+  scale_y_continuous(name = "Density") +
+  scale_color_manual(name = "Distributions", 
+                     values = c("Exponential" = "#244747", "Weibull" = "#e3120b")) +
+  ggtitle("Time intervals between Armed Assistance requests") + 
+  theme(plot.title = element_text(hjust = 0.5,face = "bold.italic"))
+ASKIplot
+```
+
+<!-- USING INTEGRATION [EXTRA POINT] -->
+Let's calculate the Expected number of days between two subsequent armed assistance requests.
+```{r,comment=""}
+integrand1 <- function(t,eta,beta){
+  t*(beta*(t)^(beta-1)*exp(-1*(t/eta)^beta)/(eta^beta))
+}
+
+exp_days <- function(eta,beta)integrate(integrand1,lower = 10^(-100),upper = Inf,eta=eta,beta=beta)$value
+
+exp_days(w1$estimate[1],w1$estimate[2])
+```
+Which tells us that the Expected number of days between two subsequent armed assistance requests is about 6 weeks.
+
+---
+
+### Taking the theory to data
+
+* <em>Giving Ultimatums</em>
+
+Now we look at the events of the type "Give ultimatum". Let's see if it follows any of our interesting distributions.
+
+In a similar manner, we generate the vector and conduct a Likelihood Ratio test on it.
+```{r,echo=FALSE,comment=""}
+load(file = "ULTI_vec_mem.rda")
+l1 <- LK.test(vec90,"LR",nsim = 200)  #Check for g.o.f of exponential distbn.
+w1 <- WLK.test(vec90,type="EW",procedure="LR") #Check for g.o.f of weibull distbn.
+l1;w1
+```
+The exponential fits well and the weibull fits excellently (pval $> 0.95$) and estimates a shape parameter $\approx 1$.
+This gives strong evidence that giving ultimatums might be purely random events.
+The weibull shape parameter is $1.02$. We can't say it is exactly exponential but for such a small data sample, it's a good approximation.
+```{r,echo=FALSE,fig.width=6, fig.height=4, fig.align='center'}
+#Graph it.
+df <- as.data.frame(vec90)
+df$index <- c(1:length(vec90))
+
+x <- seq(0, 30, length.out=100)
+df2 <- with(df, data.frame(x = x, y = dexp(x,l1$estimate)))
+df3 <- with(df, data.frame(x = x, y = weibull_pdf(x,w1$estimate[1],w1$estimate[2])))
+
+
+ULTIplot <- ggplot(df,aes(x=vec90)) + 
+  geom_histogram(aes(y=..density..),binwidth = 0.8,color = "black",fill = alpha("black",0.1)) +
+  geom_line(data = df2, aes(x = x, y = y,color = "Exponential"), size = 1) +
+  geom_line(data = df3, aes(x = x, y = y,color = "Weibull"), size = 1) +
+  geom_density(aes(y=..density..),fill ="#FF6666",alpha = 0.4) +
+  scale_x_continuous(name = "Weeks since last event") +
+  scale_y_continuous(name = "Density") +
+  scale_color_manual(name = "Distributions", 
+                     values = c("Exponential" = "#244747", "Weibull" = "#e3120b")) +
+  ggtitle("Time intervals between Ultimatums") + 
+  theme(plot.title = element_text(hjust = 0.5,face = "bold.italic"))
+ULTIplot
+```
+
+---
+
+### Taking the theory to data
+
+* <em>Discussion</em>
+
+We can draw two conclusions from our analysis. Firstly, we see that the act of asking other countries for military aid might exhibit peer influence.\
+The act is defined in such a way that it includes requests of "peacekeeping" forces to international agencies like the UN.\
+We filtered the data in such a way that each event was "distinct" than its predecessor in the sense that they didn't have either party in common.\
+A plausible theory might be that during war-time, each belligerant might call upon its allies at approximately the same time.
+
+Secondly, we saw that the act of giving ultimatums might be purely randomly distributed in time. This is reasonable as there doesn't seem to be any reasons for multiple distinct dyads to influence each other's actions.
+
+It is also important to note the caveats:
+
+* Due to small sample sizes, the reliability of the results is not perfectly solid.
+
+* We only took data from 1990-1995 as taking the aggregate data (1990-2005) did not yield the same results. This might be due to conditions changing between the long time period that changes $\lambda$. For example, if due to some change in global conditions, the average number of ultimatums in a given week increases after 1995, it would no longer be a Poisson process with a unique $\lambda$. This means if we aggregate pre and post 1995 data, we won't see the memoryless property even if it exists within the separate time periods.
+
+---
+
+## 2 : Does providing Aid buy Softpower?
+
+```{r,echo=FALSE,results='hide',message=FALSE}
+#install.packages('gridExtra')
+library(gridExtra) 
+#install.packages('igraph')
+library(igraph)
+#install.packages('tibble')
+library(tibble)
+```
+
+Abstract :
+
+It is widely believed that the provision of Economic Aid by countries to those in need is motivated by more than just good faith. It is common to see countries being accused of "buying favor" through their charitable acts. The most famous example of this might be the "Belt and Road Initiative (BRI)" that was launched by the Chinese government in 2013.\
+Many skeptics have raised concerns over the project being a form of "Neo-colonialism". A favourite example towards this is the Chinese takeover of the  Hambantota Port in Sri Lanka for use as a Naval base in the Indian Ocean when the latter was unable to repay debts to China.\
+If this phenomenon is indeed true, it may be beneficial to understand if it is effective.\
+For this, we analyze the 10MM_IDI dataset, looking at the data on Inter-country dyadic events of the form "Provide Economic Aid" and "Threaten". We use these variables as proxies for "Aid" and "Softpower".
+
+The idea is to see if providing Aid to a country significantly impacts the probability of receiving a Threat from it. If this impact turns out to be negative, we can conclude that providing Aid indeed buys Softpower.
+
+In Part I, we conduct some preliminary data analysis to motivate the use of Network Analysis techniques.
+
+In Part II, we actually go about analyzing the the Aid and Threat networks from 1990-2005 through Exponential Random Graph Modelling.
+
+In Part III, we interpret the results and conclude the topic.
+
+Datasets used : 10 Million International Dyadic Events (10MM_IDE).
+
+---
+
+### I. Preliminary Analysis
+
+Here, we utilize a similar strategy as the last topic wherein we explained how an Exponential distribution can be used to determine if events of a certain type occur purely at random.\
+When looking at Network graphs where the different countries are represented as Nodes and dyadic events are represented as the Edges, we can determine the probability of edge formation through Network analysis techniques. This probability $p$ can either be constant across the entire graph or be determined by features such as nodal and edge attributes, neighbouring edges, etc. A graph of the former type is known as an "Erdos-Renyi Random Graph".
+
+If find an event to occur purely at random, we should expect to see an Erdos-Renyi Graph. If not, we might find the graph to be more complex. In such a graph, ties would not be formed at random but might be dependent on certain nodal and edge attributes. We model such dependencies by using the "Exponential Random Graph Model (ERGM)".
+
+With this in mind, we try to provide motivations for the use of an ERGM in this section.
+
+We generate the vectors containing time intervals between successive Aid and Threat events using a similar loop as in the last topic. We conduct Likelihood Ratio tests on both these events to check for goodness of fit of an Exponential distribution. We graph these fits.
+
+```{r,comment="",echo=FALSE}
+load(file = "EEAI_vec_pre.rda")
+load(file = "THRT_vec_pre.rda")
+l1 <- LK.test(aid_totalvec, "LR", nsim = 200)
+l2 <- LK.test(threat_totalvec, "LR", nsim = 200)
+l1;l2
+```
+
+We can clearly see that the Exponential does NOT fit either Aid or Threat data well (pvals $\approx 0$).
+This gives sufficient evidence that both the events are NOT purely random. Edge formation might be dependent on other features.
+
+```{r,echo=FALSE,warning=FALSE, message=FALSE, fig.align='center',fig.width=10,fig.height=4}
+#Graphs....
+df <- as.data.frame(aid_totalvec)
+df$index <- c(1:length(aid_totalvec))
+
+x <- seq(0, 30, length.out=100)
+df2 <- with(df, data.frame(x = x, y = dexp(x,l1$estimate)))
+
+Aidplot <- ggplot(df,aes(x=aid_totalvec)) + 
+  geom_histogram(aes(y=..density..),binwidth = 0.8,color = "black",fill = alpha("black",0.1)) +
+  geom_line(data = df2, aes(x = x, y = y,color = "Exponential"), size = 1) +
+  geom_density(aes(y=..density..),fill ="#FF6666",alpha = 0.4) +
+  ylim(c(0,0.5)) +
+  xlim(c(0,10)) +
+  scale_x_continuous(name = "Weeks since last event") +
+  scale_y_continuous(name = "Density") +
+  scale_color_manual(name = "Distributions", 
+                     values = c("Exponential" = "#244747")) +
+  ggtitle("Economic Aid") + 
+  theme(plot.title = element_text(hjust = 0.5,face = "bold.italic"))
+
+
+df <- as.data.frame(threat_totalvec)
+df$index <- c(1:length(threat_totalvec))
+
+x <- seq(0, 30, length.out=100)
+df2 <- with(df, data.frame(x = x, y = dexp(x,l1$estimate)))
+
+Threatplot <- ggplot(df,aes(x=threat_totalvec)) + 
+  geom_histogram(aes(y=..density..),binwidth = 0.8,color = "black",fill = alpha("black",0.1)) +
+  geom_line(data = df2, aes(x = x, y = y,color = "Exponential"), size = 1) +
+  geom_density(aes(y=..density..),fill ="#FF6666",alpha = 0.4) +
+  ylim(c(0,0.5)) +
+  xlim(c(0,70)) +
+  scale_x_continuous(name = "Weeks since last event") +
+  scale_y_continuous(name = "Density") +
+  scale_color_manual(name = "Distributions", 
+                     values = c("Exponential" = "#244747")) +
+  ggtitle("Threat") + 
+  theme(plot.title = element_text(hjust = 0.5,face = "bold.italic"))
+
+
+grid.arrange(Aidplot,Threatplot, ncol = 2)
+```
+
+This result motivates us to conduct an ERGM to analyze these networks as they are clearly not Erdos-Renyi Random Graphs.
+
+---
+
+### II. Network analysis using ERGM
+
+The Exponential family is a broad family of models for covering many types of data, not just networks. An ERGM is a model from this family which describes networks.
+
+Formally a random graph $Y$ consists of a set of $n$ nodes and $m$ dyads (edges) ${Y_{ij} : i=1,2,3...n ; j=1,2,3...n}$ where $Y_{ij} = 1$ if the nodes $(i,j)$ are connected and 0 otherwise.
+
+The basic assumption of these models is that the structure in an observed graph $y$ can be explained by any statistics $s(y)$ depending on the observed network and nodal attributes.
+
+The model is defined as :
+$$P(Y=y | \theta) = \frac{exp(\theta^Ts(y))}{c(\theta)}$$
+
+where,\
+$\theta$ is a vector of model parameters associated with $s(y)$,\
+$c(\theta)$ is the normalizing constant to make it a probabiliy measure between $0$ and $1$. It is equal to $\sum_{y \in Y} exp(\theta^T s(y))$
+
+These models represent a probability distribution on each possible network on $n$ nodes and may be directed or undirected.
+
+
+
+```{r,echo=FALSE,warning=FALSE, message=FALSE, fig.align='center', fig.height=10, fig.width=12, results='hide'}
+
+load(file = "at_graph.rda")
+colorss <- c("green","red")
+plot(routes_igraph,vertex.size = 10,vertex.label.cex = 0.7,vertex.label.color = "black",
+     main = "Aid and Threat Network for 1993")
+legend("topleft",c("Economic Aid","Threat"),fill = colorss)
+
+```
+
+---
+
+place for A&T discussion and conclusion
+
+---
+
+## 3 : The (not-so)Great Escape : Analyzing Political Exile.
+
+Abstract :
+
+In January 1979, after 8 years of despotic rule, Ugandan dictator Idi Amin found himself surrounded by the Tanzanian Army, which had launched a counter-offensive against his forces. As the Ugandan Army retreated, Amin fled into exile to Libya, then ruled by Muammar Gaddafi.\
+In this topic, we try to explore what factors might determine where dictators (and politicians in general) flee to when escaping crises. We employ the same Network Analysis framework to analyze the "Political Flight" network constructed from the 10MM_IDI dataset. We try to find the attributes, both nodal and edge-wise, that might have a significant impact on the probability of observing an inter-country political exile edge.
+
+In Part I, we conduct some preliminary data analysis to motivate the use of Network Analysis techniques.
+
+In Part II, we actually go about analyzing the the Aid and Threat networks from 1990-2005 through Exponential Random Graph Modelling.
+
+In Part III, we interpret the results and conclude the topic.
+
+Datasets used : 10 Million International Dyadic Events (10MM_IDE).
+
+---
+
+### I. Preliminary Analysis
+
+We follow the exact procedure as the last topic to see if data on events of the type "Political Flight" follow the Exponential distribution. We'll use "Asylum" as a short-hand for "Political Flight" in this paper.
+
+```{r,comment="",echo=FALSE}
+load(file = "HIDE_vec_pre.rda")
+l3 <- LK.test(asylum_totalvec, "LR", nsim = 200)
+l3
+```
+
+We can clearly see that the Exponential does NOT fit Asylum data well (pval $\approx 0$).
+This gives sufficient evidence that the events are NOT purely random. Edge formation might be dependent on other features.
+
+```{r,echo=FALSE,warning=FALSE, message=FALSE, fig.align='center',fig.width=10,fig.height=4}
+#Graphs....
+df <- as.data.frame(asylum_totalvec)
+df$index <- c(1:length(asylum_totalvec))
+
+x <- seq(0, 30, length.out=100)
+df2 <- with(df, data.frame(x = x, y = dexp(x,l3$estimate)))
+
+Asylumplot <- ggplot(df,aes(x=asylum_totalvec)) + 
+  geom_histogram(aes(y=..density..),binwidth = 0.8,color = "black",fill = alpha("black",0.1)) +
+  geom_line(data = df2, aes(x = x, y = y,color = "Exponential"), size = 1) +
+  geom_density(aes(y=..density..),fill ="#FF6666",alpha = 0.4) +
+  scale_x_continuous(name = "Weeks since last event") +
+  scale_y_continuous(name = "Density") +
+  scale_color_manual(name = "Distributions", 
+                     values = c("Exponential" = "#244747")) +
+  ggtitle("Asylum") + 
+  theme(plot.title = element_text(hjust = 0.5,face = "bold.italic"))
+Asylumplot
+```
+
+This result motivates us to conduct an ERGM to analyze these networks as they are clearly not Erdos-Renyi Random Graphs.
+
+  2. Testing hypotheses using Classical and Monte Carlo techniques.
+  
+Here we test......
+
+We use Chisq....
+
+We use a Permutation Test....
+
+---
+
+place for ERGM - Asylum
+
+```{r,echo=FALSE,warning=FALSE, message=FALSE, fig.align='center', fig.height=10, fig.width=12, results='hide'}
+
+load(file = "asylum_graph.rda")
+plot(routes_igraph,vertex.size = 10,vertex.label.cex = 0.7,vertex.label.color = "black",
+     main = "Political Flight Network 2000-2005")
+```
+
+---
+
+place for Asylum discussion and conclusion
+
+---
+
+## 4. The World Belligerence Index : Constructing a Global Index using PCA.
+
+Abstract :
+
+...We use PCA...
+
+Datasets used : 10 Million International Dyadic Events (10MM_IDE).
