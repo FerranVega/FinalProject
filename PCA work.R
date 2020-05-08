@@ -64,10 +64,15 @@ setwd("C:/Users/Ferran Vega/OneDrive/Math 23 C/Final Project/FinalProject")
 library(dils)
 library(dplyr)
 library(stats)
+library(ggplot2)
 
 ##########################
 load(file = "PCA_data.rda")
 #########################
+
+names(PCA_data_1) <- gsub("Counts.", "", names(PCA_data_1), fixed = TRUE)
+names(PCA_data_1) <- gsub("<", "", names(PCA_data_1), fixed = TRUE)
+names(PCA_data_1) <- gsub(">", "", names(PCA_data_1), fixed = TRUE)
 
 PCA_data_1 <- head(PCA_data_1,-15) # Remove last non country entries
 
@@ -420,7 +425,6 @@ Belligerance.index_high <- subset(Belligerance.index,Belligerance.index$Index>1)
 colnames(Belligerance.index_high) <- c("Country", "Index")
 library(grid)
 library(gridBase)
-library(ggplot2)
 library(ggthemes)
 
 p<-ggplot(data=Belligerance.index_high, aes(x=reorder(Country, -Index), y=Index)) +
@@ -545,11 +549,11 @@ chisq.test(Obs) # This yields a chi squared statistic and a pvalue that are very
 
 idx <- which(No.border == 1) # Index for countries without a border
 
-Mean.NoBorder <- mean(HDI[idx])
+Mean.NoBorder <- mean(HDI[idx]) 
 Mean.Border <- mean(HDI[-idx])
 observed <- Mean.Border - Mean.NoBorder ; observed 
-'On average, Countries that do not have a border have HDIs 0.07096872 lower 
-than countries with a border'
+'On average, Countries that do have a border have HDIs 0.07096872 lower 
+than countries without a border'
 
 # Now carry out permutation test to check whether this difference is significant
 N <- 10000
@@ -560,7 +564,7 @@ for (i in 1:N){
   # obtain random sample of size equal to number of countries without a border in the data
   weightSamp <- mean(HDI[samp]) # mean for random sample
   weightOther <- mean(HDI[-samp]) # mean for complement
-  diff[i] <- weightSamp - weightOther # calculate the difference
+  diff[i] <- weightOther - weightSamp # calculate the difference
 }
 
 breaks <- pretty(range(diff), n = nclass.FD(diff), min.n = 1)
@@ -572,8 +576,8 @@ ggplot(data = as.data.frame(diff),aes(diff)) + theme_economist() + geom_histogra
 
 # Calculate pvalue
 (sum(diff <= observed)+1)/(N+1) #One tailed: Check if the observed difference is large
-# enough to determine that countries without a border have an HDI that is significantly 
-# lower than countries that do have a border. The p-value is very small, 0.02239776, meaning
+# enough to determine that countries with a border have an HDI that is significantly 
+# lower than countries that do not have a border. The p-value is very small, 0.02239776, meaning
 # that that it is extremely unlikely (roughly a 2% chance) that the observed difference happened 
 # by chance if the null hypothesis of equal HDIs were true. However, we did not try to establish
 # the sign of the difference a priori, so we should instead carry out a two-tailed test.
