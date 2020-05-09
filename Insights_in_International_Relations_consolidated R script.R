@@ -859,13 +859,42 @@ civil <- subset(d95,d95$EventForm == "<CLAS>" & d95$SrcName == d95$TgtName)
 save(civil,file = "civil95s.rda")'
 
 # These .rda files ar created by the code commented out above. We load the .rda files directly for conveninence
-# (both for us and the grader) as the .csv files are extremely large.
+# (both for us and the grader) as the .csv files are extremely large. However, if the grader wants to check that 
+# bit of cleaning code as well, the .csv files are also part of the submitted .zip file.
 load(file = "civil90s.rda")
 civil90 <- subset(civil, civil$SrcSector == "<INSU>")
 load(file = "civil95s.rda") 
 civil95 <- subset(civil, civil$SrcSector == "<INSU>")
 load(file = "civil20s.rda") 
 civil20 <- subset(civil, civil$SrcSector == "<INSU>")
+
+## Econ aid 
+
+
+'As above, this cleaning code is commented out to calling the very large .csv 
+files. Load the .rda file below.
+
+d2000 <- read.csv("kingdata.csv")
+d1995 <- read.csv("final1995.csv")
+d1990 <- read.csv("final1990.csv")
+
+d20 <- subset(d2000, d2000$EventForm == "<EEAI>")
+d20 <- subset(d20, d20$SrcName != d20$TgtName)
+
+d95 <- subset(d1995, d1995$EventForm == "<EEAI>")
+d95 <- subset(d95, d95$SrcName != d95$TgtName)
+
+d90 <- subset(d1990, d1990$EventForm == "<EEAI>")
+d90 <- subset(d90, as.character(d90$SrcName) != as.character(d90$TgtName))
+
+d20 -> ea20s
+d95 -> ea95s
+d90 -> ea90s
+
+save(ea20s,ea95s,ea90s,file = "econaids.rda")'
+
+load(file = "econaids.rda")
+
 
 ## GDP per capita
 
@@ -899,7 +928,7 @@ attGDPpc$GDP2003 <- GDPpc$X2003[match(attGDPpc$country, as.character(GDPpc$Count
 attGDPpc$GDP2004 <- GDPpc$X2004[match(attGDPpc$country, as.character(GDPpc$Country.Code))]
 attGDPpc$GDP2005 <- GDPpc$X2005[match(attGDPpc$country, as.character(GDPpc$Country.Code))]
 
-attGDPpc <- attGDPpc[,2:17]
+attGDPpc <- attGDPpc[,1:17]
 
 save(attGDPpc,file = "GDPpc.mat.rda")
 
@@ -943,8 +972,10 @@ save(attHDI,file = "HDI.mat.rda")
 
 '
 Data cleaning code below was run separately until line 1009. Then a column with 
-country codes was added in excel to the written csv file. This file is then loaded 
-and manipulated further to generate the final dataset.
+country codes was added in excel to the written csv file saved at line 1038. 
+
+This file is then loaded and manipulated further to generate the final dataset.
+Please load major_religion_1 directly at line 1042.
 
 x <- read.csv("Religious_Composition_by_Country_2010-2050.csv")
 x <- subset(x, x$Year == "2010")
@@ -1471,7 +1502,7 @@ attach(data1)
 
 per_route <- data1 %>%  
   group_by(SrcName, TgtName, EventForm) %>%
-  summarise(weight = n()) %>% 
+  dplyr::summarise(weight = n()) %>% 
   ungroup()
 per_route
 
@@ -1479,11 +1510,11 @@ detach(data1)
 
 edges <- per_route %>% 
   left_join(nodes, by = c("SrcName" = "label")) %>% 
-  rename(from = id)
+  dplyr::rename(from = id)
 
 edges <- edges %>% 
   left_join(nodes, by = c("TgtName" = "label")) %>% 
-  rename(to = id)
+  dplyr::rename(to = id)
 edges <- select(edges, from, to, weight, EventForm)
 edges$EventForm <- droplevels(edges$EventForm)
 
@@ -1492,7 +1523,7 @@ edges$EventForm <- as.numeric(edges$EventForm)
 
 routes_igraph <- graph_from_data_frame(d = edges, vertices = nodes, directed = TRUE)
 set_edge_attr(routes_igraph,"EventForm",value = edges$EventForm)
-deg <- degree(routes_igraph, mode="all")
+deg <- igraph::degree(routes_igraph, mode="all")
 
 V(routes_igraph)$color <- "tomato"
 E(routes_igraph)$arrow.size <- .4
@@ -1752,7 +1783,7 @@ attach(data1)
 
 per_route <- data1 %>%  
   group_by(SrcName, TgtName) %>%
-  summarise(weight = n()) %>% 
+  dplyr::summarise(weight = n()) %>% 
   ungroup()
 per_route
 
@@ -1760,16 +1791,16 @@ detach(data1)
 
 edges <- per_route %>% 
   left_join(nodes, by = c("SrcName" = "label")) %>% 
-  rename(from = id)
+  dplyr::rename(from = id)
 
 edges <- edges %>% 
   left_join(nodes, by = c("TgtName" = "label")) %>% 
-  rename(to = id)
+  dplyr::rename(to = id)
 edges <- select(edges, from, to, weight)
 
 routes_igraph <- graph_from_data_frame(d = edges, vertices = nodes, directed = TRUE)
 
-deg <- degree(routes_igraph, mode="all")
+deg <- igraph::degree(routes_igraph, mode="all")
 
 V(routes_igraph)$color <- "tomato"
 E(routes_igraph)$arrow.size <- .4
@@ -1780,10 +1811,10 @@ E(routes_igraph)$width <- 1+E(routes_igraph)$weight
 plot(routes_igraph,vertex.size = 13,vertex.label.cex = 0.9,vertex.label.color = "black")
 #Use zoom to see it better.
 
-pdf("fleegraphFINAL.pdf",10,10) # Saves the plot as a pdf.
+'pdf("fleegraphFINAL.pdf",10,10) # Saves the plot as a pdf.
 plot(routes_igraph,vertex.size = 13,vertex.label.cex = 0.9,vertex.label.color = "black")
 dev.off()
-
+'
 
 # Analysis
 
@@ -1992,272 +2023,6 @@ load(file = "asylmod_summary.rda") # Load results.
 sum_asylnet # Results.
 
 
-##########################################################################################################
-# TOPIC 4: Minding their own business : Does Geographical Isolation impact development?
-##########################################################################################################
-
-# Preparation
-
-# Saving attributes 2003 attributes for chi-squared analysis and permutation test purposes. We select this
-# year for that exercise because we have the least amount of missing data in this year. Note that 
-# the resulting "Reg_attributes.rda" file will also be used at the end of topic 5.
-
-load(file = "borders.mat.rda") 
-load(file = "wars_by_year.rda") 
-load(file = "ally_by_year.rda")
-load(file = "data90.rda")
-load(file = "data95.rda") 
-load(file = "data20.rda")
-
-load(file = "civil90s.rda")
-civil90 <- civil
-load(file = "civil95s.rda") 
-civil95 <- civil
-load(file = "civil20s.rda") 
-civil20 <- civil
-
-for (i in 14:14){ # select only 2003 data (14th year of the 15 between 1990 and 2004)
-  if(i > 5){
-    if(i < 11){
-      data <- data95
-      civil <- civil95
-    } else { civil <- civil20
-    data <- data20 }
-  } else { civil <- civil90 
-  data <- data90 }
-  data <- subset(data,data$EventForm == "<HIDE>")
-  data <- dplyr::select(data,"EventDate", "SrcName","TgtName")
-  civil <- dplyr::select(civil,"EventDate","SrcName","TgtName")
-  if(i > 5){
-    if(i < 11){
-      data$EventDate <- ymd(data$EventDate)
-      civil$EventDate <- ymd(civil$EventDate)
-    } else {data$EventDate <- mdy_hms(data$EventDate)
-    civil$EventDate <- mdy_hms(civil$EventDate)}
-  } else {data$EventDate <- mdy(data$EventDate)
-  civil$EventDate <- mdy(civil$EventDate)}
-  
-  data <- data[order(data$EventDate),]
-  civil <- civil[order(civil$EventDate),]
-  
-  j <- i + 1989
-  k <- i + 1990
-  startdate <- paste(j,"/01/01",sep = "")
-  enddate <- paste(k,"/01/01",sep = "")
-  data <- subset(data,data$EventDate < enddate & data$EventDate >= startdate) ###################### 1990 - 1995.
-  civil  <- subset(civil,  civil$EventDate < enddate & civil$EventDate  >= startdate)
-  
-  data <- data[,-1]
-  civil <- civil[,-1]
-  
-  data$SrcName <- as.character(data$SrcName)
-  data$TgtName <- as.character(data$TgtName)
-  data$counter <- c(rep(1,nrow(data)))
-  
-  civil$SrcName <- as.character(civil$SrcName)
-  civil$TgtName <- as.character(civil$TgtName)
-  civil$counter <- c(rep(1,nrow(civil)))
-  
-  civil <- ddply(civil,.(SrcName,TgtName),nrow)
-  civil <- civil[,-2]
-  colnames(civil)[1] <- "country"
-  
-  ally1990 <- ally_by_year[[i]]
-  war1990 <- wars_by_year[[i]]
-  
-  ally1990_1 <- ally1990
-  temp <- ally1990_1[,1]
-  ally1990_1[,1] <- ally1990_1[,2]
-  ally1990_1[,2] <- temp
-  ally1990 <- rbind(ally1990, ally1990_1) # Makes alliances edglist "complete"
-  
-  colnames(borders.mat)[3] <- "UK_"
-  rownames(borders.mat)[3] <- "UK_"
-  
-  #mig1990 <- EdgelistFromAdjacency(as.matrix(migrants1990[,2:190]), nodelist = colnames(migrants1990[,2:190]))
-  
-  borders.mat_without_NA <- as.matrix(borders.mat[-(1:2),-(1:2)])
-  
-  bord <- EdgelistFromAdjacency(borders.mat_without_NA, nodelist = colnames(borders.mat_without_NA))
-  
-  landlock <- as.data.frame(borders.mat[,1])
-  landlock$country <- rownames(landlock)
-  landlock <- landlock[-1,]
-  colnames(landlock) <- c("No.Border", "country")
-  
-  m1 <- merge(war1990[,-4],ally1990,by = c("namea","nameb"),all = TRUE)
-  colnames(m1)[3] <- "Wars"
-  colnames(m1)[4] <- "Alliance"
-  m1[,3] <- ifelse(is.na(m1[,3]), 0, m1[,3])
-  m1[,4] <- ifelse(is.na(m1[,4]), 0, 1)
-  
-  colnames(bord)[1] <- "namea"
-  colnames(bord)[2] <- "nameb"
-  
-  m1 <- merge(m1,bord, by = c("namea", "nameb"), all = TRUE)
-  colnames(m1)[5] <- "border"
-  
-  #colnames(mig1990)[1] <- "namea"
-  #colnames(mig1990)[2] <- "nameb"
-  
-  #m1 <- merge(m1, mig1990, by = c("namea", "nameb"), all = TRUE)
-  #colnames(m1)[6] <- "Mig"
-  
-  colnames(data)[1] <- "namea"
-  colnames(data)[2] <- "nameb"
-  
-  m1 <- merge(m1, data, by = c("namea", "nameb"), all = TRUE)
-  colnames(m1)[ncol(m1)] <- "Asylum"
-  
-  m1[is.na(m1)] = 0
-  
-  load(file = "GDPpc.mat.rda") 
-  attGDPpc$country <- as.character(attGDPpc$country)
-  attGDPpc$country[attGDPpc$country == "_UK"] <- "UK_"
-  node.att.regressions <- attGDPpc[,c(1,i+1)] # Create GDP node att column
-  colnames(node.att.regressions)[2] <- "GDP"
-  
-  node.att.regressions <- merge(node.att.regressions, civil, by = "country", all = TRUE) #Merging civil war data.
-  colnames(node.att.regressions)[3] <- "CivilWars"
-  node.att.regressions$CivilWars[is.na(node.att.regressions$CivilWars)] = 0
-  
-  load(file = "HDI.mat.rda") 
-  attHDI$country <- as.character(attHDI$country)
-  attHDI$country[attHDI$country == "_UK"] <- "UK_"
-  node.att.regressions <- merge(node.att.regressions, attHDI[,c(1,i+1)], by = "country") # Merging HDI node att
-  colnames(node.att.regressions)[4] <- "HDI"
-  
-  node.att.regressions <- merge(node.att.regressions, landlock, by = "country") # Merging landlock node att
-  colnames(node.att.regressions)[5] <- "No.border"
-  
-  node.att.regressions <- node.att.regressions[as.character(node.att.regressions$GDP)!= "" ,]
-  node.att.regressions <- na.omit(node.att.regressions)
-  
-  edge.att.1990 <- filter(m1, is.element(m1$namea, node.att.regressions$country) & is.element(m1$nameb, node.att.regressions$country)) 
-  node.att.regressions <- filter(node.att.regressions, is.element(node.att.regressions$country, edge.att.1990$namea) & is.element(node.att.regressions$country, edge.att.1990$nameb)) 
-  
-  edge.att.1990 <- edge.att.1990[order(edge.att.1990$namea, edge.att.1990$nameb),]
-  
-}
-
-save(node.att.regressions, file = "Reg_attributes.rda") 
-
-
-# Analysis
-
-load(file = "Reg_attributes.rda") # These are 2003 node attributes that were also used in ERGM analyses
-
-## Do Chi-squared test: Border/no border & HDI classifications
-chisq_data <- Reg_vars[,c(1,5:6)]
-attach(chisq_data)
-
-'The UNDP classifies each country into one of three development groups: Low human development for HDI 
-scores between 0.0 and 0.5, Medium human development for HDI scores between 0.5 and 0.8. High human 
-development for HDI scores between 0.8 and 1.0.'
-
-## Create categorical version of HDI in accordance to UNDP guidelines
-chisq_data$HDI_cat <-  cut(HDI, 
-                           breaks=c(-Inf, 0.5, 0.8, Inf), 
-                           labels=c("Low","Middle","High"))
-
-## Observed table
-attach(chisq_data)
-Obs_table <- table(No.border, HDI_cat); Obs_table
-
-'The Chi square test used in the Contingency table approach requires at least 80% of the cells 
-to have an expected count greater than 5 or else the sum of the cell Chi squares will not have
-a Chi square distribution. In our case, only 1/6 of the cells have a count lower than 5.
-'
-
-Obs = matrix(c(39, 3, 70, 18, 28, 7), ncol=3) ; Obs
-colnames(Obs) = c('Low', 'Middle', 'High')
-rownames(Obs) = c('Border', 'No border') ;Obs
-
-rowsums <- c(sum(Obs[1,]),sum(Obs[2,])) ; rowsums
-colsums <- c(sum(Obs[,1]),sum(Obs[,2]),sum(Obs[,3])) ; colsums
-total <- sum(Obs)
-
-# Expected table
-Exp <- matrix(nrow=2, ncol=3) ; Exp
-
-for (i in 1:2){
-  for (j in 1:3){
-    Exp[i,j] <- rowsums[i]*colsums[j]/total
-  }
-}
-
-# Determine the degrees of freedom
-dfs <- (nrow(Obs)-1)*(ncol(Obs)-1) 
-
-ChiSq <-function(Obs,Exp){
-  sum((Obs-Exp)^2/Exp)
-} # borrow Paul's function
-
-chisq <- ChiSq(Obs,Exp) ; chisq
-pvalue <- pchisq(chisq, dfs, lower.tail = FALSE); pvalue # 0.1447803
-# This pvalue is not small enough for us to reject the null hypothesis of independence.
-# There is over a 14% chance that the observed data pattern could have arisen by chance
-# under the assumption that the null hypothesis of independence is true. We are not 
-# comfortable with such a high probability for making a type I error (false positive), 
-# and thus conclude that the we cannot reject the null hypothesis of independence in this case.
-
-# We could have also used the integrated R command for carrying out a chi squared test 
-# of independence, which uses Yates continuity correction to handle improve accuracy  
-# after approximating discrete quantities with a continuous distribution 
-# (See Chihara&Hesterberg, p. 370)
-
-chisq.test(Obs) # This yields a chi squared statistic and a pvalue that are very 
-# close to the ones we calculated by hand. As above, we cannot reject the null hypothesis
-# that the two categorical variables are independent.
-
-# Permutation test on Border/no Border & HDI level
-
-idx <- which(No.border == 1) # Index for countries without a border
-
-Mean.NoBorder <- mean(HDI[idx]) 
-Mean.Border <- mean(HDI[-idx])
-observed <- Mean.Border - Mean.NoBorder ; observed 
-'On average, Countries that do have a border have HDIs 0.07096872 lower 
-than countries without a border'
-
-# Now carry out permutation test to check whether this difference is significant
-N <- 10000
-diff <- numeric(N)
-
-for (i in 1:N){
-  samp <- sample(nrow(chisq_data), sum(No.border == 1)) 
-  # obtain random sample of size equal to number of countries without a border in the data
-  weightSamp <- mean(HDI[samp]) # mean for random sample
-  weightOther <- mean(HDI[-samp]) # mean for complement
-  diff[i] <- weightOther - weightSamp # calculate the difference
-}
-
-breaks <- pretty(range(diff), n = nclass.FD(diff), min.n = 1)
-bwidth <- breaks[2]-breaks[1]
-ggplot(data = as.data.frame(diff),aes(diff)) + theme_economist() + geom_histogram(binwidth=bwidth,fill="white",colour="black") + geom_vline(aes(xintercept=observed), col="red") + labs(title = "Simulated differences", x = "Diff", y="Count")
-# The red line is quite far into the left tail of the histogram. Seems 
-# like the difference is significant from the graph, but lets calculate the
-# exact p-value!
-
-# Calculate pvalue
-(sum(diff <= observed)+1)/(N+1) #One tailed: Check if the observed difference is large
-# enough to determine that countries with a border have an HDI that is significantly 
-# lower than countries that do not have a border. The p-value is very small, 0.02239776, meaning
-# that that it is extremely unlikely (roughly a 2% chance) that the observed difference happened 
-# by chance if the null hypothesis of equal HDIs were true. However, we did not try to establish
-# the sign of the difference a priori, so we should instead carry out a two-tailed test.
-# To do so, we multiply the p-value by 2.
-
-((sum(diff <= observed)+1)/(N+1))*2 # Two tailed, multiply this pvalue by two
-# The pvalue remains small (0.04479552). This means that there it is quite unlikely 
-# (roughly 4.5% chance) that the observed difference happened by chance under the 
-# assumption that the null hypothesis of equal HDIs were true. We can thus confidently 
-# (at the 5% significance level) reject this null hypothesis and conclude that HDI levels
-# for countries that do not have a border are significantly different from the HDI levels
-# of countries that do have a border.
-
-detach(chisq_data)
-
 
 ##########################################################################################################
 # TOPIC 5: The World Belligerence Index : Constructing a Global Index using PCA
@@ -2278,7 +2043,7 @@ data %>% select(SrcName, EventForm) -> data # Select "actors" and "actions" colu
 
 Actions <- data %>%  
   group_by(SrcName, EventForm) %>%
-  summarise(weight = n()) %>% 
+  dplyr::summarise(weight = n()) %>% 
   ungroup()
 
 Actions <- tail(Actions, -32)
@@ -2477,8 +2242,16 @@ row.names(try2) <- c(colnames(A_2))
 options(scipen=999)
 
 try2 <- try2[order(try2$V1),]
+PC1 <- as.data.frame(try2$V1)
+rownames(PC1) <- rownames(try2) ; PC1
+
 try2 <- try2[order(try2$V2),]
+PC2 <- as.data.frame(try2$V2)
+rownames(PC2) <- rownames(try2) ; PC2
+
 try2 <- try2[order(try2$V3),]
+PC3 <- as.data.frame(try2$V3)
+rownames(PC3) <- rownames(try2) ; PC3
 
 detach(PCA_data_2)
 
@@ -2531,9 +2304,17 @@ colnames(data_3) <- c(colnames(A_3), "Eig1", "Eig2", "Eig3")
 row.names(try3) <- c(colnames(A_3))
 options(scipen=999)
 
-try3 <- try3[order(try3$V1),]
+try3 <- try3[order(try3$V1),] 
+PC1 <- as.data.frame(try3$V1)
+rownames(PC1) <- rownames(try3) ; PC1
+
 try3 <- try3[order(try3$V2),]
+PC2 <- as.data.frame(try3$V2)
+rownames(PC2) <- rownames(try3) ; PC2
+
 try3 <- try3[order(try3$V3),]
+PC3 <- as.data.frame(try3$V3)
+rownames(PC3) <- rownames(try3) ; PC3
 
 detach(PCA_data_3)
 
@@ -2592,9 +2373,20 @@ row.names(try4) <- c(colnames(A_4))
 options(scipen=999)
 
 try4 <- try4[order(try4$V1),]
+PC1 <- as.data.frame(try4$V1)
+rownames(PC1) <- rownames(try4) ; PC1
+
 try4 <- try4[order(try4$V2),]
+PC2 <- as.data.frame(try4$V2)
+rownames(PC2) <- rownames(try4) ; PC2
+
 try4 <- try4[order(try4$V3),]
+PC3 <- as.data.frame(try4$V3)
+rownames(PC3) <- rownames(try4) ; PC3
+
 try4 <- try4[order(try4$V4),]
+PC4 <- as.data.frame(try4$V4)
+rownames(PC4) <- rownames(try4) ; PC4
 
 detach(PCA_data_4)
 
@@ -2657,15 +2449,15 @@ options(scipen=999)
 
 try5 <- try5[order(try5$V1),]
 PC1 <- as.data.frame(try5$V1)
-rownames(PC1) <- rownames(try5)
+rownames(PC1) <- rownames(try5) ; PC1
 
 try5 <- try5[order(try5$V2),]
 PC2 <- as.data.frame(try5$V2)
-rownames(PC2) <- rownames(try5)
+rownames(PC2) <- rownames(try5) ; PC2
 
 try5 <- try5[order(try5$V3),]
 PC3 <- as.data.frame(try5$V3)
-rownames(PC3) <- rownames(try5)
+rownames(PC3) <- rownames(try5) ; PC3
 
 '
 The first component PC1 has negative loadings for each action type and is likely
@@ -2691,7 +2483,7 @@ detach(PCA_data_5)
 ## Create the belligerance index!
 
 Belligerance.index <- as.data.frame(PCA_data_5$Countries)
-Index <- (RAID+POLPER+AERI+CLAS+PASS+EXIL+PEXE+GRPG)/8
+Index <- (PCA_data_5$RAID+PCA_data_5$POLPER+PCA_data_5$AERI+PCA_data_5$CLAS+PCA_data_5$PASS+PCA_data_5$EXIL+PCA_data_5$PEXE+PCA_data_5$GRPG)/8
 Belligerance.index$Index <- Index*100
 Belligerance.index <- Belligerance.index[order(-Belligerance.index$Index),]
 colnames(Belligerance.index) <- c("country", "Index")
@@ -2760,3 +2552,271 @@ stargazer(reg_model, type="text",
                              "Lacking border"), out="linear_model.pdf")
 
 detach(Reg_vars)
+
+##########################################################################################################
+# TOPIC 4: Minding their own business : Does Geographical Isolation impact development?
+##########################################################################################################
+
+# Preparation
+
+# Saving attributes 2003 attributes for chi-squared analysis and permutation test purposes. We select this
+# year for that exercise because we have the least amount of missing data in this year. Note that 
+# the resulting "Reg_attributes.rda" file will also be used at the end of topic 5.
+
+load(file = "borders.mat.rda") 
+load(file = "wars_by_year.rda") 
+load(file = "ally_by_year.rda")
+load(file = "data90.rda")
+load(file = "data95.rda") 
+load(file = "data20.rda")
+
+load(file = "civil90s.rda")
+civil90 <- civil
+load(file = "civil95s.rda") 
+civil95 <- civil
+load(file = "civil20s.rda") 
+civil20 <- civil
+
+for (i in 14:14){ # select only 2003 data (14th year of the 15 between 1990 and 2004)
+  if(i > 5){
+    if(i < 11){
+      data <- data95
+      civil <- civil95
+    } else { civil <- civil20
+    data <- data20 }
+  } else { civil <- civil90 
+  data <- data90 }
+  data <- subset(data,data$EventForm == "<HIDE>")
+  data <- dplyr::select(data,"EventDate", "SrcName","TgtName")
+  civil <- dplyr::select(civil,"EventDate","SrcName","TgtName")
+  if(i > 5){
+    if(i < 11){
+      data$EventDate <- ymd(data$EventDate)
+      civil$EventDate <- ymd(civil$EventDate)
+    } else {data$EventDate <- mdy_hms(data$EventDate)
+    civil$EventDate <- mdy_hms(civil$EventDate)}
+  } else {data$EventDate <- mdy(data$EventDate)
+  civil$EventDate <- mdy(civil$EventDate)}
+  
+  data <- data[order(data$EventDate),]
+  civil <- civil[order(civil$EventDate),]
+  
+  j <- i + 1989
+  k <- i + 1990
+  startdate <- paste(j,"/01/01",sep = "")
+  enddate <- paste(k,"/01/01",sep = "")
+  data <- subset(data,data$EventDate < enddate & data$EventDate >= startdate) ###################### 1990 - 1995.
+  civil  <- subset(civil,  civil$EventDate < enddate & civil$EventDate  >= startdate)
+  
+  data <- data[,-1]
+  civil <- civil[,-1]
+  
+  data$SrcName <- as.character(data$SrcName)
+  data$TgtName <- as.character(data$TgtName)
+  data$counter <- c(rep(1,nrow(data)))
+  
+  civil$SrcName <- as.character(civil$SrcName)
+  civil$TgtName <- as.character(civil$TgtName)
+  civil$counter <- c(rep(1,nrow(civil)))
+  
+  civil <- ddply(civil,.(SrcName,TgtName),nrow)
+  civil <- civil[,-2]
+  colnames(civil)[1] <- "country"
+  
+  ally1990 <- ally_by_year[[i]]
+  war1990 <- wars_by_year[[i]]
+  
+  ally1990_1 <- ally1990
+  temp <- ally1990_1[,1]
+  ally1990_1[,1] <- ally1990_1[,2]
+  ally1990_1[,2] <- temp
+  ally1990 <- rbind(ally1990, ally1990_1) # Makes alliances edglist "complete"
+  
+  colnames(borders.mat)[3] <- "UK_"
+  rownames(borders.mat)[3] <- "UK_"
+  
+  #mig1990 <- EdgelistFromAdjacency(as.matrix(migrants1990[,2:190]), nodelist = colnames(migrants1990[,2:190]))
+  
+  borders.mat_without_NA <- as.matrix(borders.mat[-(1:2),-(1:2)])
+  
+  bord <- EdgelistFromAdjacency(borders.mat_without_NA, nodelist = colnames(borders.mat_without_NA))
+  
+  landlock <- as.data.frame(borders.mat[,1])
+  landlock$country <- rownames(landlock)
+  landlock <- landlock[-1,]
+  colnames(landlock) <- c("No.Border", "country")
+  
+  m1 <- merge(war1990[,-4],ally1990,by = c("namea","nameb"),all = TRUE)
+  colnames(m1)[3] <- "Wars"
+  colnames(m1)[4] <- "Alliance"
+  m1[,3] <- ifelse(is.na(m1[,3]), 0, m1[,3])
+  m1[,4] <- ifelse(is.na(m1[,4]), 0, 1)
+  
+  colnames(bord)[1] <- "namea"
+  colnames(bord)[2] <- "nameb"
+  
+  m1 <- merge(m1,bord, by = c("namea", "nameb"), all = TRUE)
+  colnames(m1)[5] <- "border"
+  
+  #colnames(mig1990)[1] <- "namea"
+  #colnames(mig1990)[2] <- "nameb"
+  
+  #m1 <- merge(m1, mig1990, by = c("namea", "nameb"), all = TRUE)
+  #colnames(m1)[6] <- "Mig"
+  
+  colnames(data)[1] <- "namea"
+  colnames(data)[2] <- "nameb"
+  
+  m1 <- merge(m1, data, by = c("namea", "nameb"), all = TRUE)
+  colnames(m1)[ncol(m1)] <- "Asylum"
+  
+  m1[is.na(m1)] = 0
+  
+  load(file = "GDPpc.mat.rda") 
+  attGDPpc$country <- as.character(attGDPpc$country)
+  attGDPpc$country[attGDPpc$country == "_UK"] <- "UK_"
+  node.att.regressions <- attGDPpc[,c(1,i+1)] # Create GDP node att column
+  colnames(node.att.regressions)[2] <- "GDP"
+  
+  node.att.regressions <- merge(node.att.regressions, civil, by = "country", all = TRUE) #Merging civil war data.
+  colnames(node.att.regressions)[3] <- "CivilWars"
+  node.att.regressions$CivilWars[is.na(node.att.regressions$CivilWars)] = 0
+  
+  load(file = "HDI.mat.rda") 
+  attHDI$country <- as.character(attHDI$country)
+  attHDI$country[attHDI$country == "_UK"] <- "UK_"
+  node.att.regressions <- merge(node.att.regressions, attHDI[,c(1,i+1)], by = "country") # Merging HDI node att
+  colnames(node.att.regressions)[4] <- "HDI"
+  
+  node.att.regressions <- merge(node.att.regressions, landlock, by = "country") # Merging landlock node att
+  colnames(node.att.regressions)[5] <- "No.border"
+  
+  node.att.regressions <- node.att.regressions[as.character(node.att.regressions$GDP)!= "" ,]
+  node.att.regressions <- na.omit(node.att.regressions)
+  
+  edge.att.1990 <- filter(m1, is.element(m1$namea, node.att.regressions$country) & is.element(m1$nameb, node.att.regressions$country)) 
+  node.att.regressions <- filter(node.att.regressions, is.element(node.att.regressions$country, edge.att.1990$namea) & is.element(node.att.regressions$country, edge.att.1990$nameb)) 
+  
+  edge.att.1990 <- edge.att.1990[order(edge.att.1990$namea, edge.att.1990$nameb),]
+  
+}
+
+save(node.att.regressions, file = "Reg_attributes.rda") 
+
+
+# Analysis
+
+load(file = "Reg_attributes.rda") # These are 2003 node attributes that were also used in ERGM analyses
+Reg_vars <- merge(Belligerance.index,node.att.regressions,by = "country",all = TRUE)
+Reg_vars <- na.omit(Reg_vars)
+
+## Do Chi-squared test: Border/no border & HDI classifications
+chisq_data <- Reg_vars[,c(1,5:6)]
+attach(chisq_data)
+
+'The UNDP classifies each country into one of three development groups: Low human development for HDI 
+scores between 0.0 and 0.5, Medium human development for HDI scores between 0.5 and 0.8. High human 
+development for HDI scores between 0.8 and 1.0.'
+
+## Create categorical version of HDI in accordance to UNDP guidelines
+chisq_data$HDI_cat <-  cut(HDI, 
+                           breaks=c(-Inf, 0.5, 0.8, Inf), 
+                           labels=c("Low","Middle","High"))
+
+## Observed table
+attach(chisq_data)
+Obs_table <- table(No.border, HDI_cat); Obs_table
+
+'The Chi square test used in the Contingency table approach requires at least 80% of the cells 
+to have an expected count greater than 5 or else the sum of the cell Chi squares will not have
+a Chi square distribution. In our case, only 1/6 of the cells have a count lower than 5.
+'
+
+Obs = matrix(c(39, 3, 70, 18, 28, 7), ncol=3) ; Obs
+colnames(Obs) = c('Low', 'Middle', 'High')
+rownames(Obs) = c('Border', 'No border') ;Obs
+
+rowsums <- c(sum(Obs[1,]),sum(Obs[2,])) ; rowsums
+colsums <- c(sum(Obs[,1]),sum(Obs[,2]),sum(Obs[,3])) ; colsums
+total <- sum(Obs)
+
+# Expected table
+Exp <- matrix(nrow=2, ncol=3) ; Exp
+
+for (i in 1:2){
+  for (j in 1:3){
+    Exp[i,j] <- rowsums[i]*colsums[j]/total
+  }
+}
+
+# Determine the degrees of freedom
+dfs <- (nrow(Obs)-1)*(ncol(Obs)-1) 
+
+ChiSq <-function(Obs,Exp){
+  sum((Obs-Exp)^2/Exp)
+} # borrow Paul's function
+
+chisq <- ChiSq(Obs,Exp) ; chisq
+pvalue <- pchisq(chisq, dfs, lower.tail = FALSE); pvalue # 0.1447803
+# This pvalue is not small enough for us to reject the null hypothesis of independence.
+# There is over a 14% chance that the observed data pattern could have arisen by chance
+# under the assumption that the null hypothesis of independence is true. We are not 
+# comfortable with such a high probability for making a type I error (false positive), 
+# and thus conclude that the we cannot reject the null hypothesis of independence in this case.
+
+# We could have also used the integrated R command for carrying out a chi squared test 
+# of independence, which uses Yates continuity correction to handle improve accuracy  
+# after approximating discrete quantities with a continuous distribution 
+# (See Chihara&Hesterberg, p. 370)
+
+chisq.test(Obs) # This yields a chi squared statistic and a pvalue that are very 
+# close to the ones we calculated by hand. As above, we cannot reject the null hypothesis
+# that the two categorical variables are independent.
+
+# Permutation test on Border/no Border & HDI level
+
+idx <- which(No.border == 1) # Index for countries without a border
+
+Mean.NoBorder <- mean(HDI[idx]) 
+Mean.Border <- mean(HDI[-idx])
+observed <- Mean.Border - Mean.NoBorder ; observed 
+'On average, Countries that do have a border have HDIs 0.07096872 lower 
+than countries without a border'
+
+# Now carry out permutation test to check whether this difference is significant
+N <- 10000
+diff <- numeric(N)
+
+for (i in 1:N){
+  samp <- sample(nrow(chisq_data), sum(No.border == 1)) 
+  # obtain random sample of size equal to number of countries without a border in the data
+  weightSamp <- mean(HDI[samp]) # mean for random sample
+  weightOther <- mean(HDI[-samp]) # mean for complement
+  diff[i] <- weightOther - weightSamp # calculate the difference
+}
+
+breaks <- pretty(range(diff), n = nclass.FD(diff), min.n = 1)
+bwidth <- breaks[2]-breaks[1]
+ggplot(data = as.data.frame(diff),aes(diff)) + theme_economist() + geom_histogram(binwidth=bwidth,fill="white",colour="black") + geom_vline(aes(xintercept=observed), col="red") + labs(title = "Simulated differences", x = "Diff", y="Count")
+# The red line is quite far into the left tail of the histogram. Seems 
+# like the difference is significant from the graph, but lets calculate the
+# exact p-value!
+
+# Calculate pvalue
+(sum(diff <= observed)+1)/(N+1) #One tailed: Check if the observed difference is large
+# enough to determine that countries with a border have an HDI that is significantly 
+# lower than countries that do not have a border. The p-value is very small, 0.02239776, meaning
+# that that it is extremely unlikely (roughly a 2% chance) that the observed difference happened 
+# by chance if the null hypothesis of equal HDIs were true. However, we did not try to establish
+# the sign of the difference a priori, so we should instead carry out a two-tailed test.
+# To do so, we multiply the p-value by 2.
+
+((sum(diff <= observed)+1)/(N+1))*2 # Two tailed, multiply this pvalue by two
+# The pvalue remains small (0.04479552). This means that there it is quite unlikely 
+# (roughly 4.5% chance) that the observed difference happened by chance under the 
+# assumption that the null hypothesis of equal HDIs were true. We can thus confidently 
+# (at the 5% significance level) reject this null hypothesis and conclude that HDI levels
+# for countries that do not have a border are significantly different from the HDI levels
+# of countries that do have a border.
+
+detach(chisq_data)
