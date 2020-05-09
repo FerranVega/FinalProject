@@ -1,28 +1,22 @@
 ---
 title: |
   | Insights in International Relations
-  | <font size="4"> Submitted as Term Project for MATH E-23C </font>
-  
-author: 
-  - Mohit Negi, Ferran Vega
+  | <font size="2"> _Submitted as Term Project for MATH E-23C_ </font>
+author: "Mohit Negi, Ferran Vega"
 date: "Spring 2020"
-output: 
+output:
   slidy_presentation:
     font_adjustment: -2
-    footer: "Mohit Negi | Ferran Vega"
+    footer: Mohit Negi | Ferran Vega
 ---
 
 ## Introduction
 
 The primary dataset used in this project is Gary King's "10 Million International Dyadic Events" dataset from Harvard dataverse.
 
-The data available here include almost 10 million individual events, each coded to the exact day they occur or become known. Each event is summarized in the data as "Actor A does something to Actor B", with Actors A and B recording about 450 countries and other (within-country) actors and "does something to" coded in an ontology of about 200 types of actions. The data are coded by computer from millions of Reuters news reports.
+The data available here include almost 10 million individual events, each coded to the exact day they occur or become known. Each event is summarized in the data as "Actor A does something to Actor B", with Actors A and B recording about 450 countries and other (within-country) actors and "does something to" coded in an ontology of about 200 types of actions. The data are coded by computer from millions of Reuters news reports. In some topics, we filter this huge dataset to only include "Inter-country" events. In addition to this, we use several other datasets that are cited appropriately in the relevant topics.
 
-In some topics, we filter this huge dataset to only include "Inter-country" events.
-
-In addition to this, we use several other datasets that are cited appropriately in the relevant topics.
-
-The idea of the project is to utilize the extremely rich dataset to find insights in International Relations. For this, we employ various data analysis techniques. 
+The idea of the project is to utilize the extremely rich dataset to find insights in International Relations. For this, we employ various data analysis techniques.
 
 ## Structure of the project
 
@@ -71,13 +65,17 @@ The Exponential distribution (as we'll see in a bit) has a constant Hazard rate 
 This property makes the Exponential distribution exhibit "Memoryless-ness" and the Weibull exhibit "Infant-mortality".\
 We use these properties to explore an interesting insight : Some types of events seem to be peer-influenced while some don't.
 
-First, we discuss our analysis strategy after which we take the theory to data by providing an example of a "peer influenced" event. We then provide a counter-example of an event that does not seem to be peer influenced. Finally, we conclude the topic.
+In Part I, we discuss our analysis strategy.\
+In Part II, we look at an example of peer influenced events.\
+In Part III, we present a counter-example that does not show peer influence.\
+In Part IV, we discuss the results and point out the caveats.
+Datasets used : 
 
-Datasets used : 10 Million International Dyadic Events (10MM_IDE)
+* 10 Million International Dyadic Events (10MM_IDE)
 
 ---
 
-### Strategy
+### I. Strategy
 
 We begin by looking at the Poisson process. If the number of events occuring in unit time is a random variable $X \sim Pois(\lambda)$, taking a time interval $[0,\infty)$, the number of events occuring in every subinterval of length $t$ will be a random variable with distribution $Pois(\lambda t)$. Further, the number of events occuring in distinct arbitrary non-overlapping intervals are independent random variables.\
 This is a Poisson process.
@@ -133,6 +131,7 @@ $$H_T' = \frac{\beta}{\eta^\beta} (\beta - 1) t^{\beta - 2}$$
 
 * When $\beta > 1$, $H_T$ is increasing. : The probability of the event occuring increases over time. This is likened to the "wear-and-tear" effect on machine failure events.
 
+\newpage
 Let's verify this :
 
 ```{r,fig.width=4, fig.height=4, fig.align='center'}
@@ -143,9 +142,11 @@ curve(hazardrate(x,1,1.5)) # Weibull with beta > 1 has increasing hazard rate.
 
 For our purposes, a Weibull r.v. with $\beta < 1$ can imply a "positive" peer influence. The event encourages more events. When $\beta > 1$, we see "negative" peer influence. The event discourages subsequent events which become more probable as time passes since the last event.
 
+\newpage
+
 ---
 
-### Taking the theory to data
+### II. Taking the theory to data (Armed Assistance)
 
 * <em>Armed Assistance Requests</em>
 
@@ -180,9 +181,10 @@ The weibull fits excellently (pval $> 0.9$) and estimates a shape parameter $\ne
 This gives sufficient evidence that armed assisstance requests are NOT purely random and they might be peer influenced.
 The weibull shape parameter is $0.769$ which tells us there is positive peer influence.
 
+\newpage
 Let's graph our fitted curves.
 
-```{r,echo=FALSE,fig.width=6, fig.height=4, fig.align='center'}
+```{r,echo=FALSE,fig.width=6, fig.height=3.6, fig.align='center'}
 #Graph it.
 df <- as.data.frame(vec90)
 df$index <- c(1:length(vec90))
@@ -206,21 +208,25 @@ ASKIplot
 ```
 
 <!-- USING INTEGRATION [EXTRA POINT] -->
-Let's calculate the Expected number of days between two subsequent armed assistance requests.
+Let's calculate the Expected number of weeks between two subsequent armed assistance requests.
 ```{r,comment=""}
 integrand1 <- function(t,eta,beta){
   t*(beta*(t)^(beta-1)*exp(-1*(t/eta)^beta)/(eta^beta))
 }
 
-exp_days <- function(eta,beta)integrate(integrand1,lower = 10^(-100),upper = Inf,eta=eta,beta=beta)$value
+exp_days <- function(eta,beta){
+  integrate(integrand1,lower = 10^(-100),
+            upper = Inf,eta=eta,beta=beta)$value}
 
 exp_days(w1$estimate[1],w1$estimate[2])
 ```
-Which tells us that the Expected number of days between two subsequent armed assistance requests is about 6 weeks.
+Which tells us that the Expected number of weeks between two subsequent armed assistance requests is about 6 weeks.
+
+\newpage
 
 ---
 
-### Taking the theory to data
+### III. Taking the theory to data (Ultimatums)
 
 * <em>Giving Ultimatums</em>
 
@@ -236,7 +242,8 @@ l1;w1
 The exponential fits well and the weibull fits excellently (pval $> 0.95$) and estimates a shape parameter $\approx 1$.
 This gives strong evidence that giving ultimatums might be purely random events.
 The weibull shape parameter is $1.02$. We can't say it is exactly exponential but for such a small data sample, it's a good approximation.
-```{r,echo=FALSE,fig.width=6, fig.height=4, fig.align='center'}
+
+```{r,echo=FALSE,fig.width=6, fig.height=3.6, fig.align='center'}
 #Graph it.
 df <- as.data.frame(vec90)
 df$index <- c(1:length(vec90))
@@ -260,9 +267,11 @@ ULTIplot <- ggplot(df,aes(x=vec90)) +
 ULTIplot
 ```
 
+\newpage
+
 ---
 
-### Taking the theory to data
+### IV. Taking the theory to data (Discussion)
 
 * <em>Discussion</em>
 
@@ -278,6 +287,8 @@ It is also important to note the caveats:
 * Due to small sample sizes, the reliability of the results is not perfectly solid.
 
 * We only took data from 1990-1995 as taking the aggregate data (1990-2005) did not yield the same results. This might be due to conditions changing between the long time period that changes $\lambda$. For example, if due to some change in global conditions, the average number of ultimatums in a given week increases after 1995, it would no longer be a Poisson process with a unique $\lambda$. This means if we aggregate pre and post 1995 data, we won't see the memoryless property even if it exists within the separate time periods.
+
+\newpage
 
 ---
 
@@ -297,20 +308,20 @@ Abstract :
 It is widely believed that the provision of Economic Aid by countries to those in need is motivated by more than just good faith. It is common to see countries being accused of "buying favor" through their charitable acts. The most famous example of this might be the "Belt and Road Initiative (BRI)" that was launched by the Chinese government in 2013.\
 Many skeptics have raised concerns over the project being a form of "Neo-colonialism". A favourite example towards this is the Chinese takeover of the  Hambantota Port in Sri Lanka for use as a Naval base in the Indian Ocean when the latter was unable to repay debts to China.\
 If this phenomenon is indeed true, it may be beneficial to understand if it is effective.\
-For this, we analyze the 10MM_IDI dataset, looking at the data on Inter-country dyadic events of the form "Provide Economic Aid" and "Threaten". We use these variables as proxies for "Aid" and "Softpower".
+For this, we analyze the 10MM_IDE dataset, looking at the data on Inter-country dyadic events of the form "Provide Economic Aid" and "Threaten". We use these variables as proxies for "Aid" and "Softpower".
 
 The idea is to see if providing Aid to a country significantly impacts the probability of receiving a Threat from it. If this impact turns out to be negative, we can conclude that providing Aid indeed buys Softpower.
 
-In Part I, we conduct some preliminary data analysis to motivate the use of Network Analysis techniques.
-
-In Part II, we actually go about analyzing the the Aid and Threat networks from 1990-2005 through Exponential Random Graph Modelling.
-
+In Part I, we conduct some preliminary data analysis to motivate the use of Network Analysis techniques.\
+In Part II, we actually go about analyzing the the Aid and Threat networks from 1990-2005 through Exponential Random Graph Modelling.\
 In Part III, we interpret the results and conclude the topic.
 
-Datasets used : 10 Million International Dyadic Events (10MM_IDE)
-                Correlates of War Dataset
-                HDI dataset, UNDP
-                GDP per capita dataset, 
+Datasets used : 
+
+* 10 Million International Dyadic Events (10MM_IDE)
+* Correlates of War Dataset
+* HDI dataset, UNDP
+* GDP per capita dataset, World Bank
 
 ---
 
@@ -319,11 +330,11 @@ Datasets used : 10 Million International Dyadic Events (10MM_IDE)
 Here, we utilize a similar strategy as the last topic wherein we explained how an Exponential distribution can be used to determine if events of a certain type occur purely at random.\
 When looking at Network graphs where the different countries are represented as Nodes and dyadic events are represented as the Edges, we can determine the probability of edge formation through Network analysis techniques. This probability $p$ can either be constant across the entire graph or be determined by features such as nodal and edge attributes, neighbouring edges, etc. A graph of the former type is known as an "Erdos-Renyi Random Graph".
 
-If find an event to occur purely at random, we should expect to see an Erdos-Renyi Graph. If not, we might find the graph to be more complex. In such a graph, ties would not be formed at random but might be dependent on certain nodal and edge attributes. We model such dependencies by using the "Exponential Random Graph Model (ERGM)".
+If find an event to occur purely at random, we should expect to see an Erdos-Renyi Graph. If not, we might find the graph to be more complex. In such a graph, ties would not be formed at random but might be dependent on certain nodal and edge attributes. We model such dependencies by using the "Exponential Random Graph Model (ERGM)".\
+With this in mind, we try to provide motivations for the use of an ERGM in this section.\
+We generate the vectors containing time intervals between successive Aid and Threat events using a similar loop as in the last topic. We conduct Likelihood Ratio tests on both these events to check for goodness of fit of an Exponential distribution. 
 
-With this in mind, we try to provide motivations for the use of an ERGM in this section.
-
-We generate the vectors containing time intervals between successive Aid and Threat events using a similar loop as in the last topic. We conduct Likelihood Ratio tests on both these events to check for goodness of fit of an Exponential distribution. We graph these fits.
+We graph these fits.
 
 ```{r,comment="",echo=FALSE}
 load(file = "EEAI_vec_pre.rda")
@@ -376,12 +387,13 @@ Threatplot <- ggplot(df,aes(x=threat_totalvec)) +
                      values = c("Exponential" = "#244747")) +
   ggtitle("Threat") + 
   theme(plot.title = element_text(hjust = 0.5,face = "bold.italic"))
-
-
-grid.arrange(Aidplot,Threatplot, ncol = 2)
+Aidplot
+Threatplot
 ```
 
 This result motivates us to conduct an ERGM to analyze these networks as they are clearly not Erdos-Renyi Random Graphs.
+
+\newpage
 
 ---
 
@@ -406,15 +418,15 @@ We can interpret the results of such models in the following way :
 
 We define $Y_{ij}^c$ as the graph we observe before edge $Y_{ij}$ is measured. So $P(Y_{ij} = 1|Y_{ij}^c)$ is the probability of formation of an edge between i and j given the rest of the graph.
 
-$\begin{align*} odds(Y_{ij} = 1) &= \frac{P(Y_{ij}=1|Y_{ij}^c)}{1-P(Y_{ij}=1|Y_{ij}^c)}\\ &= \frac{P(Y_{ij}=1|Y_{ij}^c)}{P(Y_{ij}=0|Y_{ij}^c)}\\ &= \frac{exp(\theta^Ts(Y_{ij}^+))}{exp(\theta^Ts(Y_{ij}^-))}\end{align*}$
+$$\begin{aligned} odds(Y_{ij} = 1) &= \frac{P(Y_{ij}=1|Y_{ij}^c)}{1-P(Y_{ij}=1|Y_{ij}^c)}\\ &= \frac{P(Y_{ij}=1|Y_{ij}^c)}{P(Y_{ij}=0|Y_{ij}^c)}\\ &= \frac{exp(\theta^Ts(Y_{ij}^+))}{exp(\theta^Ts(Y_{ij}^-))}\end{aligned}$$
 
 Here, $Y_{ij}^+$ is the graph with edge $Y_{ij}$ present and $Y_{ij}^-$ is the graph where its absent. It is important to note that both these graphs are identical $\forall Y_{pq} \neq Y_{ij}$.
 
-$\begin{align*} odds(Y_{ij} = 1) &= exp(\theta^Ts(Y_{ij}^+) - \theta^Ts(Y_{ij}^-))\\ &= exp(\theta^T[s(Y_{ij}^+) - s(Y_{ij}^-)])\end{align*}$
+$$\begin{aligned} odds(Y_{ij} = 1) &= exp(\theta^Ts(Y_{ij}^+) - \theta^Ts(Y_{ij}^-))\\ &= exp(\theta^T[s(Y_{ij}^+) - s(Y_{ij}^-)])\end{aligned}$$
 
 Here, $s(Y_{ij}^+) - s(Y_{ij}^-)$ is the "change statistic" vector that represents the change in the values of the statistics by adding the edge $Y_{ij}$. Each variable now accounts for the change in counts of network statistics. We notate it as $s(\Delta Y_{ij})$.
 
-$\begin{align*} odds(Y_{ij} = 1) &= exp(\theta^Ts(\Delta Y_{ij}))\\ logodds(Y_{ij} = 1) &= \theta^Ts(\Delta Y_{ij})\\ logit(Y_{ij} = 1) &= \theta_1s_1(\Delta Y_{ij}) + \theta_2s_2(\Delta Y_{ij}) + \theta_3s_3(\Delta Y_{ij}) +.......\theta_ks_k(\Delta Y_{ij}) \end{align*}$
+$$\begin{aligned} odds(Y_{ij} = 1) &= exp(\theta^Ts(\Delta Y_{ij}))\\ logodds(Y_{ij} = 1) &= \theta^Ts(\Delta Y_{ij})\\ logit(Y_{ij} = 1) &= \theta_1s_1(\Delta Y_{ij}) + \theta_2s_2(\Delta Y_{ij}) + \theta_3s_3(\Delta Y_{ij}) +.......\theta_ks_k(\Delta Y_{ij}) \end{aligned}$$
 
 This is the Logit model we solve when we use an ERGM. The statistics can be network features like number of edges, triangles, etc.
 
@@ -423,12 +435,12 @@ $\theta_1 s_1(\Delta Y_{ij}) = \theta_1 (1) = \theta_1$\
 This is because the change in the edge count by adding edge $Y_{ij}$ is $1$.
 
 Our model thus becomes,
-$\begin{align*} logodds(Y_{ij} = 1) &= \theta_1\\ odds(Y_{ij}=1) &= exp(\theta_1)\\ \frac{p}{1-p} &= exp(\theta_1)\\ p &= \frac{exp(\theta_1)}{1+exp(\theta_1)} \end{align*}$
+$$\begin{aligned} logodds(Y_{ij} = 1) &= \theta_1\\ odds(Y_{ij}=1) &= exp(\theta_1)\\ \frac{p}{1-p} &= exp(\theta_1)\\ p &= \frac{exp(\theta_1)}{1+exp(\theta_1)} \end{aligned}$$
 
 This $p$ would be the "Erdos-Renyi" probability of an edge forming randomly. However, the reason we use ERGMs is to model complex networks where $p$ is not constant across the entire network. Just like any other Logit model, we control for these other factors by adding them as covariates in our Logit model.
 
 For example,
-$logodds(Y_{ij} = 1) = \theta_1Edges + \theta_2GDP_i + \theta_3GDP_j + \theta_4Border$
+$$logodds(Y_{ij} = 1) = \theta_1Edges + \theta_2GDP_i + \theta_3GDP_j + \theta_4Border$$
 
 We cleaned the following datasets to obtain our covariates :
 
@@ -469,10 +481,13 @@ model_fulltime11 <- btergm(netlist ~ edges + mutual()
 summary(model_fulltime11)
 ```
 We obtain the results,
-```{r,echo=FALSE,comment=""}
+```{r,echo=FALSE,comment="",fig.align='center'}
 load(file = "threatmod_summary.rda") # Load results.
 sum_threatmod
 ```
+
+\newpage
+
 ---
 
 ### III. Discussion
@@ -487,9 +502,7 @@ legend("topleft",c("Economic Aid","Threat"),fill = colorss)
 
 ```
 
-The sparse nature of the network makes it very difficult to effectively interpret the marginal effects of our predictor variables. The edges term has a coefficient of $-9.511$ which translates to, holding all others terms to be 0, a base probability of $0.007\%$ of an edge ("Threat") forming randomly. This is a clear indication of a very sparse network which is reasonable since threats are not that common when considering all the countries in the world. 
-
-The mutual term, which measures reciprocity in edges, has a very low coefficient of $-13.853$ which tells us reciprocity was very rarely observed. 
+The sparse nature of the network makes it very difficult to effectively interpret the marginal effects of our predictor variables. The edges term has a coefficient of $-9.511$ which translates to, holding all others terms to be 0, a base probability of $0.007\%$ of an edge ("Threat") forming randomly. This is a clear indication of a very sparse network which is reasonable since threats are not that common when considering all the countries in the world. The mutual term, which measures reciprocity in edges, has a very low coefficient of $-13.853$ which tells us reciprocity was very rarely observed. 
 
 The following terms have significant coefficients : Alliance, Border and Aid. However, all these coefficients are very high in magnitude which makes interpretation challenging.\
 For example, according to results from our model, on the margin, having an alliance reduces the odds of a threat event occuring by about $1 - e^{-13.264} \approx 99.99983\%$! This might be due to occurence of very few threat events, almost none of which were between allies. This is the case for "presence of a border" and "Economic Aid" too.
@@ -498,6 +511,7 @@ Since the probability to logodds transformation is monotonic, a negative coeffic
 
 However, as is apparent, these estimates might just be a result of a really sparse network with too few threat events.
 
+\newpage
 
 ---
 
@@ -506,19 +520,19 @@ However, as is apparent, these estimates might just be a result of a really spar
 Abstract :
 
 In January 1979, after 8 years of despotic rule, Ugandan dictator Idi Amin found himself surrounded by the Tanzanian Army, which had launched a counter-offensive against his forces. As the Ugandan Army retreated, Amin fled into exile to Libya, then ruled by Muammar Gaddafi.\
-In this topic, we try to explore what factors might determine where dictators (and politicians in general) flee to when escaping crises. We employ the same Network Analysis framework to analyze the "Political Flight" network constructed from the 10MM_IDI dataset. We try to find the attributes, both nodal and edge-wise, that might have a significant impact on the probability of observing an inter-country political exile edge.
+In this topic, we try to explore what factors might determine where dictators (and politicians in general) flee to when escaping crises. We employ the same Network Analysis framework to analyze the "Political Flight" network constructed from the 10MM_IDE dataset. We try to find the attributes, both nodal and edge-wise, that might have a significant impact on the probability of observing an inter-country political exile edge.
 
-In Part I, we conduct some preliminary data analysis to motivate the use of Network Analysis techniques.
-
-In Part II, we actually go about analyzing the the Aid and Threat networks from 1990-2005 through Exponential Random Graph Modelling.
-
+In Part I, we conduct some preliminary data analysis to motivate the use of Network Analysis techniques.\
+In Part II, we actually go about analyzing the the Aid and Threat networks from 1990-2005 through Exponential Random Graph Modelling.\
 In Part III, we interpret the results and conclude the topic.
 
-Datasets used : 10 Million International Dyadic Events (10MM_IDE)
-                GDP per capita dataset,
-                Correlates of War dataset
-                HDI dataset, UNDP
-                Religious composition by country, Pew Research Center
+Datasets used : 
+
+* 10 Million International Dyadic Events (10MM_IDE)
+* GDP per capita dataset, World Bank
+* Correlates of War dataset
+* HDI dataset, UNDP
+* Religious composition by country, Pew Research Center
                 
 ---
 
@@ -535,7 +549,7 @@ l3
 We can clearly see that the Exponential does NOT fit Asylum data well (pval $\approx 0$).
 This gives sufficient evidence that the events are NOT purely random. Edge formation might be dependent on other features.
 
-```{r,echo=FALSE,warning=FALSE, message=FALSE, fig.align='center',fig.width=10,fig.height=4}
+```{r,echo=FALSE,warning=FALSE, message=FALSE, fig.align='center',fig.width=10,fig.height=3.6}
 #Graphs....
 df <- as.data.frame(asylum_totalvec)
 df$index <- c(1:length(asylum_totalvec))
@@ -551,12 +565,14 @@ Asylumplot <- ggplot(df,aes(x=asylum_totalvec)) +
   scale_y_continuous(name = "Density") +
   scale_color_manual(name = "Distributions", 
                      values = c("Exponential" = "#244747")) +
-  ggtitle("Asylum") + 
+  ggtitle("Political Flight") + 
   theme(plot.title = element_text(hjust = 0.5,face = "bold.italic"))
 Asylumplot
 ```
 
 This result motivates us to conduct an ERGM to analyze these networks as they are clearly not Erdos-Renyi Random Graphs.
+
+\newpage
 
 ---
 
@@ -569,7 +585,7 @@ We cleaned the following datasets to obtain our covariates :
 1. GDP per capita
 2. HDI
 3. Dominant Religious Group
-4. Civil conflicts : 10MM_IDI
+4. Civil conflicts : 10MM_IDE
 5. Borders
 6. Alliances : Correlates of War dataset
 7. Wars : Correlates of War dataset
@@ -596,10 +612,12 @@ asylfull6_rel <- btergm(netlist ~ edges + mutual()
                            R = 50)
 ```
 We obtain the results,
-```{r,echo=FALSE,comment=""}
+```{r,echo=FALSE,comment="",fig.align='center'}
 load(file = "asylmod_summary.rda") # Load results.
 sum_asylnet
 ```
+
+\newpage
 
 ---
 
@@ -618,6 +636,7 @@ The term "nodematch.Religion" measures homophily in the network with respect to 
 
 Civil conflicts in host as well as origin countries seem to positively impact the probability of a political flight. The term nodeocov.Civil Conflicts represents civil conflicts in origin country and increases odds of a political flight by $e^{0.0861} - 1 \approx 8.9\%$ which seems resonable as countries with internal turmoil might be more likely to see its politicians fleeing. The term nodeicov.Civil Conflicts represents civil conflicts in host country and increases odds of a political flight by $e^{0.0756} - 1 \approx 7.85\%$ which might be due to politicians fleeing to  similarly "unstable" regimes as was the case in our introductory example of Idi Amin fleeing to Libya.
 
+\newpage
 
 ---
 
@@ -625,7 +644,9 @@ Civil conflicts in host as well as origin countries seem to positively impact th
 
 Abstract : In this short topic, we analyze HDI and Geographical contiguity data to determine if there is a statistically significant impact of having no borders i.e. being isolated on HDI levels. For this, we make use of the Pearson's Chi-squared test. We then use a Permutation test after which we compare the two methods.
 
-Datasets used : HDI dataset, UNDP
+Datasets used : 
+
+* HDI dataset, UNDP
               
 ---
 
@@ -637,7 +658,7 @@ load("chisq_data.rda")
 head(chisq_data)
 ```
 This is the contingency table,
-```{r,echo=FALSE,comment=""}
+```{r,echo=FALSE,comment="",fig.align='center'}
 attach(chisq_data)
 Obs_table <- table(No.border, HDI_cat); Obs_table
 ```
@@ -704,7 +725,7 @@ for (i in 1:N){
 ```
 Let's plot a histogram of the results.
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,fig.align='center',fig.width=9,fig.height=5}
 breaks <- pretty(range(diff), n = nclass.FD(diff), min.n = 1)
 bwidth <- breaks[2]-breaks[1]
 ggplot(data = as.data.frame(diff),aes(diff)) + geom_histogram(binwidth=bwidth,fill="white",colour="black") + geom_vline(aes(xintercept=observed), col="red") + labs(title = "Simulated differences", x = "Diff", y="Count")
@@ -730,6 +751,8 @@ The Permutation test does not have this issue as it does not utilize any theoret
 n exact test provides a significance test that keeps the Type I error rate of the test $\alpha$ at the desired significance level of the test. For example an exact test at significance level of $\alpha = 0.05$, when repeating the test over many samples where the null hypotheses is true, will reject at most $5\%$ of the time. This is opposed to an approximate test in which the desired type I error rate is only approximately kept (i.e.: the test might reject more than 5% of the time), while this approximation may be made as close to $\alpha$  as desired by making the sample size big enough.
 
 In summary, Permutation test (and other non-parametric tests including many using Monte Carlo techniques) are better when the sample size $n$ is small. 
+
+\newpage
 
 ---
 
@@ -757,17 +780,17 @@ library(stargazer)
 
 ### I. Constructing the World Belligerence Index.
 
-After many attempts, we narrowed down the dataset to just 24 actions. We filtered the actions on the basis of relevance (to the purpose of the index) and removed actions with too low variance.
+We narrow down the dataset to just 24 actions. We filtered the actions on the basis of relevance (to the purpose of the index) and removed actions with too low variance.
 
 The overall activity level of countries in the international arena leads to a high correlation between action counts for all actions. (For example, the US, being a major global actor, has high counts on virtually all actions, good or bad). This biased the results of our initial attempt at carrying the PCA and motivates our decision to manipulate the data to use the proportion of total counts for each action instead.
-```{r,eval=FALSE}
+```{r,eval=FALSE,echo=FALSE}
 PCA_data_5 <- select(PCA_data_2, "Countries", "AERI","BREL","CLAS","COLL","COMP_1", "DMOB",
                      "DWAR","ESAN","EAID", "EMAI","EXIL","GRPG","HAID","POLPER", "IMPR","MDEM","NEGO",
                      "PASS","PEXE","RAID", "RALL","SANC","SHEP","THRT_1")
 ```
 ```{r,echo=FALSE,comment=""}
 load(file = "PCA_data_5.rda")
-head(PCA_data_5)
+head(PCA_data_5[,1:8])
 ```
 We use Eigenvalue decomposition to compute the Principal components. We create the symmetric covariance matrix and compute its Eigenvectors. These form the orthogonal eigenbasis of our covariance matrix by the Spectral Theorem.
 
@@ -859,10 +882,12 @@ colnames(Belligerance.index_high) <- c("Country", "Index")
 p<-ggplot(data=Belligerance.index_high, aes(x=reorder(Country, -Index), y=Index)) +
   geom_bar(stat="identity", fill="steelblue")+
   theme_minimal()
-p1 <- p + theme_economist() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(title = "World Belligerent Index", x = "Country") + geom_hline(aes(yintercept=1), col="red") 
+p1 <- p + theme_economist() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(title = "The World Belligerence Index", x = "Country") + geom_hline(aes(yintercept=1), col="red") 
 p1 + scale_y_continuous(breaks = c(1, 5, 10,15))
 
 ```
+
+\newpage
 
 ---
 
@@ -906,10 +931,11 @@ coeff <- solve(t(A)%*%A)%*%t(A)%*%Reg_vars$Index
 ```
 We find that the built-in R function lm() returns the same results. We use it to find the t-statistics and significance of covariates in our model.
 ```{r,comment=""}
-reg_model <- lm(Reg_vars$Index ~ Reg_vars$GDP + Reg_vars$HDI + Reg_vars$CivilWars + Reg_vars$No.border)
+reg_model <- lm(Reg_vars$Index ~ Reg_vars$GDP + Reg_vars$HDI 
+                + Reg_vars$CivilWars + Reg_vars$No.border)
 ```
 
-```{r,comment="",echo=FALSE}
+```{r,comment="",echo=FALSE,fig.align='center'}
 stargazer(reg_model, type="text",
           dep.var.labels=c("Belligerance Index"),
           covariate.labels=c("Log GDP per cap.","Human Development Index (HDI)","Civil war",
@@ -918,6 +944,8 @@ detach(PCA_data_5)
 ```
 
 The results suggest that HDI and the occurrence of civil wars lead to increases in the level of belligerance shown by countries as measured by our index. However, given suspicion (motivated by the initial scatterplots of the dependent variable with each individual regressor) that a linear model might not be appropriate for this analysis, we advise not to read too much into these.
+
+\newpage
 
 ---
 
@@ -970,6 +998,8 @@ The results suggest that HDI and the occurrence of civil wars lead to increases 
 * Team consists of exactly two members.
 * A video of the short script is posted on YouTube and a link to it is left in your long script.
 
+\newpage
+
 ---
 
 ## 7. Conclusion
@@ -1005,5 +1035,3 @@ In addition to course-material, we used several R tutorials while making this pr
 * King, Gary; Lowe, Will, 2008, "10 Million International Dyadic Events", https://doi.org/10.7910/DVN/BTMQA0, Harvard Dataverse, V5, UNF:3:dSE0bsQK2o6xXlxeaDEhcg== [fileUNF]
 
 * van der Pol, J. Introduction to Network Modeling Using Exponential Random Graph Models (ERGM): Theory and an Application Using R-Project. Comput Econ 54, 845–875 (2019). https://doi.org/10.1007/s10614-018-9853-2
-
----
