@@ -844,8 +844,8 @@ save(borders.mat,file = "borders.mat.rda")
 
 ## Civil wars
 
-d2 <- read.csv("kingdata.csv")
-d9 <- read.csv('final1990.csv')
+'d2 <- read.csv("kingdata.csv")
+d9 <- read.csv("final1990.csv")
 d95 <- read.csv("final1995.csv")
 
 civil <- subset(d2,d2$EventForm == "<CLAS>" & d2$SrcName == d2$TgtName)
@@ -856,8 +856,16 @@ civil <- subset(d9,d9$EventForm == "<CLAS>" & as.character(d9$SrcName) == as.cha
 save(civil,file = "civil90s.rda")
 
 civil <- subset(d95,d95$EventForm == "<CLAS>" & d95$SrcName == d95$TgtName)
-save(civil,file = "civil95s.rda")
+save(civil,file = "civil95s.rda")'
 
+# These .rda files ar created by the code commented out above. We load the .rda files directly for conveninence
+# (both for us and the grader) as the .csv files are extremely large.
+load(file = "civil90s.rda")
+civil90 <- subset(civil, civil$SrcSector == "<INSU>")
+load(file = "civil95s.rda") 
+civil95 <- subset(civil, civil$SrcSector == "<INSU>")
+load(file = "civil20s.rda") 
+civil20 <- subset(civil, civil$SrcSector == "<INSU>")
 
 ## GDP per capita
 
@@ -891,7 +899,7 @@ attGDPpc$GDP2003 <- GDPpc$X2003[match(attGDPpc$country, as.character(GDPpc$Count
 attGDPpc$GDP2004 <- GDPpc$X2004[match(attGDPpc$country, as.character(GDPpc$Country.Code))]
 attGDPpc$GDP2005 <- GDPpc$X2005[match(attGDPpc$country, as.character(GDPpc$Country.Code))]
 
-attGDPpc <- attGDPpc[,2:18]
+attGDPpc <- attGDPpc[,2:17]
 
 save(attGDPpc,file = "GDPpc.mat.rda")
 
@@ -933,9 +941,13 @@ save(attHDI,file = "HDI.mat.rda")
 
 ## RELIGIONS
 
+'
+Data cleaning code below was run separately until line 1009. Then a column with 
+country codes was added in excel to the written csv file. This file is then loaded 
+and manipulated further to generate the final dataset.
+
 x <- read.csv("Religious_Composition_by_Country_2010-2050.csv")
 x <- subset(x, x$Year == "2010")
-library(tidyverse)
 
 x <- x[, -(1:5)]
 x <- x[-(1:7), ]
@@ -994,37 +1006,13 @@ for (i in 1:nrow(x)) {
 x[, -1] <- mutate_all(x[, -1], as.numeric)
 x$major <- colnames(x[, -1])[max.col(x[, -1], ties.method = "first")]
 
-write.csv(x, "major_religion.csv")
-x <- read.csv("major_religion.csv")
+write.csv(x, "major_religion.csv")'
+
+x <- read.csv("major_religion_1.csv")
 x$Code <- as.character(x$Code)
 x <- subset(x, x$Code != "#N/A")
 write.csv(x, "major_religion.csv")
 
-
-## DOMINANT ETHNIC GROUP
-
-x <- read.csv("EPR-2019.csv")
-x <- subset(x, x$from <= 2000 & x$to >= 2000)
-x <-
-  subset(
-    x,
-    x$status == "DOMINANT" |
-      x$status == "JUNIOR PARTNER" |
-      x$status == "MONOPOLY" | x$status == "SENIOR PARTNER"
-  )
-x$status <- as.character(x$status)
-x$status <- replace(x$status, x$status == "MONOPOLY", 1)
-x$status <- replace(x$status, x$status == "DOMINANT", 2)
-x$status <- replace(x$status, x$status == "SENIOR PARTNER", 3)
-x$status <- replace(x$status, x$status == "JUNIOR PARTNER", 4)
-x <- x[order(x$status), ]
-x <- distinct(x, statename, .keep_all = TRUE)
-ethnic_dom_grp <- select(x, statename, group, size)
-
-edg <- read.csv("edg.csv")
-ethnic_dom_grp <- select(edg,-"X")
-
-write.csv(ethnic_dom_grp,"ethnic_dom_grup.csv")
 
 ## WARS
 
@@ -1063,15 +1051,6 @@ save(wars_by_year,file = "wars_by_year.rda")
 
 ## ALLIANCE
 
-ally <- read.csv("cowally.csv")
-ally <- select(ally,ccode1,ccode2,year)
-ally$namea <- mapvalues(ally$namea,from = levels(ally$namea),to = as.vector(r$Y))
-ally$nameb <- mapvalues(ally$nameb,from = levels(ally$nameb),to = as.vector(r$Y))
-ally <- subset(ally,ally$namea != "N" & ally$nameb != "N")
-
-ally <- dplyr::mutate(ally,id = row_number())
-ally <- ally[order(ally$ccode1),]
-
 ally2 <- read.csv("a2.csv")
 ally2 <- select(ally2,namea,nameb,year)
 ally2 <- subset(ally2,ally2$namea != "N" & ally2$nameb != "N")
@@ -1096,60 +1075,6 @@ ally_by_year <- list(ally1990,ally1991,ally1992,ally1993,ally1994,ally1995,ally1
                      ally2000,ally2001,ally2002,ally2003,ally2004,ally2005)
 
 save(ally_by_year,file = "ally_by_year.rda")
-
-## UN MIGRANTS ( COMMUNITY SIZE )
-
-x <- read.csv("unmigrants.csv")
-#new <- read.csv("xfac.csv")
-x$Country <- mapvalues(x$Country,from = levels(x$Country),to = as.vector(new$new))
-
-xfac <- levels(x$Country)
-x <- subset(x,x$Country != "N")
-
-
-y <- colnames(x)
-
-newcols <- read.csv("col.csv")
-
-colnames(x) <- newcols$namee
-
-x2 <- x
-
-x[, -2] <- mutate_all(x[,-2], as.character)
-x <- as.data.frame(lapply(x, function(y) gsub(",", "", y)))
-x[, -2] <- mutate_all(x[,-2], as.character)
-x[, -2] <- mutate_all(x[,-2], as.numeric)
-
-x[is.na(x)] = 0
-
-x <- x[order(x$Country),]
-
-
-mig1990 <- subset(x,x$Year == 2000)
-x3 <- mig1990
-x3 <- x3 %>% select(-contains("V."))
-rowmatch <- as.character(sort(x3$Country))
-colmatch <- colnames(x3)[-(1:3)]
-colmatch <- colmatch[-4]
-colmatch <- colmatch[-26]
-both <- intersect(rowmatch,colmatch)
-both <- c(colnames(x3)[1:3],both)
-x3 <- x3[which(x3$Country %in% both), which(names(x3) %in% both)]
-x3 <- select(x3,-c("Total","Year"))
-nn <- as.character(x3[,1])
-x3_t <- as.data.frame(t(x3[,-1]))
-x3_t <- setDT(x3_t, keep.rownames = TRUE)[]
-colnames(x3_t) <- c("Country",nn)
-x3_t$Totals <- as.numeric(rowSums(x3_t[,-1]))
-for(i in 1:nrow(x3_t)){
-  x3_t[i,2:190] <- sapply(x3_t[i,2:190], FUN = function(k) k/x3_t[i,191])
-}
-nam <- paste("mig","2000",sep = ".")
-assign(nam,x3_t)
-
-migrants_by_year <- list(mig.1990,mig.1995,mig.2000)
-
-save(migrants_by_year,file = "migrants_by_year.rda")
 
 
 
@@ -1339,15 +1264,7 @@ ULTIplot
 
 
 ##########################################################################################################
-# DATA PREPARATION 2: (Creation of matrices of covariates (nodal and edges) by year)
-##########################################################################################################
-
-
-
-
-
-##########################################################################################################
-# INSTALLATION OF BTERM
+# INSTALLATION OF BTERGM
 
 'Warning: If the installation code below does not work for some reason, please load files asylmod_summary.rda
 and threatmod_summary.rda to see the results of both network analyses!'
@@ -1358,37 +1275,9 @@ and threatmod_summary.rda to see the results of both network analyses!'
 ##########################################################################################################
 
 
-install.packages("devtools")
-install.packages("installr")
-library(installr)
-install.Rtools()
-library(devtools)
-devtools::install_github("tedhchen/multilayer.ergm", build_opts = c("--no-resave-data", "--no-manual"))
-
-
-install.packages("C:/Users/Ferran Vega/Documents/R/win-library/3.6/btergm_1.9.4.tar", repos = NULL, type="source")
-
-
 url <- "https://cran.r-project.org/src/contrib/Archive/btergm/btergm_1.9.4.tar.gz"
 pkgFile <- "btergm_1.9.4.tar.gz"
 download.file(url = url, destfile = pkgFile)
-
-install.packages("xergm.common")
-
-install.packages(pkgs=pkgFile, type="source", repos=NULL)
-
-url <- "https://cran.r-project.org/src/contrib/Archive/xergm.common/xergm.common_1.7.7.tar.gz"
-pkgFile <- "xergm.common_1.7.7.tar.gz"
-download.file(url = url, destfile = pkgFile)
-
-install.packages("xergm.common")
-
-install.packages(pkgs=pkgFile, type="source", repos=NULL)
-pkgFile <- "btergm_1.9.4.tar.gz"
-download.file(url = url, destfile = pkgFile)
-
-install.packages("xergm.common")
-
 install.packages(pkgs=pkgFile, type="source", repos=NULL)
 
 
@@ -2113,7 +2002,6 @@ sum_asylnet # Results.
 # year for that exercise because we have the least amount of missing data in this year. Note that 
 # the resulting "Reg_attributes.rda" file will also be used at the end of topic 5.
 
-#load(file = "migrants_by_year.rda")
 load(file = "borders.mat.rda") 
 load(file = "wars_by_year.rda") 
 load(file = "ally_by_year.rda")
