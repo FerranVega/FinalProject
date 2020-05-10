@@ -504,12 +504,9 @@ legend("topleft",c("Economic Aid","Threat"),fill = colorss)
 
 The sparse nature of the network makes it very difficult to effectively interpret the marginal effects of our predictor variables. The edges term has a coefficient of $-9.511$ which translates to, holding all others terms to be 0, a base probability of $0.007\%$ of an edge ("Threat") forming randomly. This is a clear indication of a very sparse network which is reasonable since threats are not that common when considering all the countries in the world. The mutual term, which measures reciprocity in edges, has a very low coefficient of $-13.853$ which tells us reciprocity was very rarely observed. 
 
-The following terms have significant coefficients : Alliance, Border and Aid. However, all these coefficients are very high in magnitude which makes interpretation challenging.\
-For example, according to results from our model, on the margin, having an alliance reduces the odds of a threat event occuring by about $1 - e^{-13.264} \approx 99.99983\%$! This might be due to occurence of very few threat events, almost none of which were between allies. This is the case for "presence of a border" and "Economic Aid" too.
+Since the probability to logodds transformation is monotonic, a negative coefficient of $-11.906$ on "Aid" can be said to imply that providing economic aid to a country reduces the probability that it will threaten you (it reduces the odds of a threat event by $1 - e^{-11.906} \approx 99.99933\%$), which is consistent with our main hypothesis.
 
-Since the probability to logodds transformation is monotonic, a negative coefficient of $-12.219$ on "Aid" can be said to imply that providing economic aid to a country reduces the probability that it will threaten you (it reduces the odds of a threat event by $1 - e^{-12.219} \approx 99.99951\%$), which is consistent with our main hypothesis.
-
-However, as is apparent, these estimates might just be a result of a really sparse network with too few threat events.
+However, these estimates might just be a result of a really sparse network with too few threat events.
 
 \newpage
 
@@ -744,11 +741,11 @@ This means that there it is quite unlikely (roughly 4.5% chance) that the observ
 
 At this point, we can compare the Chi-squared test with the Permutation test.
 
-The Pearson's Chi-squared test used here is a parametric test whereas the Permutation Test in non-parametric. The Chi-squared test is an "approximate test". As sample size $n$ increases, the probability distribution of the test statistic $\sum_k \frac{(observed-expected)^2}{expected}$ converges to the Chi-squared distribution with $k-1$ degrees of freedom. However, when sample sizes are fairly small for some categories, as in our case, then the result might not be exact.
+The Chi-squared test is an "approximate test". As sample size $n$ increases, the probability distribution of the test statistic $\sum_k \frac{(observed-expected)^2}{expected}$ converges to the Chi-squared distribution with $k-1$ degrees of freedom. However, when sample sizes are fairly small for some categories, as in our case, then the result might not be exact.
 
 The Permutation test does not have this issue as it does not utilize any theoretical distributions in its functioning. With a sufficiently large number of simulations (resamplings), we can test the significance "exactly".
 
-n exact test provides a significance test that keeps the Type I error rate of the test $\alpha$ at the desired significance level of the test. For example an exact test at significance level of $\alpha = 0.05$, when repeating the test over many samples where the null hypotheses is true, will reject at most $5\%$ of the time. This is opposed to an approximate test in which the desired type I error rate is only approximately kept (i.e.: the test might reject more than 5% of the time), while this approximation may be made as close to $\alpha$  as desired by making the sample size big enough.
+An exact test provides a significance test that keeps the Type I error rate of the test $\alpha$ at the desired significance level of the test. For example an exact test at significance level of $\alpha = 0.05$, when repeating the test over many samples where the null hypotheses is true, will reject at most $5\%$ of the time. This is opposed to an approximate test in which the desired type I error rate is only approximately kept (i.e.: the test might reject more than 5% of the time), while this approximation may be made as close to $\alpha$  as desired by making the sample size big enough.
 
 In summary, Permutation test (and other non-parametric tests including many using Monte Carlo techniques) are better when the sample size $n$ is small. 
 
@@ -853,7 +850,7 @@ positive loadings are:
 
 * RAID (Armed actions)
 * POLPER (Political flight/arrests)
-*AERI (Missile attacks)
+* AERI (Missile attacks)
 * CLAS (Armed battle)
 * PASS (All uses of non-armed physical force in assaults against people)
 * EXIL (Expel)
